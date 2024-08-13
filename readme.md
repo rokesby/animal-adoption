@@ -5,12 +5,7 @@ Clone this repo
 - cd into animal-adoption
 
 # Frontend setup
-
 Notes taken from the video - https://www.youtube.com/watch?v=ctQMqqEo4G8&t=629s
-
-- npx create-vite
-- project name = frontend
-- Select React/Javascript
 
 ## Follow the on-screen instructions
 
@@ -29,3 +24,4 @@ cd server
 
 ## Install dependencies 
 - pip install flask
+- pip install pymongo
