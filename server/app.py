@@ -1,18 +1,20 @@
 from flask import Flask, request, render_template, redirect
 from lib.database_connection import get_flask_database_connection
 
+
+from mongoengine import * # TODO remove this.
+from db.User import Users # TODO Review this location.
+
 # Create a new Flask app
 app = Flask(__name__)
 
-# == Your Routes Here ==
-
-
-# == Example Code Below ==
+# == Routes Here ==
 
 # GET /emoji
 # Returns a smiley face in HTML
 # Try it:
 #   ; open http://localhost:5001/emoji
+# TODO - Remove this test route.
 @app.route('/emoji', methods=['GET'])
 def get_emoji():
     # We use `render_template` to send the user the file `emoji.html`
@@ -21,11 +23,20 @@ def get_emoji():
     return render_template('emoji.html', emoji=':)')
 
 
-
 # Login route - capture
 @app.route('/login', methods=['GET'])
 def display_login_page():
     return render_template('login.html')
+
+# Login route - get users
+@app.route('/users', methods=['GET'])
+def display_users():
+    # connection = get_flask_database_connection(app)
+    connect('adoption') 
+    # TODO - Push into the DB connection and remove the import
+    # Get all of the listings for all shelters.
+
+    return render_template('users.html', Users=Users)
 
 
 # These lines start the server if you run this file directly
