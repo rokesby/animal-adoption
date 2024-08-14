@@ -7,20 +7,39 @@ import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions } fro
 
 
 export const LoginPage = () => {
-  const [loginForm, setLoginForm] = useState({});
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     // const token = localStorage.getItem("token");
-    setLoginForm({
-      ...loginForm,
-      email: event.target.value,
-      password: event.target.value,
-    });
+    setEmail(event.target.value);
   };
 
-  const handleSubmit = () => {
-    console.log("Submit")
-  }
+  const handlePasswordChange = (event) => {
+    // const token = localStorage.getItem("token");
+    setPassword(event.target.value);
+  };
+
+  const handleSubmit = async (event) => {
+    const token = localStorage.getItem("token"); //need to set up 
+    event.preventDefault();
+    if (token) {
+      try {
+        // I have taken setPost to handlePostChange - add validation for an empty post.
+        // await login(token, email, password); need to create the login service
+        console.log(email)
+        console.log(password)
+        navigate("/login");
+        // props.fetchPosts();
+        setEmail("");
+        setPassword("");
+      } catch (err) {
+        console.error(err);
+        navigate("/login");
+      }
+    }
+  };
 
   return (
     <>
@@ -50,10 +69,8 @@ export const LoginPage = () => {
           id="username"
           type="text"
           name="message"
-          value={loginForm.email}
+          value={email}
           onChange={handleEmailChange}
-          multiline
-          rows={1}
 
         />
         <TextField
@@ -67,10 +84,8 @@ export const LoginPage = () => {
           id="password"
           type="text"
           name="message"
-          value={loginForm.email}password
-          onChange={handleEmailChange}
-          multiline
-          rows={1}
+          value={password}
+          onChange={handlePasswordChange}
 
         />
       </CardContent>
@@ -81,7 +96,7 @@ export const LoginPage = () => {
           form="post-form"
           variant="contained"
         >
-          Email
+          Login
         </Button>
       </CardActions>
     </Card>
