@@ -5,7 +5,7 @@ ONE OFF INSTRUCTIONS
 - active your venv environment!
 - pip install psycopg2
 - pip install SQLAlchemy
-- type in createdb adoptions # to create a new postgres database
+- type in createdb adoption # to create a new postgres database
 - run this file : python seed.py
 - run this file : python print_seed.py
 
