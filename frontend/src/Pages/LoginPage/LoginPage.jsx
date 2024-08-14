@@ -11,7 +11,7 @@ export const LoginPage = () => {
 
   const handleEmailChange = (event) => {
     // const token = localStorage.getItem("token");
-    setEmail({
+    setLoginForm({
       ...loginForm,
       email: event.target.value,
       password: event.target.value,
@@ -41,16 +41,33 @@ export const LoginPage = () => {
 
         <TextField
           inputProps={{
-            "data-testid": "tusername",
+            "data-testid": "username",
           }}
           label="Email Address"
           fullWidth
           size="small"
           variant="outlined"
-          id="login"
+          id="username"
           type="text"
           name="message"
           value={loginForm.email}
+          onChange={handleEmailChange}
+          multiline
+          rows={1}
+
+        />
+        <TextField
+          inputProps={{
+            "data-testid": "password",
+          }}
+          label="Password"
+          fullWidth
+          size="small"
+          variant="outlined"
+          id="password"
+          type="text"
+          name="message"
+          value={loginForm.email}password
           onChange={handleEmailChange}
           multiline
           rows={1}

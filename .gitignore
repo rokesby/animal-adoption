@@ -10,3 +10,4 @@ server/adoption/bin/activate.fish
 server/adoption/bin/activate.csh
 server/adoption/bin/activate
 server/adoption/pyvenv.cfg
+*venv*  

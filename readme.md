@@ -26,3 +26,7 @@ cd server
 - pip install flask
 - pip install pymongo
 - pip install mongoengine
+
+## Frontend Dependencies
+- npm install @mui/material @emotion/react @emotion/styled
+- npm install react-router-dom 
