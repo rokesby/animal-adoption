@@ -1,5 +1,5 @@
 from mongoengine import *
-from models.shelter import Shelter
+# from models.shelter import Shelter
 
 class Animal(Document):
     name = StringField(required=True, max_length=100)
@@ -10,7 +10,7 @@ class Animal(Document):
     male = BooleanField(required=True)
     bio = StringField(required=True, max_length=500)
     neutered = BooleanField(required=True)
-    owner = ReferenceField(Shelter, reverse_delete_rule='CASCADE')
+    owner = ReferenceField('Shelter', reverse_delete_rule='CASCADE')
     lives_with_children = BooleanField(required=True)
 
     meta = {

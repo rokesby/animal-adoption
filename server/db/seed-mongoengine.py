@@ -6,47 +6,6 @@ from db_file import *
 
 connect_db()
 
-# class Animal(Document):
-#     name = StringField(required=True, max_length=100)
-#     species = StringField(required=True)
-#     age = StringField(required=True)
-#     breed = StringField(required=True)
-#     location = StringField(required=True)
-#     male = BooleanField(required=True)
-#     bio = StringField(required=True, max_length=500)
-#     neutered = BooleanField(required=True)
-#     owner = ReferenceField(Shelter, reverse_delete_rule='CASCADE')
-#     lives_with_children = BooleanField(required=True)
-
-#     meta = {
-#         'collection': 'animals'
-#     }
-
-
-# class Shelter(Document):
-#     name_of_shelter = StringField(required=True)
-#     location = StringField(required=True)
-#     email = StringField(required=True)
-#     phone_number = IntField(required=True, max_length=11)
-#     animals = ListField(ReferenceField(Animal))
-#     staff = ListField(ReferenceField(User))
-
-#     meta = {
-#         'collection': 'shelters'
-#     }
-# class User(Document):
-#     email = StringField(required=True)
-#     password = StringField(required=True)
-#     first_name = StringField(max_length=50)
-#     last_name = StringField(max_length=50)
-#     shelter = ReferenceField(Shelter)
-
-#     meta = {
-#     'collection': 'users',
-#     'indexes': [
-#         'email'
-#     ]
-#     }
 
 User.drop_collection()
 Animal.drop_collection()
