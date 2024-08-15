@@ -1,9 +1,6 @@
-#import os
-# import psycopg2
-from flask import g
-#from psycopg2.rows import dict_row
-from contextlib import contextmanager
+# from flask import g
 
+from contextlib import contextmanager
 
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import create_engine, MetaData

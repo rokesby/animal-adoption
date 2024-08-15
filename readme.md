@@ -36,3 +36,24 @@ pip install SQLAlchemy
 - npm install @mui/material @emotion/react @emotion/styled
 - npm install react-router-dom 
 
+# How to seed.... (one-off)
+ONE OFF INSTRUCTIONS
+- go to /server/db
+- activate your venv environment!
+- pip install psycopg2
+- pip install SQLAlchemy
+- type in createdb adoption # to create a new postgres database
+- run this file : python seed.py
+- run this file : python print_seed.py
+
+
+
+# New environment variable
+- go to /server/ directory
+- ensure your python venv is activated
+
+pip install -U Flask-SQLAlchemy
+pip install pip install python-dotenv
+touch .env
+- ensure that the .env file is in your gitignore file
+- Paste the following line into your .env file : DATABASE_CONNECT = "postgresql://reza@localhost:5432/adoption"

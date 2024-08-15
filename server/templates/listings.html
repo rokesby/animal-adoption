@@ -7,14 +7,15 @@
   </head>
   <body>
     
-    <h1>Listings</h1>
+    <h1>Animal Listing</h1>
   
+      {% for animal in animals %}
       <div>
-        Listing to follow here
+        Animal,  name: {{ animal.name }} , species: {{ animal.species }} ,  age: {{ animal.age }}
       </div>
- 
+      {% endfor %}  
     
-    <p>Placeholder text</p>
+    <p>End of listing</p>
 
   </body>
 </html>

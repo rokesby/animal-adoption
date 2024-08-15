@@ -1,13 +1,4 @@
 '''
-ONE OFF INSTRUCTIONS
-
-- go to /server/db
-- active your venv environment!
-- pip install psycopg2
-- pip install SQLAlchemy
-- type in createdb adoption # to create a new postgres database
-- run this file : python seed.py
-- run this file : python print_seed.py
 
 '''
 
@@ -21,7 +12,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm import sessionmaker
 
 
-from database_connection  import db_session
+# from database_connection import db_session
 
 
 # TODO Refactor and place this in the database connection file.
@@ -96,7 +87,7 @@ Base.metadata.create_all(engine)
 
 
 # Check which tables are being reflected
-print("=> ", Base.metadata.tables.keys())  # If using MetaData
+print("Tables reflected => ", Base.metadata.tables.keys())  # If using MetaData
 
 Session = sessionmaker(bind=engine)
 session = Session()
@@ -140,6 +131,9 @@ animal1 = Animal(
 
 session.add(animal1)
 
+
+#################### 
+
 animal2 = Animal(
     name = "Roger",
     species = "dog",
@@ -154,6 +148,25 @@ animal2 = Animal(
 )
 
 session.add(animal2)
+
+#################### 
+
+animal3 = Animal(
+    name = "Duke",
+    species = "rabbit",
+    age = 3,
+    breed = "American Rabbit",
+    location = "London",
+    male = True,
+    bio = "This is a lovely rabbit and he needs a good home and lots of carrots.",
+    neutered = False,
+    lives_with_children = False,
+    shelter = shelter2
+)
+
+session.add(animal3)
+
+
 
 # Populate the USERS table
 ###############################
@@ -185,6 +198,9 @@ user3 = User(
     shelter = shelter2
 )
 session.add(user3)
+
+
+
 
 #############################################################
 

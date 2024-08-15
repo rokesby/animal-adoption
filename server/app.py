@@ -1,23 +1,55 @@
 from flask import Flask, request, render_template, redirect
-# from server.db.database_connection import get_flask_database_connection
+from flask_sqlalchemy import SQLAlchemy
+
+
+from db.database_connection import db_session
+from db.seed import Animal, Shelter, User
+
+from dotenv import load_dotenv
+import os
+
 
 # Create a new Flask app
 app = Flask(__name__)
+# TODO : Refactor this string.
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
+db = SQLAlchemy(app)
+
+
+class Animal(db.Model):
+    __tablename__ = 'animals'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(255))
+    species = db.Column(db.String(50))
+    age = db.Column(db.Integer)
+    breed = db.Column(db.String(50), nullable=False)
+    location = db.Column(db.String(50), nullable=False)
+    male = db.Column(db.Boolean, nullable=False)
+    bio = db.Column(db.String(500), nullable=False)
+    neutered = db.Column(db.Boolean, nullable=False)
+    lives_with_children = db.Column(db.Boolean, nullable=False)
+    shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
 
 # == Routes Here ==
 
-# Login route - get users
-@app.route('/users', methods=['GET'])
-def display_users():
-    # connection = get_flask_database_connection(app)
-    return render_template('users.html', Users=Users)
+# # Login route - get users
+# @app.route('/users', methods=['GET'])
+# def display_users():
+#     # connection = get_flask_database_connection(app)
+#     # class AnimalsResource(Resource)
+#     return render_template('users.html', Users=Users)
 
 
 # Listings route - return a list of Animals.
 @app.route('/listings', methods=['GET'])
-def display_listings():
-    # connection = get_flask_database_connection(app)
-    return render_template('listings.html')
+def display_animals():
+
+    #with db_session() as db:
+    with app.app_context():
+        #animals = db.query(Animal).all()
+        animals = Animal.query.all()
+        return render_template('listings.html', animals=animals)
 
 
 # Test JSON route
@@ -34,4 +66,4 @@ def my_profile():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-     app.run(debug=True)
+    app.run(debug=True)
