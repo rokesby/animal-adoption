@@ -56,4 +56,4 @@ pip install -U Flask-SQLAlchemy
 pip install pip install python-dotenv
 touch .env
 - ensure that the .env file is in your gitignore file
-- Paste the following line into your .env file : DATABASE_CONNECT = "postgresql://reza@localhost:5432/adoption"
+- Paste the following line into your .env file : DATABASE_CONNECT = "postgresql://YOURUSERNAMEHERE@localhost:5432/adoption" i.e. reza@localhost:5432/adoption
