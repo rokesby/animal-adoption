@@ -11,7 +11,6 @@ import os
 
 # Create a new Flask app
 app = Flask(__name__)
-# TODO : Refactor this string.
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
 db = SQLAlchemy(app)
 
