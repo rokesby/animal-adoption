@@ -25,3 +25,6 @@ dist-ssr
 
 # venv
 *venv*
+
+# environment variables
+*.env*
