@@ -1,10 +1,6 @@
 from flask import Flask, request, render_template, redirect
 from lib.database_connection import get_flask_database_connection
 
-
-from mongoengine import * # TODO remove this.
-from db.User import Users # TODO Review this location.
-
 # Create a new Flask app
 app = Flask(__name__)
 
@@ -14,28 +10,23 @@ app = Flask(__name__)
 # Returns a smiley face in HTML
 # Try it:
 #   ; open http://localhost:5001/emoji
-# TODO - Remove this test route.
 @app.route('/emoji', methods=['GET'])
 def get_emoji():
     # We use `render_template` to send the user the file `emoji.html`
     # But first, it gets processed to look for placeholders like {{ emoji }}
     # These placeholders are replaced with the values we pass in as arguments
-    return render_template('emoji.html', emoji=':)')
+    # return render_template('emoji.html', emoji=':)')
 
 
 # Login route - capture
-@app.route('/login', methods=['GET'])
-def display_login_page():
-    return render_template('login.html')
+# @app.route('/login', methods=['GET'])
+# def display_login_page():
+#     return render_template('login.html')
 
 # Login route - get users
 @app.route('/users', methods=['GET'])
 def display_users():
     # connection = get_flask_database_connection(app)
-    connect('adoption') 
-    # TODO - Push into the DB connection and remove the import
-    # Get all of the listings for all shelters.
-
     return render_template('users.html', Users=Users)
 
 
@@ -43,4 +34,4 @@ def display_users():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-    app.secret_key = "super secret key"
+     app.run(debug=True)
