@@ -1,25 +1,21 @@
-'''
-
-'''
-
 # Guidance from here - https://coderpad.io/blog/development/sqlalchemy-with-postgresql/
 
 from sqlalchemy import create_engine
-from sqlalchemy.engine import URL
+from sqlalchemy import URL
 from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Boolean, MetaData
+
 from sqlalchemy.orm import declarative_base
+
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm import sessionmaker
 
 
-# from database_connection import db_session
+import os
 
-
-# TODO Refactor and place this in the database connection file.
 url = URL.create(
     drivername="postgresql",
-    host="localhost",
-    database="adoption"
+    host = os.getenv("DATABASE_HOST"),
+    database= os.getenv("DATABASE_NAME")
 )
 
 engine = create_engine(url)
@@ -31,12 +27,13 @@ meta.reflect(bind=engine)
 Base = declarative_base()
 
 # Drop all tables and clear the database.
-
 meta.drop_all(bind=engine, tables=None, checkfirst=True)
 
 # Create the models.
 
 #############################################################
+
+# FIXME Refactor these classes out of the seed file and into a place where app.py can read them. This has not been easy.
 
 class Animal(Base):
     __tablename__ = 'animals'
@@ -53,20 +50,6 @@ class Animal(Base):
     lives_with_children = Column(Boolean, nullable=False)
     shelter_id = Column(Integer(), ForeignKey('shelters.id'))
 
-#############################################################
-
-class Shelter(Base):
-    __tablename__ = 'shelters'
-
-    id = Column(Integer(), primary_key=True)
-
-    name = Column(String(255), nullable=False)
-    location = Column(String(255), nullable=False)
-    email = Column(String(255), nullable=False)
-    phone_number = Column(String(20))
-
-    animals = relationship('Animal', backref='shelter')
-    users = relationship('User', backref='shelter')
 
 #############################################################
 
@@ -83,8 +66,26 @@ class User(Base):
 
 #############################################################
 
-Base.metadata.create_all(engine)
 
+class Shelter(Base):
+    __tablename__ = 'shelters'
+
+    id = Column(Integer(), primary_key=True)
+
+    name = Column(String(255), nullable=False)
+    location = Column(String(255), nullable=False)
+    email = Column(String(255), nullable=False)
+    phone_number = Column(String(20))
+
+    animals = relationship('Animal', backref='shelter')
+    users = relationship('User', backref='shelter')
+
+# Animal.shelter = relationship("Shelter", back_populates="animals")
+# User.shelter = relationship("Shelter", back_populates="users")
+
+#############################################################
+
+Base.metadata.create_all(engine)
 
 # Check which tables are being reflected
 print("Tables reflected => ", Base.metadata.tables.keys())  # If using MetaData
@@ -112,7 +113,6 @@ shelter2 = Shelter(
 )
 session.add(shelter2)
 
-
 # Populate the ANIMALS table
 ###############################
 
@@ -130,7 +130,6 @@ animal1 = Animal(
 )
 
 session.add(animal1)
-
 
 #################### 
 
@@ -167,7 +166,6 @@ animal3 = Animal(
 session.add(animal3)
 
 
-
 # Populate the USERS table
 ###############################
 
@@ -198,9 +196,6 @@ user3 = User(
     shelter = shelter2
 )
 session.add(user3)
-
-
-
 
 #############################################################
 
