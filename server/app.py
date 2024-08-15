@@ -81,8 +81,7 @@ class Animal(db.Model):
 #     # class AnimalsResource(Resource)
 #     return render_template('users.html', Users=Users)
 
-
-# Listings route - return a list of Animals.
+# Listings route - return a list of all animals.
 @app.route('/listings', methods=['GET'])
 def display_animals():
 
@@ -90,12 +89,14 @@ def display_animals():
     with app.app_context():
         #animals = db.query(Animal).all()
         animals = Animal.query.all()
-        animals_to_json = []
-        for animal in animals:
-            animals_to_json.append(animal.as_dict())
+        animals_to_json = [animal.as_dict() for animal in animals]
         return jsonify(animals_to_json)
-            # print({'Animal': animal.name})
-        # return render_template('listings.html', animals=animals)
+
+@app.route('/listings/<int:id>', methods= ['GET'])
+def display_one_animal(id):
+    with app.app_context():
+        animal = Animal.query.get(id)
+        return jsonify(animal.as_dict())
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
 
