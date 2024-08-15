@@ -29,11 +29,8 @@ const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
-
-
     path: "create-advert",
     element: <CreateAdvertPage />,
-
   }
 ]);
 
