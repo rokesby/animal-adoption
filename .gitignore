@@ -1,3 +1,7 @@
+
 *pycache*
 *venv*  
 .env
+*venv*  
+server/adoption/bin/dotenv
+
