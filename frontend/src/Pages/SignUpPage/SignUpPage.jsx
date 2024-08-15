@@ -45,7 +45,7 @@ export const SignUpPage = () => {
       if (data === "User with email provided already exists") {
         setMessage(data);
       } else {
-        setAuthStatus(true);
+        // setAuthStatus(true);
         navigate("/", { state: [0, data.message] });
       }
     } catch (err) {
@@ -61,7 +61,6 @@ export const SignUpPage = () => {
 
   return (
     <>
-      {!authStatus && (
         <>
           {message && (
             <Box display="flex" justifyContent="center" alignItems="center">
@@ -206,23 +205,18 @@ export const SignUpPage = () => {
               <TextField
                 InputProps={{
                   "data-testid": "none",
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <ContentPasteIcon onClick={handlePaste} />
-                    </InputAdornment>
-                  ),
                 }}
                 InputLabelProps={{ shrink: true }}
-                label="Profile Photo URL"
-                placeholder="accepted formats: PNG, JPG, BMP"
+                label="Shelter"
+                placeholder="Your Shelter name"
                 fullWidth
                 size="small"
                 variant="outlined"
-                id="image"
+                id="shelter"
                 type="text"
-                name="image"
-                value={formData.image}
-                onChange={(e) => handleUpdateFormData("image", e.target.value)}
+                name="Shelter"
+                value={formData.shelter}
+                onChange={(e) => handleUpdateFormData("shelter", e.target.value)}
                 sx={{ mb: 3 }}
               />
 
@@ -243,7 +237,6 @@ export const SignUpPage = () => {
             </CardActions>
           </Card>
         </>
-      )}
     </>
   );
 };
