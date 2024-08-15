@@ -37,6 +37,36 @@ class Animal(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
+class User(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer(), primary_key=True)
+
+    email = db.Column(db.String(255), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(255), nullable=False)
+    last_name = db.Column(db.String(255), nullable=False)
+    shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+class Shelter(db.Model):
+    __tablename__ = 'shelters'
+
+    id = db.Column(db.Integer(), primary_key=True)
+
+    name = db.Column(db.String(255), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
+
+    animals = db.relationship('Animal', backref='shelter', lazy=True)
+    # animals = relationship('Animal', backref='shelter')
+    # users = relationship('User', backref='shelter')
+    users = db.relationship('User', backref='shelter', lazy=True)
+
+
 
 # == Routes Here ==
 
@@ -49,6 +79,58 @@ class Animal(db.Model):
 
 
 # Listings route - return a list of Animals.
+# @app.route('/signup', methods=['POST'])
+# def create_new_users():
+
+#     #with db_session() as db:
+#     with app.app_context():
+#         # Extract and validate input data
+#         data = request.get_json()
+#         first_name = data.get('first_name')
+#         last_name = data.get('last_name')
+#         email = data.get('email')
+#         password = data.get('password')
+#         shelter_id = int(data.get('shelter_id'))
+#     user = User(
+#             first_name=first_name,
+#             last_name=last_name,
+#             email=email,
+#             password=password,
+#             shelter_id=shelter_id,
+#         )
+#     db.session.add(user)
+#     db.session.commit()
+@app.route('/signup', methods=['POST'])
+def create_new_users():
+    data = request.json
+
+    shelter_id = data.get('shelter_id')
+    if not shelter_id or not isinstance(shelter_id, int):
+        return jsonify({"error": "Invalid shelter ID"}), 400
+
+    user = User(
+        first_name=data['first_name'],
+        last_name=data['last_name'],
+        email=data['email'],
+        password=data['password'],
+        shelter_id=data['shelter_id']
+    )
+
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify(user.as_dict()), 201
+    # user = User(
+        #     first_name=request.json['first_name'],
+        #     last_name=request.json['last_name'],
+        #     email=request.json['email'],
+        #     password=request.json['password'],
+        #     shelter_id=request.json['shelter_id']
+        # )
+        # db.session.add(user)
+        # db.session.commit()
+        # return jsonify(user.as_dict())
+    
 @app.route('/listings', methods=['GET'])
 def display_animals():
 

@@ -1,22 +1,38 @@
 // docs: https://vitejs.dev/guide/env-and-mode.html
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// export const getUsers = async (token) => {
-//     const requestOptions = {
-//       method: "GET",
-//       headers: {
-//         Authorization: `Bearer ${token}`,
-//       },
-//     };
+export const signup = async (formData) => {
+    const payload = {
+      first_name: formData.first_name,
+      last_name: formData.last_name,
+      email: formData.email,
+      password: formData.password,
+      // confirmPassword: formData.confirmPassword,
+      shelter_id: formData.shelter_id,
+    //   image: formData.image,
+    };
   
-//     const response = await fetch(`${BACKEND_URL}/users`, requestOptions);
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
   
-//     console.log(response.status);
+    let response = await fetch(`${BACKEND_URL}/signup`, requestOptions);
   
-//     if (response.status !== 200) {
-//       throw new Error("Unable to fetch users");
-//     }
+    // docs: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/201
+    if (response.status === 201) {
+      const data = await response.json();
+      return data;
+    } else if (response.status === 409) {
+      const data = await response.json();
+      return data.message;
+    } else {
+      throw new Error(
+        `Received status ${response.status} when signing up. Expected 201`
+      );
+    }
+  };
   
-//     const data = await response.json();
-//     return data;
-//   };
