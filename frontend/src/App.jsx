@@ -3,6 +3,7 @@ import { useState, useEffect, createContext } from "react";
 import "./App.css";
 import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
+import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
@@ -21,10 +22,10 @@ const router = createBrowserRouter([
     path: "/login",
     element: <LoginPage />,
   },
-  // {
-  //   path: "/signup",
-  //   element: <SignupPage />,
-  // } 
+  {
+    path: "/signup",
+    element: <SignUpPage />,
+  } 
 ]);
 
 const App = () => {
