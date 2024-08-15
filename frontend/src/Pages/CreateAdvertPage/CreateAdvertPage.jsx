@@ -27,7 +27,7 @@ export const CreateAdvertPage = () => {
     bio: "",
     neutered: false,
     livesWithChildren: false,
-    image: null,
+    // image: null,
     shelterId: "",
   });
 
@@ -210,14 +210,14 @@ export const CreateAdvertPage = () => {
             </Select>
           </FormControl>
 
-          <Button variant="contained" component="label" sx={{ mb: 3 }}>
+          {/* <Button variant="contained" component="label" sx={{ mb: 3 }}>
             Upload Image
             <input
               type="file"
               hidden
               onChange={(e) => handleUpdateFormData("image", e.target.files[0])}
-            />
-          </Button>
+            /> */}
+          {/* </Button> */}
         </CardContent>
 
         <CardActions>
