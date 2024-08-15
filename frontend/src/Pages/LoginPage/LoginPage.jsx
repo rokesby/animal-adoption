@@ -4,7 +4,6 @@ import Login from "../../Components/Login/Login";
 // import { useContext } from "react";
 // import Context from "../../components/Context/Context";
 import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions } from "@mui/material";
-import { getAnimals } from "../../services/animals";
 
 
 export const LoginPage = () => {
@@ -31,7 +30,6 @@ export const LoginPage = () => {
         // await login(token, email, password); need to create the login service
         console.log(email)
         console.log(password)
-        console.log(getAnimals())
         navigate("/login");
         // props.fetchPosts();
         setEmail("");
