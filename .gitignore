@@ -11,3 +11,4 @@ server/adoption/bin/activate.csh
 server/adoption/bin/activate
 server/adoption/pyvenv.cfg
 *venv*  
+node_modules
