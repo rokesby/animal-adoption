@@ -1,14 +1,4 @@
-server/adoption/bin/flask
-server/adoption/bin/pip
-server/adoption/bin/pip3
-server/adoption/bin/python3
-server/adoption/bin/python
-server/adoption/bin/pip3.12
-server/adoption/bin/python3.12
-server/adoption/bin/Activate.ps1
-server/adoption/bin/activate.fish
-server/adoption/bin/activate.csh
-server/adoption/bin/activate
-server/adoption/pyvenv.cfg
+*pycache*
 *venv*  
-server/adoption/bin/dotenv
+.env
+*venv*  

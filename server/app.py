@@ -1,5 +1,6 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 
 from db.database_connection import db_session
@@ -11,6 +12,9 @@ import os
 
 # Create a new Flask app
 app = Flask(__name__)
+
+CORS(app)
+
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
 db = SQLAlchemy(app)
 
@@ -30,6 +34,10 @@ class Animal(db.Model):
     lives_with_children = db.Column(db.Boolean, nullable=False)
     shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
 
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
 # == Routes Here ==
 
 # # Login route - get users
@@ -48,9 +56,13 @@ def display_animals():
     with app.app_context():
         #animals = db.query(Animal).all()
         animals = Animal.query.all()
-        return render_template('listings.html', animals=animals)
-
-
+        animals_to_json = []
+        for animal in animals:
+            animals_to_json.append(animal.as_dict())
+        return jsonify(animals_to_json)
+            # print({'Animal': animal.name})
+        # return render_template('listings.html', animals=animals)
+    
 # Test JSON route
 @app.route('/profile')
 def my_profile():
