@@ -36,6 +36,40 @@ class Animal(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+    class User(db.Model):
+        __tablename__ = 'users'
+
+        id = db.Column(db.Integer(), primary_key=True)
+
+        email = db.Column(db.String(255), nullable=False)
+        password = db.Column(db.String(255), nullable=False)
+        first_name = db.Column(db.String(255), nullable=False)
+        last_name = db.Column(db.String(255), nullable=False)
+        shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
+
+        def as_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+    class Shelter(db.Model):
+        __tablename__ = 'shelters'
+
+        id = db.Column(db.Integer(), primary_key=True)
+
+        name = db.Column(db.String(255), nullable=False)
+        location = db.Column(db.String(255), nullable=False)
+        email = db.Column(db.String(255), nullable=False)
+        phone_number = db.Column(db.String(20), nullable=False)
+
+        animals = db.relationship('Animal', backref='shelter', lazy=True)
+        # animals = relationship('Animal', backref='shelter')
+        # users = relationship('User', backref='shelter')
+        users = db.relationship('User', backref='shelter', lazy=True)
+
+        def as_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+
 
 
 # == Routes Here ==
@@ -62,7 +96,37 @@ def display_animals():
         return jsonify(animals_to_json)
             # print({'Animal': animal.name})
         # return render_template('listings.html', animals=animals)
-    
+
+# THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
+
+# Will I need to change '/listings' to something else? 
+@app.route('/listings', methods=['POST'])
+def create_new_animal():
+    with app.app_context():
+
+        data = request.get_json()
+        print('Received the data:', data)
+        # data= request.json
+        animal = Animal(
+            name=data['name'],
+            species=data['species'],
+            age=data['age'],
+            breed=data['breed'],
+            location=data['location'],
+            male=data['male'],
+            bio=data['bio'],
+            neutered=data['neutered'],
+            lives_with_children=data['lives_with_children'],
+            shelter_id=data['shelter_id']
+        )
+
+        db.session.add(animal)
+        db.session.commit()
+
+        return jsonify(animal.as_dict()), 201
+
+
+
 # Test JSON route
 @app.route('/profile')
 def my_profile():
