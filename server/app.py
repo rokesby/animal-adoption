@@ -1,27 +1,10 @@
 from flask import Flask, request, render_template, redirect
-from lib.database_connection import get_flask_database_connection
+# from server.db.database_connection import get_flask_database_connection
 
 # Create a new Flask app
 app = Flask(__name__)
 
 # == Routes Here ==
-
-# GET /emoji
-# Returns a smiley face in HTML
-# Try it:
-#   ; open http://localhost:5001/emoji
-@app.route('/emoji', methods=['GET'])
-def get_emoji():
-    # We use `render_template` to send the user the file `emoji.html`
-    # But first, it gets processed to look for placeholders like {{ emoji }}
-    # These placeholders are replaced with the values we pass in as arguments
-    # return render_template('emoji.html', emoji=':)')
-
-
-# Login route - capture
-# @app.route('/login', methods=['GET'])
-# def display_login_page():
-#     return render_template('login.html')
 
 # Login route - get users
 @app.route('/users', methods=['GET'])
@@ -29,6 +12,23 @@ def display_users():
     # connection = get_flask_database_connection(app)
     return render_template('users.html', Users=Users)
 
+
+# Listings route - return a list of Animals.
+@app.route('/listings', methods=['GET'])
+def display_listings():
+    # connection = get_flask_database_connection(app)
+    return render_template('listings.html')
+
+
+# Test JSON route
+@app.route('/profile')
+def my_profile():
+    response_body = {
+        "name": "Nagato",
+        "about" :"Hello! I'm a full stack developer that loves python and javascript"
+    }
+
+    return response_body
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
