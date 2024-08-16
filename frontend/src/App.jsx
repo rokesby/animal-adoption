@@ -12,12 +12,12 @@ import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
 // https://react.dev/reference/react/useContext#usecontext
 const Context = createContext();
 
-const NavbarWrapper = () => (
+//const NavbarWrapper = () => (
   <>
     <Navbar />
     <Outlet />
   </>
-);
+//);
 
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
@@ -36,10 +36,6 @@ const router = createBrowserRouter([
   {
     path: "/create-advert",
     element: <CreateAdvertPage />,
-  },
-  {
-    path: "/listings",
-    element: <Listings />,
   }
 ]);
 

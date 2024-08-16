@@ -37,21 +37,39 @@ class Animal(db.Model):
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
+
+    class User(db.Model):
+        __tablename__ = 'users'
+
+        id = db.Column(db.Integer(), primary_key=True)
+
+        email = db.Column(db.String(255), nullable=False)
+        password = db.Column(db.String(255), nullable=False)
+        first_name = db.Column(db.String(255), nullable=False)
+        last_name = db.Column(db.String(255), nullable=False)
+        shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
+
+        def as_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
-class User(db.Model):
-    __tablename__ = 'users'
+    class Shelter(db.Model):
+        __tablename__ = 'shelters'
 
-    id = db.Column(db.Integer(), primary_key=True)
-    email = db.Column(db.String(255), nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
+        id = db.Column(db.Integer(), primary_key=True)
+
+        name = db.Column(db.String(255), nullable=False)
+        location = db.Column(db.String(255), nullable=False)
+        email = db.Column(db.String(255), nullable=False)
+        phone_number = db.Column(db.String(20), nullable=False)
+
+        animals = db.relationship('Animal', backref='shelter', lazy=True)
+        # animals = relationship('Animal', backref='shelter')
+        # users = relationship('User', backref='shelter')
+        users = db.relationship('User', backref='shelter', lazy=True)
+
+        def as_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
-
 # == Routes Here ==
 
 # # Login route - get users
@@ -61,17 +79,50 @@ class User(db.Model):
 #     # class AnimalsResource(Resource)
 #     return render_template('users.html', Users=Users)
 
-
-# Listings route - return a list of Animals.
+# Listings route - return a list of all animals.
 @app.route('/listings', methods=['GET'])
 def display_animals():
 
     with app.app_context():
         animals = Animal.query.all()
-        animals_to_json = []
-        for animal in animals:
-            animals_to_json.append(animal.as_dict())
+        animals_to_json = [animal.as_dict() for animal in animals]
         return jsonify(animals_to_json)
+
+
+@app.route('/listings/<int:id>', methods= ['GET'])
+def display_one_animal(id):
+    with app.app_context():
+        animal = Animal.query.get(id)
+        return jsonify(animal.as_dict())
+
+# THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
+
+# Will I need to change '/listings' to something else? 
+@app.route('/listings', methods=['POST'])
+def create_new_animal():
+    with app.app_context():
+
+        data = request.get_json()
+        print('Received the data:', data)
+        # data= request.json
+        animal = Animal(
+            name=data['name'],
+            species=data['species'],
+            age=data['age'],
+            breed=data['breed'],
+            location=data['location'],
+            male=data['male'],
+            bio=data['bio'],
+            neutered=data['neutered'],
+            lives_with_children=data['lives_with_children'],
+            shelter_id=data['shelter_id']
+        )
+
+        db.session.add(animal)
+        db.session.commit()
+
+        return jsonify(animal.as_dict()), 201
+
 
 @app.route('/users', methods=['GET'])
 def get_users():
@@ -102,6 +153,7 @@ def get_user_by_id():
 #     return jsonify({"token": token.decode('utf-8')}), 200
 
     
+
 # Test JSON route
 @app.route('/profile')
 def my_profile():
