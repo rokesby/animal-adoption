@@ -46,7 +46,7 @@ export const SignUpPage = () => {
         setMessage(data);
       } else {
         // setAuthStatus(true);
-        navigate("/", { state: [0, data.message] });
+        navigate("/create-advert", { state: [0, data.message] });
       }
     } catch (err) {
       console.error(err);
@@ -251,10 +251,10 @@ export const SignUpPage = () => {
               // />
               type="number"  // Ensures numeric input
               name="shelter"
-              value={formData.shelter}
+              value={formData.shelter_id}
               onChange={(e) => {
                 const value = e.target.value;
-                handleUpdateFormData("shelter", value ? parseInt(value) : "");
+                handleUpdateFormData("shelter_id", value ? parseInt(value) : "");
               }}
               sx={{ mb: 3 }}
             />
