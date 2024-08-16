@@ -25,14 +25,40 @@ cd server
 ## Install dependencies 
 - pip install flask
 - pip install pymongo
+<<<<<<< HEAD
 
 
     pip install psycopg2
     pip install SQLAlchemy
 
+=======
+- pip install psycopg2
+- pip install SQLAlchemy
+- pip install -U Flask-SQLAlchemy
+- pip install python-dotenv
+- pip install authlib
+>>>>>>> main
 
 
 ## Frontend Dependencies
 - npm install @mui/material @emotion/react @emotion/styled
 - npm install react-router-dom 
 
+# How to seed.... (one-off)
+ONE OFF INSTRUCTIONS to create the Postgres database.
+- go to /server/db
+- activate your venv environment!
+- type in createdb adoption # to create a new postgres database
+- run this file : python seed.py
+- run this file : python print_seed.py
+
+# New environment variable
+- go to /server/ directory
+- ensure your python venv is activated
+- touch .env
+- ensure that the .env file is in your gitignore file
+- Paste the following line into your .env file (change the relevant fields!!)
+
+DATABASE_CONNECT = "postgresql://reza@localhost:5432/adoption"
+DATABASE_NAME = "adoption"
+DATABASE_HOST = "localhost"

@@ -5,7 +5,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 
-const AnimalCard = ({ image, name, age, breed, location, button1Text }) => {
+const AnimalCard = ({ props.name, props.age, props.breed, props.location, button1Text }) => {
   return (
     <Card sx={{ maxWidth: 380 }} style={{ margin: "2em", overflow: "hidden" }}>
       {image && ( // Conditionally render image if provided
