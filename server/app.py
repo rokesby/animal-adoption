@@ -131,19 +131,6 @@ def get_users():
         users_list = [user.as_dict() for user in users]
         return jsonify(users_list)
     
-# @app.route('/login', methods=['GET'])
-# def get_user_by_id():
-#     with app.app_context():
-#         req_email = request.headers.get('email')
-#         req_password = request.headers.get('password')
-#         user = User.query.filter_by(email=req_email).first()
-#         if not user:
-#             return jsonify({"error": "User not found"}), 401
-#         elif user.password == req_password:
-#             return jsonify(user.as_dict()), 200
-#         else:
-#             return jsonify({"error": "Password is incorrect"}), 401
-            
 @app.route('/login', methods=['POST'])
 def login():
     with app.app_context():
