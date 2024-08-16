@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-=======
 *venv*  
 *pycache*
 .env
->>>>>>> main
 node_modules
-*venv*
-.env
