@@ -113,6 +113,15 @@ shelter2 = Shelter(
 )
 session.add(shelter2)
 
+
+shelter3 = Shelter(
+    name = "Mayhew Animal Home",
+    location = "NW London",
+    email = "info@themayhew.org.org",
+    phone_number = "07931996802"
+)
+session.add(shelter3)
+
 # Populate the ANIMALS table
 ###############################
 
@@ -166,6 +175,25 @@ animal3 = Animal(
 session.add(animal3)
 
 
+
+#################### 
+
+animal4 = Animal(
+    name = "Parsley",
+    species = "cat",
+    age = 3,
+    breed = "Ginger",
+    location = "London",
+    male = True,
+    bio = "These two sweet babies are the last of our Herby bunch and are ideally looking to be homed together. Parsley and sage are two rambunctious little boys who love to play and have fun. ",
+    neutered = False,
+    lives_with_children = False,
+    shelter = shelter3
+)
+
+session.add(animal4)
+
+
 # Populate the USERS table
 ###############################
 
@@ -196,6 +224,16 @@ user3 = User(
     shelter = shelter2
 )
 session.add(user3)
+
+
+user4 = User(
+    email = "santosh@dasari.com",
+    password = "password1",
+    first_name = "Santosh",
+    last_name = "Dasari",
+    shelter = shelter1
+)
+session.add(user4)
 
 #############################################################
 

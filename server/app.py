@@ -9,7 +9,6 @@ from controllers.auth import generate_token, decode_token
 from dotenv import load_dotenv
 import os
 
-
 # Create a new Flask app
 app = Flask(__name__)
 
@@ -17,7 +16,6 @@ CORS(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
 db = SQLAlchemy(app)
-
 
 class Animal(db.Model):
     __tablename__ = 'animals'
@@ -131,6 +129,7 @@ def get_users():
         users_list = [user.as_dict() for user in users]
         return jsonify(users_list)
     
+
 @app.route('/login', methods=['GET'])
 def get_user_by_id():
     with app.app_context():
@@ -144,6 +143,7 @@ def get_user_by_id():
         else:
             return jsonify({"error": "Password is incorrect"}), 401
             
+
 # @app.route('/login', methods=['POST'])
 # def login():
 #     # Assume you validate the user's credentials and get the user_id
@@ -151,8 +151,6 @@ def get_user_by_id():
 #     token = generate_token(user_id)
 
 #     return jsonify({"token": token.decode('utf-8')}), 200
-
-    
 
 # Test JSON route
 @app.route('/profile')
