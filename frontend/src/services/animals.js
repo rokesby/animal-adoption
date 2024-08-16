@@ -44,7 +44,23 @@ export const createAnimal = async (animal) => {
   }
 };
 
-
+export const getSingleAnimal = async (animal_id) => {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      // Authorization: `Bearer ${token}`,
+    },
+  };
+  try {
+    const response = await fetch(`${BACKEND_URL}/listings/${animal_id}`, requestOptions);
+    if (response.status !== 200) {
+      throw new Error("Unable to fetch this animal");
+    }
+    const data = await response.json();
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
 
 
