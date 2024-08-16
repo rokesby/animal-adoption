@@ -1,4 +1,6 @@
 *venv*  
 *pycache*
+*adoption
+*bin*
 .env
 node_modules
