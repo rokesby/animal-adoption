@@ -9,6 +9,9 @@ import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
 import Listings from "./pages/Listings/Listings";
 
 
+import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";import { Listings } from "./Pages/Listings/Listings";
+
+
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
 const Context = createContext();
@@ -37,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/create-advert",
     element: <CreateAdvertPage />,
+  },
+  {
+    path: "/animal-advert", 
+    element: <AnimalAdvertPage />,
   },
   {
     path: "/listings",

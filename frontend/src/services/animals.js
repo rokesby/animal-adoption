@@ -64,25 +64,12 @@ export const createAnimal = async (animal) => {
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getAnimals = async () => {
-<<<<<<< HEAD
   const requestOptions = {
     method: "GET",
     headers: {
     "Content-Type": "application/json"
     },
   };
-
-  const response = await fetch(`${BACKEND_URL}/animals`, requestOptions);
-
-  console.log(response.status);
-
-  if (response.status !== 200) {
-    throw new Error("Unable to fetch animals");
-  }
-
-  const data = await response.json();
-  return data;
-};
 
 export const getAnimal = async (id) => {
   const requestOptions = {
@@ -141,10 +128,8 @@ export const getAnimal = async (id) => {
 //     return [];
 //   }
 // };
-
 // The animal object is what is created on CreateAdvertPage
 // We pass it in through the services function here
-
 export const createAnimal = async (animal) => {
   const requestOptions = {
     method: "POST",
@@ -154,15 +139,12 @@ export const createAnimal = async (animal) => {
     },
     body: JSON.stringify(animal),
   };
-
   try {
     console.log(`Making request to: ${BACKEND_URL}/listings`);
     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
-
     if (!response.ok) {
       throw new Error("Error creating post");
     }
-
     const data = await response.json();
     return data;
   } catch (error) {
@@ -170,4 +152,3 @@ export const createAnimal = async (animal) => {
     throw error;
   }
 };
-
