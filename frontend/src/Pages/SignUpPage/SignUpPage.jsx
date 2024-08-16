@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
+import { signup } from "/src/Services/users.js";
 
 
 
@@ -18,12 +19,12 @@ export const SignUpPage = () => {
   const [message, setMessage] = useState("");
 
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     password: "",
     confirmPassword: "",
-    image: ""
+    shelter_id: ""
   });
 
   const navigate = useNavigate();
@@ -45,7 +46,7 @@ export const SignUpPage = () => {
         setMessage(data);
       } else {
         // setAuthStatus(true);
-        navigate("/", { state: [0, data.message] });
+        navigate("/create-advert", { state: [0, data.message] });
       }
     } catch (err) {
       console.error(err);
@@ -113,12 +114,12 @@ export const SignUpPage = () => {
                 fullWidth
                 size="small"
                 variant="outlined"
-                id="firstName"
+                id="first_name"
                 type="text"
-                name="firstName"
-                value={formData.firstName}
+                name="first_name"
+                value={formData.first_name}
                 onChange={(e) =>
-                  handleUpdateFormData("firstName", e.target.value)
+                  handleUpdateFormData("first_name", e.target.value)
                 }
                 sx={{ mb: 3 }}
               />
@@ -133,12 +134,12 @@ export const SignUpPage = () => {
                 fullWidth
                 size="small"
                 variant="outlined"
-                id="lastName"
+                id="last_name"
                 type="text"
-                name="lastName"
-                value={formData.lastName}
+                name="last_name"
+                value={formData.last_name}
                 onChange={(e) =>
-                  handleUpdateFormData("lastName", e.target.value)
+                  handleUpdateFormData("last_name", e.target.value)
                 }
                 sx={{ mb: 3 }}
               />
@@ -207,15 +208,15 @@ export const SignUpPage = () => {
                 }}
                 InputLabelProps={{ shrink: true }}
                 label="Shelter"
-                placeholder="Your Shelter name"
+                placeholder="Your Shelter id"
                 fullWidth
                 size="small"
                 variant="outlined"
                 id="shelter"
-                type="text"
+                type="number"
                 name="Shelter"
-                value={formData.shelter}
-                onChange={(e) => handleUpdateFormData("shelter", e.target.value)}
+                value={formData.shelter_id}
+                onChange={(e) => handleUpdateFormData("shelter_id", e.target.value)}
                 sx={{ mb: 3 }}
               />
 

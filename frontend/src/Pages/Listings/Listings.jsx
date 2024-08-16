@@ -1,5 +1,5 @@
 
-export const Listings = () => {
+const Listings = () => {
 
   return (
     <>
@@ -7,3 +7,5 @@ export const Listings = () => {
     </>
   );
 }
+
+export default Listings; 
