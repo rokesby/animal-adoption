@@ -4,12 +4,12 @@ import "./App.css";
 import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
-import AllAnimals from "./pages/Animals/AllAnimals";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
 import Listings from "./pages/Listings/Listings";
+import AllAnimals from "./Pages/Animals/Animals";
 
+import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
 
-import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";import { Listings } from "./Pages/Listings/Listings";
 
 
 // alternative to state for passing down to child components
