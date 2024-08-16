@@ -1,10 +1,10 @@
 from flask import Flask, request, render_template, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-
-
 from db.database_connection import db_session
 from db.seed import Animal, Shelter, User
+from functools import wraps
+from controllers.auth import generate_token, decode_token
 
 from dotenv import load_dotenv
 import os
@@ -36,38 +36,40 @@ class Animal(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
 
-class User(db.Model):
-    __tablename__ = 'users'
+    class User(db.Model):
+        __tablename__ = 'users'
 
-    id = db.Column(db.Integer(), primary_key=True)
+        id = db.Column(db.Integer(), primary_key=True)
 
-    email = db.Column(db.String(255), nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    first_name = db.Column(db.String(255), nullable=False)
-    last_name = db.Column(db.String(255), nullable=False)
-    shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
+        email = db.Column(db.String(255), nullable=False)
+        password = db.Column(db.String(255), nullable=False)
+        first_name = db.Column(db.String(255), nullable=False)
+        last_name = db.Column(db.String(255), nullable=False)
+        shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
 
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        def as_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+    class Shelter(db.Model):
+        __tablename__ = 'shelters'
 
-class Shelter(db.Model):
-    __tablename__ = 'shelters'
+        id = db.Column(db.Integer(), primary_key=True)
 
-    id = db.Column(db.Integer(), primary_key=True)
+        name = db.Column(db.String(255), nullable=False)
+        location = db.Column(db.String(255), nullable=False)
+        email = db.Column(db.String(255), nullable=False)
+        phone_number = db.Column(db.String(20), nullable=False)
 
-    name = db.Column(db.String(255), nullable=False)
-    location = db.Column(db.String(255), nullable=False)
-    email = db.Column(db.String(255), nullable=False)
-    phone_number = db.Column(db.String(20), nullable=False)
+        animals = db.relationship('Animal', backref='shelter', lazy=True)
+        # animals = relationship('Animal', backref='shelter')
+        # users = relationship('User', backref='shelter')
+        users = db.relationship('User', backref='shelter', lazy=True)
 
-    animals = db.relationship('Animal', backref='shelter', lazy=True)
-    # animals = relationship('Animal', backref='shelter')
-    # users = relationship('User', backref='shelter')
-    users = db.relationship('User', backref='shelter', lazy=True)
-
-
-
+        def as_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
 # == Routes Here ==
 
 # # Login route - get users
@@ -134,17 +136,77 @@ def create_new_users():
 @app.route('/listings', methods=['GET'])
 def display_animals():
 
-    #with db_session() as db:
     with app.app_context():
-        #animals = db.query(Animal).all()
         animals = Animal.query.all()
-        animals_to_json = []
-        for animal in animals:
-            animals_to_json.append(animal.as_dict())
+        animals_to_json = [animal.as_dict() for animal in animals]
         return jsonify(animals_to_json)
-            # print({'Animal': animal.name})
-        # return render_template('listings.html', animals=animals)
+
+
+@app.route('/listings/<int:id>', methods= ['GET'])
+def display_one_animal(id):
+    with app.app_context():
+        animal = Animal.query.get(id)
+        return jsonify(animal.as_dict())
+
+# THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
+
+# Will I need to change '/listings' to something else? 
+@app.route('/listings', methods=['POST'])
+def create_new_animal():
+    with app.app_context():
+
+        data = request.get_json()
+        print('Received the data:', data)
+        # data= request.json
+        animal = Animal(
+            name=data['name'],
+            species=data['species'],
+            age=data['age'],
+            breed=data['breed'],
+            location=data['location'],
+            male=data['male'],
+            bio=data['bio'],
+            neutered=data['neutered'],
+            lives_with_children=data['lives_with_children'],
+            shelter_id=data['shelter_id']
+        )
+
+        db.session.add(animal)
+        db.session.commit()
+
+        return jsonify(animal.as_dict()), 201
+
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    with app.app_context():
+        users = User.query.all()
+        users_list = [user.as_dict() for user in users]
+        return jsonify(users_list)
     
+@app.route('/login', methods=['GET'])
+def get_user_by_id():
+    with app.app_context():
+        req_email = request.headers.get('email')
+        req_password = request.headers.get('password')
+        user = User.query.filter_by(email=req_email).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 401
+        elif user.password == req_password:
+            return jsonify(user.as_dict()), 200
+        else:
+            return jsonify({"error": "Password is incorrect"}), 401
+            
+# @app.route('/login', methods=['POST'])
+# def login():
+#     # Assume you validate the user's credentials and get the user_id
+#     user_id = "some_user_id"  # Replace with actual user ID
+#     token = generate_token(user_id)
+
+#     return jsonify({"token": token.decode('utf-8')}), 200
+
+    
+
 # Test JSON route
 @app.route('/profile')
 def my_profile():
@@ -154,6 +216,34 @@ def my_profile():
     }
 
     return response_body
+
+# decorator function used for sake of DRY
+def token_checker(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = None
+        auth_header = request.headers.get('Authorization')
+
+        if auth_header:
+            # Assuming the token is in the format "Bearer <token>"
+            token = auth_header.split(" ")[1]
+        if not token:
+            return jsonify({"message": "Token is missing!"}), 401
+        try:
+            payload = decode_token(token)
+            request.user_id = payload.get('user_id')
+        except Exception as e:
+            return jsonify({"message": "Invalid or expired token!"}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+# test protected route
+@app.route('/protected', methods=['GET'])
+@token_checker
+def protected_route():
+    return jsonify({"message": f"Access granted, user_id: {request.user_id}"}), 200
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
