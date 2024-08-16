@@ -1,14 +1,11 @@
 {
   "dependencies": {
-<<<<<<< HEAD
     "@emotion/react": "^11.13.0",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "dependencies": "^0.0.1",
+    "prop-types": "^15.8.1",
     "react": "^18.3.1"
-=======
-    "@mui/icons-material": "^5.16.7"
->>>>>>> main
   }
 }

@@ -4,8 +4,9 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
+import PropTypes from 'prop-types'; 
 
-const AnimalCard = ({ props.name, props.age, props.breed, props.location, button1Text }) => {
+const AnimalCard = ({ name, age, breed, location, image, button1Text }) => {
   return (
     <Card sx={{ maxWidth: 380 }} style={{ margin: "2em", overflow: "hidden" }}>
       {image && ( // Conditionally render image if provided
@@ -24,10 +25,6 @@ const AnimalCard = ({ props.name, props.age, props.breed, props.location, button
         <Typography variant="body1" color="text.secondary">
           {lastName}
         </Typography> */}
-
-        <Typography variant="body1" color="text.secondary">
-          {/* {email} */}
-        </Typography>
       </CardContent>
 
       <CardActions>
@@ -39,6 +36,15 @@ const AnimalCard = ({ props.name, props.age, props.breed, props.location, button
       </CardActions>
     </Card>
   );
+};
+
+AnimalCard.propTypes = {
+  name: PropTypes.string.isRequired,
+  age: PropTypes.string.isRequired,
+  breed: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  button1Text: PropTypes.string,
 };
 
 export default AnimalCard;

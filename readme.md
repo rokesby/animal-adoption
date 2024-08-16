@@ -25,24 +25,22 @@ cd server
 ## Install dependencies 
 - pip install flask
 - pip install pymongo
-<<<<<<< HEAD
 
 
     pip install psycopg2
     pip install SQLAlchemy
 
-=======
 - pip install psycopg2
 - pip install SQLAlchemy
 - pip install -U Flask-SQLAlchemy
 - pip install python-dotenv
 - pip install authlib
->>>>>>> main
 
 
 ## Frontend Dependencies
 - npm install @mui/material @emotion/react @emotion/styled
-- npm install react-router-dom 
+- npm install react-router-dom
+- npm install prop-types 
 
 # How to seed.... (one-off)
 ONE OFF INSTRUCTIONS to create the Postgres database.
