@@ -29,6 +29,7 @@ cd server
 - pip install SQLAlchemy
 - pip install -U Flask-SQLAlchemy
 - pip install python-dotenv
+- pip install authlib
 
 
 ## Frontend Dependencies
