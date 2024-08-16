@@ -14,6 +14,7 @@ import {
   Box,
   Alert,
 } from "@mui/material";
+import { createAnimal } from "../../services/animals";
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
@@ -31,6 +32,7 @@ export const CreateAdvertPage = () => {
     shelterId: "",
   });
 
+
   const navigate = useNavigate();
 
   const handleUpdateFormData = (id, value) => {
@@ -45,17 +47,32 @@ export const CreateAdvertPage = () => {
       return;
     }
 
-    try {
-      const data = new FormData();
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
-
-    } catch (err) {
-      console.error(err);
-      setMessage("Error creating advert. Please try again.");
-    }
-  };
+    // try {
+    //   const data = new FormData();
+    //   for (const key in formData) {
+      //     data.append(key, formData[key]);
+      
+      // HERE: I am going to try creating an animal 
+      // using the info obtained from the form
+      
+      try {
+        const animal = await createAnimal({
+          name: formData.name,
+          species: formData.species,
+          age: formData.age,
+          breed: formData.breed,
+          location: formData.location,
+          male: formData.male,
+          bio: formData.bio,
+          neutered: formData.neutered,
+          lives_with_children: formData.livesWithChildren,
+          shelter_id: formData.shelterId
+        });
+          } catch (err) {
+            console.error(err);
+            setMessage("Error creating advert. Please try again.");
+          }
+        };
 
   return (
     <>
@@ -141,6 +158,19 @@ export const CreateAdvertPage = () => {
             value={formData.location}
             onChange={(e) => handleUpdateFormData("location", e.target.value)}
             fullWidth
+            size="small"
+            variant="outlined"
+            required
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            label="Shelter_ID"
+            value={formData.shelterId}
+            onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
+            fullWidth
+            multiline
+            rows={4}
             size="small"
             variant="outlined"
             required
@@ -233,6 +263,6 @@ export const CreateAdvertPage = () => {
       </Card>
     </>
   );
-};
+}
 
 export default CreateAdvertPage;
