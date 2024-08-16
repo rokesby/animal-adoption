@@ -1,7 +1,5 @@
 *DS_Store*
 node_modules
-*adoption
-/adoption/bin
 *venv*
 .env
 # Byte-compiled / optimized / DLL files
