@@ -4,12 +4,9 @@ import "./App.css";
 import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
-<<<<<<< HEAD
 import AllAnimals from "./pages/Animals/AllAnimals";
-=======
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import { Listings } from "./Pages/Listings/Listings";
->>>>>>> main
+
 
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
@@ -33,11 +30,10 @@ const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
-<<<<<<< HEAD
     path: "/animals",
     element: <AllAnimals />,
   } 
-=======
+  {
     path: "/create-advert",
     element: <CreateAdvertPage />,
   },
@@ -45,7 +41,6 @@ const router = createBrowserRouter([
     path: "/listings",
     element: <Listings />,
   }
->>>>>>> main
 ]);
 
 const App = () => {
