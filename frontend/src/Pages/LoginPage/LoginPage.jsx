@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Login from "../../Components/Login/Login";
+import { getUsers, getUserById } from "../../services/users"
 // import { useContext } from "react";
 // import Context from "../../components/Context/Context";
-import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions } from "@mui/material";
+import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions, Typography } from "@mui/material";
+import PetsIcon from '@mui/icons-material/Pets';
 
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("")
+  const [userData, setUserData] = useState("")
   const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
@@ -26,16 +30,18 @@ export const LoginPage = () => {
     event.preventDefault();
     if (token) {
       try {
-        // I have taken setPost to handlePostChange - add validation for an empty post.
         // await login(token, email, password); need to create the login service
-        console.log(email)
-        console.log(password)
-        navigate("/login");
-        // props.fetchPosts();
+        const data = await getUserById(email, password)
+        setUserData(data);
+        navigate("/listings");
         setEmail("");
         setPassword("");
+        setError("")
       } catch (err) {
-        console.error(err);
+        setUserData(null)
+        setError(err.message)
+        setEmail("");
+        setPassword("");
         navigate("/login");
       }
     }
@@ -50,18 +56,20 @@ export const LoginPage = () => {
         padding: "0.1em",
         mt: 3,
       }}
-    >
+    > 
 
       <CardContent
         component="form"
         id="post-form"
         onSubmit={handleSubmit}
       >
-
+        <Typography variant="h2"  sx={{mb: 2}}>Login</Typography>
+        {/* <PetsIcon sx={{mb: 2}}/> */}
         <TextField
           inputProps={{
             "data-testid": "username",
           }}
+          sx={{mb: 2}}
           label="Email Address"
           fullWidth
           size="small"
@@ -86,6 +94,7 @@ export const LoginPage = () => {
           name="message"
           value={password}
           onChange={handlePasswordChange}
+          helperText={error}
 
         />
       </CardContent>
@@ -95,6 +104,7 @@ export const LoginPage = () => {
           type="submit"
           form="post-form"
           variant="contained"
+          endIcon={<PetsIcon />}
         >
           Login
         </Button>
