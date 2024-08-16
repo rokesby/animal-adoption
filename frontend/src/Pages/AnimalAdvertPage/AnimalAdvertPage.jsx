@@ -11,12 +11,29 @@ import {
 import mockData from "./mockData.json";
 
 export const AnimalAdvertPage = () => {
-  const [animalData, setAnimalData] = useState(null);
-
+  // const [animalData, setAnimalData] = useState(null);
+  const [name, setName] = useState("");
+  const [species, setSpecies] = useState(""); 
+  const [age, setAge] = useState(""); 
+  const [breed, setBreed] = useState(""); 
+  const [location, setLocation] = useState("");      
+  
   useEffect(() => {
 // Temporary - mock data
-    setAnimalData(mockData);
-  }, []);
+    // setAnimalData(mockData);
+    const fetchAnimalData = async () => {
+      try {
+        const data = await getSingleAnimal(animal_id);
+        setName(data.name);
+        setSpecies(data.species);
+        setAge(data.age);
+        setBreed(data.breed);
+        setLocation(data.location);
+      } catch (error) {
+        console.error("Fail to fetch animal data");
+      }
+    }
+  });
 
   if (!animalData) {
     return (
