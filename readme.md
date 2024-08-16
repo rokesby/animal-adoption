@@ -23,14 +23,8 @@ cd server
 - source adoption/bin/activate
 
 ## Install dependencies 
-- pip install flask
-- pip install pymongo
-- pip install psycopg2
-- pip install SQLAlchemy
-- pip install -U Flask-SQLAlchemy
-- pip install python-dotenv
-- pip install authlib
-
+pip install flask authlib pymongo psycopg2 SQLAlchemy python-dotenv
+pip install -U Flask-SQLAlchemy
 
 ## Frontend Dependencies
 - npm install @mui/material @emotion/react @emotion/styled
