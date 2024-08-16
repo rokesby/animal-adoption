@@ -38,37 +38,37 @@ class Animal(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
 
-    class User(db.Model):
-        __tablename__ = 'users'
+class User(db.Model):
+    __tablename__ = 'users'
 
-        id = db.Column(db.Integer(), primary_key=True)
+    id = db.Column(db.Integer(), primary_key=True)
 
-        email = db.Column(db.String(255), nullable=False)
-        password = db.Column(db.String(255), nullable=False)
-        first_name = db.Column(db.String(255), nullable=False)
-        last_name = db.Column(db.String(255), nullable=False)
-        shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    first_name = db.Column(db.String(255), nullable=False)
+    last_name = db.Column(db.String(255), nullable=False)
+    shelter_id = db.Column(db.Integer, db.ForeignKey('shelters.id'), nullable=False)
 
-        def as_dict(self):
-            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    
-    class Shelter(db.Model):
-        __tablename__ = 'shelters'
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-        id = db.Column(db.Integer(), primary_key=True)
+class Shelter(db.Model):
+    __tablename__ = 'shelters'
 
-        name = db.Column(db.String(255), nullable=False)
-        location = db.Column(db.String(255), nullable=False)
-        email = db.Column(db.String(255), nullable=False)
-        phone_number = db.Column(db.String(20), nullable=False)
+    id = db.Column(db.Integer(), primary_key=True)
 
-        animals = db.relationship('Animal', backref='shelter', lazy=True)
-        # animals = relationship('Animal', backref='shelter')
-        # users = relationship('User', backref='shelter')
-        users = db.relationship('User', backref='shelter', lazy=True)
+    name = db.Column(db.String(255), nullable=False)
+    location = db.Column(db.String(255), nullable=False)
+    email = db.Column(db.String(255), nullable=False)
+    phone_number = db.Column(db.String(20), nullable=False)
 
-        def as_dict(self):
-            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    animals = db.relationship('Animal', backref='shelter', lazy=True)
+    # animals = relationship('Animal', backref='shelter')
+    # users = relationship('User', backref='shelter')
+    users = db.relationship('User', backref='shelter', lazy=True)
+
+    def as_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
 # == Routes Here ==
 
@@ -131,28 +131,22 @@ def get_users():
         users_list = [user.as_dict() for user in users]
         return jsonify(users_list)
     
-@app.route('/login', methods=['GET'])
-def get_user_by_id():
+@app.route('/login', methods=['POST'])
+def login():
     with app.app_context():
-        req_email = request.headers.get('email')
-        req_password = request.headers.get('password')
+        data = request.get_json()
+        req_email = data.get('email')
+        req_password = data.get('password')
         user = User.query.filter_by(email=req_email).first()
         if not user:
             return jsonify({"error": "User not found"}), 401
         elif user.password == req_password:
-            return jsonify(user.as_dict()), 200
+            token = generate_token(req_email)
+            print(token)
+            return jsonify({"token": token.decode('utf-8')}), 200
         else:
             return jsonify({"error": "Password is incorrect"}), 401
-            
-# @app.route('/login', methods=['POST'])
-# def login():
-#     # Assume you validate the user's credentials and get the user_id
-#     user_id = "some_user_id"  # Replace with actual user ID
-#     token = generate_token(user_id)
 
-#     return jsonify({"token": token.decode('utf-8')}), 200
-
-    
 
 # Test JSON route
 @app.route('/profile')
