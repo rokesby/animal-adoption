@@ -24,12 +24,12 @@ cd server
 
 ## Install dependencies 
 - pip install flask
-- pip install pymongo
 - pip install psycopg2
 - pip install SQLAlchemy
 - pip install -U Flask-SQLAlchemy
 - pip install python-dotenv
 - pip install authlib
+- pip install flask_cors
 
 
 ## Frontend Dependencies
