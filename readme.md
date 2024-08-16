@@ -27,8 +27,8 @@ cd server
 - pip install pymongo
 
 
-pip install psycopg2
-pip install SQLAlchemy
+    pip install psycopg2
+    pip install SQLAlchemy
 
 
 
