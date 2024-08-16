@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: "/animals",
     element: <AllAnimals />,
-  } 
+  },
   {
     path: "/create-advert",
     element: <CreateAdvertPage />,
