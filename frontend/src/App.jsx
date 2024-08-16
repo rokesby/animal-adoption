@@ -4,19 +4,24 @@ import "./App.css";
 import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
+import AllAnimals from "./pages/Animals/AllAnimals";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import { Listings } from "./Pages/Listings/Listings";
+import Listings from "./pages/Listings/Listings";
+
+
+import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";import { Listings } from "./Pages/Listings/Listings";
+
 
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
 const Context = createContext();
 
-const NavbarWrapper = () => (
+//const NavbarWrapper = () => (
   <>
     <Navbar />
     <Outlet />
   </>
-);
+//);
 
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
@@ -29,8 +34,16 @@ const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
+    path: "/animals",
+    element: <AllAnimals />,
+  },
+  {
     path: "/create-advert",
     element: <CreateAdvertPage />,
+  },
+  {
+    path: "/animal-advert", 
+    element: <AnimalAdvertPage />,
   },
   {
     path: "/listings",
