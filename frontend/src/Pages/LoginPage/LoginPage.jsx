@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Login from "../../Components/Login/Login";
-import { getUsers, getUserById } from "../../services/users"
+import { login } from "../../services/authentication"
 // import { useContext } from "react";
 // import Context from "../../components/Context/Context";
 import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions, Typography } from "@mui/material";
@@ -13,27 +12,24 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
   const [userData, setUserData] = useState("")
+  const [token, setToken] = useState("")
   const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
-    // const token = localStorage.getItem("token");
     setEmail(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
-    // const token = localStorage.getItem("token");
     setPassword(event.target.value);
   };
 
   const handleSubmit = async (event) => {
-    const token = localStorage.getItem("token"); //need to set up 
     event.preventDefault();
-    if (token) {
       try {
-        // await login(token, email, password); need to create the login service
-        const data = await getUserById(email, password)
-        setUserData(data);
-        navigate("/listings");
+        const data = await login(email, password)
+        // console.log(data.token) this shows a token
+        setToken(data.token);
+        navigate("/create-advert");
         setEmail("");
         setPassword("");
         setError("")
@@ -43,7 +39,6 @@ export const LoginPage = () => {
         setEmail("");
         setPassword("");
         navigate("/login");
-      }
     }
   };
 
