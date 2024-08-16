@@ -6,6 +6,7 @@ import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import AllAnimals from "./pages/Animals/AllAnimals";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
+import Listings from "./pages/Listings/Listings";
 
 
 // alternative to state for passing down to child components
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/create-advert",
     element: <CreateAdvertPage />,
+  },
+  {
+    path: "/listings",
+    element: <Listings />,
   }
 ]);
 

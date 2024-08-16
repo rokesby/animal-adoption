@@ -37,7 +37,7 @@ const AnimalCard = ({ name, age, breed, location, image, button1Text }) => {
     </Card>
   );
 };
-
+// Define the prop types for the component
 AnimalCard.propTypes = {
   name: PropTypes.string.isRequired,
   age: PropTypes.string.isRequired,

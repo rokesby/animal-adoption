@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { getAnimals } from "../../services/animals";
 import AnimalCard from "../../components/AnimalCard/animalcard";
 
-const AllAnimals = () => {
+// This component fetches all the animals from the database and displays them in a card format.
+  const AllAnimals = () => {
   const [animalsState, setAnimalsState] = useState([]);
 
   const fetchAnimals = () => {
