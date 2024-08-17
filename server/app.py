@@ -5,6 +5,8 @@ from db.database_connection import db_session
 from db.seed import Animal, Shelter, User
 from functools import wraps
 from controllers.auth import generate_token, decode_token
+from flask_bcrypt import Bcrypt 
+
 
 from dotenv import load_dotenv
 import os
@@ -12,6 +14,8 @@ import os
 
 # Create a new Flask app
 app = Flask(__name__)
+# Encryption with Bcrypt
+bcrypt = Bcrypt(app) 
 
 CORS(app)
 
@@ -153,11 +157,14 @@ def signup():
     with app.app_context():
         data = request.get_json()
         print('Received the data:', data)
+
+        # Password hashing happens here
+        plaintext_password = data['password'].encode("utf-8")
+        hashed_password = bcrypt.generate_password_hash(plaintext_password).decode('utf-8') 
+
         user = User(
             email=data['email'],
-            # Will need to modify the line below
-            # so that the password is hashed before saved to db
-            password=data['password'],
+            password=hashed_password,
             first_name=data['first_name'],
             last_name=data['last_name'],
             shelter_id=data['shelter_id']
