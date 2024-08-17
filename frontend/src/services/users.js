@@ -18,7 +18,7 @@ export const signup = async (formData) => {
     body: JSON.stringify(payload),
   };
 
-  let response = await fetch(`${BACKEND_URL}/signup`, requestOptions);
+  let response = await fetch(`${BACKEND_URL}/sign-up`, requestOptions);
   if (response.status === 201) {
     const data = await response.json();
     return data;
