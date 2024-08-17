@@ -147,6 +147,27 @@ def login():
         else:
             return jsonify({"error": "Password is incorrect"}), 401
 
+# This function adds a new user to the database
+@app.route('/sign-up', methods=['POST'])
+def signup():
+    with app.app_context():
+        data = request.get_json()
+        print('Received the data:', data)
+        user = User(
+            email=data['email'],
+            # Will need to modify the line below
+            # so that the password is hashed before saved to db
+            password=data['password'],
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            shelter_id=data['shelter_id']
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        return jsonify(user.as_dict()), 201
+
+        
 
 # Test JSON route
 @app.route('/profile')
