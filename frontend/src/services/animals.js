@@ -63,7 +63,7 @@ export const createAnimal = async (animal) => {
   }
 };
 
-export const getSingleAnimal = async (animal_id) => {
+export const getSingleAnimal = async (id) => {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -71,11 +71,13 @@ export const getSingleAnimal = async (animal_id) => {
     },
   };
   try {
-    const response = await fetch(`${BACKEND_URL}/listings/${animal_id}`, requestOptions);
+    const response = await fetch(`${BACKEND_URL}/listings/${id}`, requestOptions);
     if (response.status !== 200) {
       throw new Error("Unable to fetch this animal");
     }
     const data = await response.json();
+    return data; 
+
   } catch (error) {
     console.error('Error:', error);
   }

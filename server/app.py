@@ -99,6 +99,7 @@ def display_one_animal(id):
         animal = Animal.query.get(id)
         return jsonify(animal.as_dict()), 200
 
+
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
 
 # Will I need to change '/listings' to something else? 
