@@ -5,6 +5,8 @@ from db.database_connection import db_session
 from db.seed import Animal, Shelter, User
 from functools import wraps
 from controllers.auth import generate_token, decode_token
+from flask_bcrypt import Bcrypt 
+
 
 from dotenv import load_dotenv
 import os
@@ -12,6 +14,8 @@ import os
 
 # Create a new Flask app
 app = Flask(__name__)
+# Encryption with Bcrypt
+bcrypt = Bcrypt(app) 
 
 CORS(app)
 
@@ -93,7 +97,8 @@ def display_animals():
 def display_one_animal(id):
     with app.app_context():
         animal = Animal.query.get(id)
-        return jsonify(animal.as_dict())
+        return jsonify(animal.as_dict()), 200
+
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
 
@@ -147,6 +152,30 @@ def login():
         else:
             return jsonify({"error": "Password is incorrect"}), 401
 
+# This function adds a new user to the database
+@app.route('/sign-up', methods=['POST'])
+def signup():
+    with app.app_context():
+        data = request.get_json()
+        print('Received the data:', data)
+
+        # Password hashing happens here
+        plaintext_password = data['password']
+        hashed_password = bcrypt.generate_password_hash(plaintext_password).decode('utf-8') 
+
+        user = User(
+            email=data['email'],
+            password=hashed_password,
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            shelter_id=data['shelter_id']
+        )
+        db.session.add(user)
+        db.session.commit()
+
+        return jsonify(user.as_dict()), 201
+
+        
 
 # Test JSON route
 @app.route('/profile')
