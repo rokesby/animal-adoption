@@ -1,18 +1,25 @@
+//animals pages page  
+
 import { useState, useEffect } from "react";
 import { getAnimals } from "../../services/animals";
 import AnimalCard from "../../components/AnimalCard/animalcard";
 
 // This component fetches all the animals from the database and displays them in a card format.
-  const AllAnimals = () => {
+const AllAnimals = () => {
   const [animalsState, setAnimalsState] = useState([]);
 
   const fetchAnimals = () => {
     getAnimals()
       .then((data) => {
-        setAnimalsState(data.animals);
+        console.log("I have data");
+        if (data && Array.isArray(data  )) {
+          setAnimalsState(data);
+        } else {
+          console.error("Unexpected data format:", data);
+        }
       })
       .catch((err) => {
-        console.error(err);
+        console.error("Error fetching animals:", err);
       });
   };
 
@@ -22,32 +29,28 @@ import AnimalCard from "../../components/AnimalCard/animalcard";
 
   return (
     <>
-      <h2>Animals who need a home</h2>
-      {animalsState.map((animal) => {
-        const { id, image, name, breed, age, location } = animal;
-        return (
-          <>
-            <div
-              key={id}
-              style={{
-                margin: "1em",
-                overflow: "hidden",
-                display: "inline-block",
-                flexDirection: "row",
-              }}
-            >
+      <h2>Animals Who Need a Home</h2>
+      {animalsState.length > 0 ? (
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+          {animalsState.map((animal) => {
+            const { id, image, name, breed, age, location } = animal;
+            return (
               <AnimalCard
+                key={id}
                 image={image}
                 name={name}
                 age={age}
                 breed={breed}
                 location={location}
                 button1Text={`Meet ${name}`}
+                linkUrl={`/animals/${id}`}  // Assuming animal details are on /animals/:id
               />
-            </div>
-          </>
-        );
-      })}
+            );
+          })}
+        </div>
+      ) : (
+        <p>No animals available at the moment.</p>
+      )}
     </>
   );
 };

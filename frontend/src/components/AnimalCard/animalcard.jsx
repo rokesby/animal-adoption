@@ -6,33 +6,34 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import PropTypes from 'prop-types'; 
 
-const AnimalCard = ({ name, age, breed, location, image, button1Text }) => {
+const dummyImage = "https://via.placeholder.com/265"; // Dummy image URL
+
+const AnimalCard = ({ name, age, breed, location, image, button1Text, linkUrl }) => {
   return (
     <Card sx={{ maxWidth: 380 }} style={{ margin: "2em", overflow: "hidden" }}>
-      {image && ( // Conditionally render image if provided
-        <CardMedia sx={{ height: 265, width: 265 }} image={image} />
-      )}
+      <CardMedia
+        sx={{ height: 265, width: "100%", objectFit: "cover" }}
+        image={image || dummyImage} 
+      />
 
-      <CardContent data-testid="animal-card">
+<CardContent data-testid="animal-card">
         <Typography gutterBottom variant="h5" component="div">
-          {name} {age} {breed} {location}
+          {name}
         </Typography>
-
-        {/* <Typography variant="body1" color="text.secondary">
-          {firstName}
-        </Typography>
-
         <Typography variant="body1" color="text.secondary">
-          {lastName}
-        </Typography> */}
+          Age: {age}
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Breed: {breed}
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
+          Location: {location}
+        </Typography>
       </CardContent>
-
-      <CardActions>
-        {/* <button style={{ color: "blue" }} size="small">{button1Text}</button> */}
-        <Button variant="outlined">{button1Text}</Button>
-        {/* <Button>
-          {button2Text}
-        </Button> */}
+      <CardActions style={{ justifyContent: "center" }}>
+        <a href={linkUrl} style={{ textDecoration: 'none' }}>
+          <Button variant="outlined">{button1Text}</Button>
+        </a>
       </CardActions>
     </Card>
   );
@@ -40,11 +41,12 @@ const AnimalCard = ({ name, age, breed, location, image, button1Text }) => {
 // Define the prop types for the component
 AnimalCard.propTypes = {
   name: PropTypes.string.isRequired,
-  age: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
   breed: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
   image: PropTypes.string,
   button1Text: PropTypes.string,
+  linkUrl: PropTypes.string.isRequired
 };
 
 export default AnimalCard;
