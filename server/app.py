@@ -147,6 +147,22 @@ def login():
         else:
             return jsonify({"error": "Password is incorrect"}), 401
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    with app.app_context():
+        data = request.get_json()
+        req_email = data.get('email')
+        req_password = data.get('password')
+        user = User.query.filter_by(email=req_email).first()
+        if not user:
+            return jsonify({"error": "User not found"}), 401
+        elif user.password == req_password:
+            token = generate_token(req_email)
+            print(token)
+            return jsonify({"token": token.decode('utf-8')}), 200
+        else:
+            return jsonify({"error": "Password is incorrect"}), 401
+
 
 # Test JSON route
 @app.route('/profile')
