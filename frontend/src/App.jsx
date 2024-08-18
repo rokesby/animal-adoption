@@ -42,7 +42,7 @@ const router = createBrowserRouter([
     element: <CreateAdvertPage />,
   },
   {
-    path: "/animal-advert/animal_id", 
+    path: "/animals/:id", 
     element: <AnimalAdvertPage />,
   },
   {

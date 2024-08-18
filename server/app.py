@@ -90,9 +90,9 @@ def display_animals():
 
 
 @app.route('/listings/<int:id>', methods= ['GET'])
-def display_one_animal(animal_id):
+def display_one_animal(id):
     with app.app_context():
-        animal = Animal.query.get(animal_id)
+        animal = Animal.query.get(id)
         return jsonify(animal.as_dict())
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
