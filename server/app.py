@@ -94,10 +94,10 @@ def display_animals():
 
 
 @app.route('/listings/<int:id>', methods= ['GET'])
-def display_one_animal(animal_id):
+def display_one_animal(id):
     with app.app_context():
-        animal = Animal.query.get(animal_id)
-        return jsonify(animal.as_dict())
+        animal = Animal.query.get(id)
+        return jsonify(animal.as_dict()), 200
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
 
@@ -159,7 +159,7 @@ def signup():
         print('Received the data:', data)
 
         # Password hashing happens here
-        plaintext_password = data['password'].encode("utf-8")
+        plaintext_password = data['password']
         hashed_password = bcrypt.generate_password_hash(plaintext_password).decode('utf-8') 
 
         user = User(
