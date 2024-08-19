@@ -1,5 +1,3 @@
-//animals pages page  
-
 import { useState, useEffect } from "react";
 import { getAnimals } from "../../services/animals";
 import AnimalCard from "../../components/AnimalCard/animalcard";

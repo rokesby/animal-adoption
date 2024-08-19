@@ -5,49 +5,48 @@ import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
+import AllAnimals from "./Pages/Animals/animals";
 import AllAnimals from "./Pages/Animals/Animals";
-
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
-
-
 
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
+// Create a context to pass down authStatus
 const Context = createContext();
 
-//const NavbarWrapper = () => (
+// Wrapper component that includes the Navbar and renders the nested routes
+const NavbarWrapper = () => (
   <>
     <Navbar />
     <Outlet />
   </>
-//);
+);
 
-// docs: https://reactrouter.com/en/main/start/overview
+// Define your routes
 const router = createBrowserRouter([
   {
-    path: "/",
-    element: <AllAnimals />,
+    path: "/", // Base path for the application
+    element: <NavbarWrapper />, // Navbar on all pages
+    children: [
+      {
+        path: "login", 
+        element: <LoginPage />,
+      },
+      {
+        path: "sign-up", 
+        element: <SignUpPage />,
+      },
+      {
+        path: "animals", 
+        element: <AllAnimals />,
+      },
+      {
+        path: "create-advert", // Path to the create advert page
+        element: <CreateAdvertPage />,
+      }
+    ],
   },
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/sign-up",
-    element: <SignUpPage />,
-  },
-  {
-    path: "/animals",
-    element: <AllAnimals />,
-  },
-  {
-    path: "/create-advert",
-    element: <CreateAdvertPage />,
-  },
-  {
-    path: "/animals/:id", 
-    element: <AnimalAdvertPage />,
-  }
+
 ]);
 
 const App = () => {
