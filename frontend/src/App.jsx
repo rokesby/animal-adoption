@@ -6,6 +6,8 @@ import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
 import AllAnimals from "./Pages/Animals/animals";
+import AllAnimals from "./Pages/Animals/Animals";
+import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
 
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
@@ -44,6 +46,7 @@ const router = createBrowserRouter([
       }
     ],
   },
+
 ]);
 
 const App = () => {

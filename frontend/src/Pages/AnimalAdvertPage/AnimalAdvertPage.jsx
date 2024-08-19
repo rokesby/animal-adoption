@@ -12,44 +12,6 @@ import {
 import { getSingleAnimal } from "../../services/animals";
 import { useParams } from "react-router-dom";
 
-// export const AnimalAdvertPage = ({ id }) => {
-//   const [animalData, setAnimalData] = useState(null);
-//   const [error, setError] = useState(null);
-
-//   const [name, setName] = useState("");
-//   const [species, setSpecies] = useState(""); 
-//   const [age, setAge] = useState(""); 
-//   const [breed, setBreed] = useState(""); 
-//   const [location, setLocation] = useState(""); 
-//   const [bio, setBio] = useState("");
-//   const[male, setMale] = useState("");
-//   const[neutered, setNeutered] = useState("");
-//   const[livesWithChildren, setLivesWithChildren] = useState("");    
-  
-//   useEffect(() => {
-// // Temporary - mock data
-//     // setAnimalData(mockData);
-//     const fetchAnimalData = async () => {
-//       try {
-//         const data = await getSingleAnimal(id);
-//         setAnimalData(data);
-
-
-//         setName(data.name);
-//         setSpecies(data.species);
-//         setAge(data.age);
-//         setBreed(data.breed);
-//         setLocation(data.location);
-//         setBio(data.bio);
-//         setMale(data.male);
-//         setNeutered(data.neutered);
-//         setLivesWithChildren(data.lives_with_children);
-//       } catch (error) {
-//         console.error("Fail to fetch animal data");
-//       }
-//     }
-//     fetchAnimalData();
-//   }, [id]);
 
 // useEffect(() => {
 //   const fetchAnimal = async () => {
@@ -159,6 +121,18 @@ export const AnimalAdvertPage = () => {
                 secondary={animalData.livesWithChildren ? "Yes" : "No"}
               />
             </ListItem>
+            <ListItem>
+            <ListItemText 
+              primary="Email" 
+              secondary={
+                <a 
+                  href={`mailto:${animalData.shelter.email}?subject=Inquiry%20about%20adopting%20${encodeURIComponent(animalData.name)}&body=Hi,%20I'm%20interested%20in%20adopting%20${encodeURIComponent(animalData.name)}.%20Could%20I%20get%20some%20more%20info?`}
+                >
+                  {animalData.shelter.email}
+                </a>
+              } 
+            />
+          </ListItem>
           </List>
         </Box>
       </CardContent>
