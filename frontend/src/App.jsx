@@ -5,7 +5,6 @@ import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import Listings from "./pages/Listings/Listings";
 import AllAnimals from "./Pages/Animals/Animals";
 
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
@@ -26,6 +25,10 @@ const Context = createContext();
 // docs: https://reactrouter.com/en/main/start/overview
 const router = createBrowserRouter([
   {
+    path: "/",
+    element: <AllAnimals />,
+  },
+  {
     path: "/login",
     element: <LoginPage />,
   },
@@ -44,10 +47,6 @@ const router = createBrowserRouter([
   {
     path: "/animals/:id", 
     element: <AnimalAdvertPage />,
-  },
-  {
-    path: "/listings",
-    element: <Listings />,
   }
 ]);
 

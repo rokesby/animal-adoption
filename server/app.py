@@ -136,7 +136,7 @@ def get_users():
         users_list = [user.as_dict() for user in users]
         return jsonify(users_list)
     
-@app.route('/login', methods=['POST'])
+@app.route('/token', methods=['POST'])
 def login():
     with app.app_context():
         data = request.get_json()

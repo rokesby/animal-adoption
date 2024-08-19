@@ -11,8 +11,18 @@ export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
-  const [userData, setUserData] = useState("")
-  const [token, setToken] = useState("")
+  const [userData, setUserData] = useState("");
+  
+  // get token from local storage
+  const token = localStorage.getItem("token");
+  // useEffect(() => {
+  //   if (token) {
+  //     fetchGetUser(token);
+  //   }
+  // }, [token]);
+
+
+
   const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
@@ -27,8 +37,7 @@ export const LoginPage = () => {
     event.preventDefault();
       try {
         const data = await login(email, password)
-        // console.log(data.token) this shows a token
-        setToken(data.token);
+        localStorage.setItem("token", data.token)
         navigate("/create-advert");
         setEmail("");
         setPassword("");
