@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getAnimals } from "../../services/animals";
 import AnimalCard from "../../components/AnimalCard/animalcard";
+import LoginLogout from "../../components/LoginLogout/LoginLogout";
 
 // This component fetches all the animals from the database and displays them in a card format.
 const AllAnimals = () => {
@@ -29,6 +30,7 @@ const AllAnimals = () => {
 
   return (
     <>
+    <LoginLogout />
       <h2>Animals Who Need a Home</h2>
       {animalsState.length > 0 ? (
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
