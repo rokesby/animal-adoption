@@ -68,11 +68,23 @@ export const CreateAdvertPage = () => {
           lives_with_children: formData.livesWithChildren,
           shelter_id: formData.shelterId
         });
-          } catch (err) {
-            console.error(err);
-            setMessage("Error creating advert. Please try again.");
-          }
-        };
+
+        if (animal.status === 201) {
+          const newAnimalId = animal.data.id; // Get the ID of the newly created animal
+          navigate(`/animals/${newAnimalId}`); // Redirect to the animal's profile page
+        } else {
+          throw new Error("Failed to create animal");
+        }
+      } catch (err) {
+        console.error(err);
+        setMessage("Error creating advert. Please try again.");
+      }
+    };
+        //   } catch (err) {
+        //     console.error(err);
+        //     setMessage("Error creating advert. Please try again.");
+        //   }
+        // };
 
   return (
     <>

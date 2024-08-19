@@ -56,7 +56,11 @@ export const createAnimal = async (animal) => {
       throw new Error("Error creating post");
     }
     const data = await response.json();
-    return data;
+    return {
+      status: response.status,
+      message: 'Successfully created animal profile',
+      data:data,
+    };
   } catch (error) {
     console.error("Fetch error:", error);
     throw error;
