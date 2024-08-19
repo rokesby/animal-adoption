@@ -37,10 +37,19 @@ class Animal(db.Model):
     neutered = db.Column(db.Boolean, nullable=False)
     lives_with_children = db.Column(db.Boolean, nullable=False)
     shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
+    # shelter = db.relationship('Shelter', backref='animals', lazy=True)
 
     def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    
+        animal_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
+        shelter_info = Shelter.query.get(self.shelter_id)
+
+        animal_dict['shelter'] = {
+            'name': shelter_info.name,
+            'location': shelter_info.location,
+            'email': shelter_info.email,
+            'phone_number': shelter_info.phone_number
+        }
+        return animal_dict
 
 class User(db.Model):
     __tablename__ = 'users'
