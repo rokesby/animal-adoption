@@ -44,9 +44,17 @@ export const LoginPage = () => {
 
   return (
     <>
-       <Card 
+    <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh'
+        }}>
+    <Card 
       sx={{
-        width: "90vh",
+        width: "400px",
         margin: "0 auto",
         padding: "0.1em",
         mt: 3,
@@ -105,6 +113,7 @@ export const LoginPage = () => {
         </Button>
       </CardActions>
     </Card>
+    </Box>
     </>
   );
 }
