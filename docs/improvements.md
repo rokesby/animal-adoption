@@ -1,0 +1,2 @@
+# TODO - Upload multiple files at a time.
+Photo upload - need to append a unique filename to each upload so that the files in the directory do not overwrite each other. Need to tie the photographs into the Animal object so that they can be referenced.

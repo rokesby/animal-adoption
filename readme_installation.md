@@ -44,4 +44,5 @@ touch .env
 DATABASE_CONNECT = "postgresql://reza@localhost:5432/adoption"
 DATABASE_NAME = "adoption"
 DATABASE_HOST = "localhost"
+PHOTO_UPLOAD_LOCATION = "static/photo_uploads/"
 
