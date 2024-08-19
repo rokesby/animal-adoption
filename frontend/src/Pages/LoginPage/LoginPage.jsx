@@ -12,18 +12,17 @@ export const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
   const [userData, setUserData] = useState("");
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
   
   // get token from local storage
-  const token = localStorage.getItem("token");
-  // useEffect(() => {
-  //   if (token) {
-  //     fetchGetUser(token);
-  //   }
-  // }, [token]);
+  
+  useEffect(() => {
+    if (token) {
+     navigate("/animals")
+    }
+  }, [token]);
 
-
-
-  const navigate = useNavigate();
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -53,7 +52,7 @@ export const LoginPage = () => {
 
   return (
     <>
-       <Card 
+      <Card 
       sx={{
         width: "90vh",
         margin: "0 auto",
