@@ -7,6 +7,15 @@ from functools import wraps
 from controllers.auth import generate_token, decode_token
 from flask_bcrypt import Bcrypt 
 
+# Photo upload
+from werkzeug.utils import secure_filename
+from flask import url_for
+import imghdr # TODO  - remove and cleanup.
+from flask import send_from_directory
+from flask import abort
+import FileUploader
+
+# End photo upload.
 
 from dotenv import load_dotenv
 import os
@@ -75,13 +84,6 @@ class Shelter(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
     
 # == Routes Here ==
-
-# # Login route - get users
-# @app.route('/users', methods=['GET'])
-# def display_users():
-#     # connection = get_flask_database_connection(app)
-#     # class AnimalsResource(Resource)
-#     return render_template('users.html', Users=Users)
 
 # Listings route - return a list of all animals.
 @app.route('/listings', methods=['GET'])
@@ -177,15 +179,45 @@ def signup():
 
         
 
-# Test JSON route
-@app.route('/profile')
-def my_profile():
-    response_body = {
-        "name": "Nagato",
-        "about" :"Hello! I'm a full stack developer that loves python and javascript"
-    }
+############ Photo Upload.
 
-    return response_body
+app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
+app.config['UPLOAD_PATH'] = 'uploads'
+
+# TODO Specify GET?
+# Test to allow system admin to view files.
+@app.route('/upload', methods=['GET'])
+def upload_form():
+    file_listing = os.listdir(os.getenv("PHOTO_UPLOAD_LOCATION"))
+    return render_template('upload.html', file_listing = file_listing)
+
+@app.route('/upload', methods=['POST'])
+def upload_files():
+    uploader = FileUploader.FileUploader(
+        upload_location=os.getenv("PHOTO_UPLOAD_LOCATION"),
+        allowed_extensions=app.config['UPLOAD_EXTENSIONS']
+    )
+
+    uploaded_file = request.files['file']
+    success, message = uploader.validate_and_save(uploaded_file)
+
+    if not success:
+        return message, 400
+    return '', 204
+
+@app.route('/upload/<filename>')
+def upload(filename):
+    return send_from_directory(os.getenv("PHOTO_UPLOAD_LOCATION"), filename)
+
+
+# Validator for Dropzone js component.
+@app.errorhandler(413)
+def too_large(e):
+    return "File is too large", 413
+
+
+############ End Photo Upload
 
 # decorator function used for sake of DRY
 def token_checker(f):
