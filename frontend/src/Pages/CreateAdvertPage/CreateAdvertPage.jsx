@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   TextField,
@@ -18,6 +18,7 @@ import { createAnimal } from "../../services/animals";
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token"); // getting token from local storage
   const [formData, setFormData] = useState({
     name: "",
     species: "",
@@ -35,13 +36,20 @@ export const CreateAdvertPage = () => {
 
   const navigate = useNavigate();
 
+  // Anna I've added a useEffect to check for the token / navigate to 'login' if no token exists.
+  useEffect(() => {
+    if (!token) {
+     navigate("/login")
+    }
+  }, [token]);
+
   const handleUpdateFormData = (id, value) => {
     setFormData({ ...formData, [id]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (!formData.name || !formData.species || !formData.age) {
       setMessage("Please fill in all required fields");
       return;
@@ -56,7 +64,8 @@ export const CreateAdvertPage = () => {
       // using the info obtained from the form
       
       try {
-        const animal = await createAnimal({
+        // I've added the 'token' as an argument on createAnimal
+        const animal = await createAnimal(token, {
           name: formData.name,
           species: formData.species,
           age: formData.age,

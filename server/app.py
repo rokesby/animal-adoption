@@ -76,6 +76,28 @@ class Shelter(db.Model):
     
 # == Routes Here ==
 
+# decorator function used for sake of DRY
+def token_checker(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = None
+        auth_header = request.headers.get('Authorization')
+
+        if auth_header:
+            # Assuming the token is in the format "Bearer <token>"
+            token = auth_header.split(" ")[1]
+        if not token:
+            return jsonify({"message": "Token is missing!"}), 401
+        try:
+            payload = decode_token(token)
+            request.user_id = payload.get('user_id')
+        except Exception as e:
+            return jsonify({"message": "Invalid or expired token!"}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated_function
+
 # # Login route - get users
 # @app.route('/users', methods=['GET'])
 # def display_users():
@@ -104,6 +126,7 @@ def display_one_animal(id):
 
 # Will I need to change '/listings' to something else? 
 @app.route('/listings', methods=['POST'])
+@token_checker # Added this decorator to check for token. 
 def create_new_animal():
     with app.app_context():
 
@@ -148,7 +171,6 @@ def login():
             return jsonify({"error": "User not found"}), 401
         elif is_valid:
             token = generate_token(req_email)
-            print(token)
             return jsonify({"token": token.decode('utf-8')}), 200
         else:
             return jsonify({"error": "Password is incorrect"}), 401
@@ -187,28 +209,6 @@ def my_profile():
     }
 
     return response_body
-
-# decorator function used for sake of DRY
-def token_checker(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        token = None
-        auth_header = request.headers.get('Authorization')
-
-        if auth_header:
-            # Assuming the token is in the format "Bearer <token>"
-            token = auth_header.split(" ")[1]
-        if not token:
-            return jsonify({"message": "Token is missing!"}), 401
-        try:
-            payload = decode_token(token)
-            request.user_id = payload.get('user_id')
-        except Exception as e:
-            return jsonify({"message": "Invalid or expired token!"}), 401
-
-        return f(*args, **kwargs)
-
-    return decorated_function
 
 # test protected route
 @app.route('/protected', methods=['GET'])
