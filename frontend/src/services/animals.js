@@ -40,12 +40,14 @@ export const getAnimals = async () => {
 // };
 // The animal object is what is created on CreateAdvertPage
 // We pass it in through the services function here
-export const createAnimal = async (animal) => {
+
+// I've updated createAnimal to accept a token
+export const createAnimal = async (token, animal) => {
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`, // I've uncommented this to pass the token in the header.
     },
     body: JSON.stringify(animal),
   };

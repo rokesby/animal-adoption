@@ -15,7 +15,7 @@ export const login = async (email, password) => {
       body: JSON.stringify(payload),
     };
     
-    const response = await fetch(`${BACKEND_URL}/login`, requestOptions);
+    const response = await fetch(`${BACKEND_URL}/token`, requestOptions);
     if (response.status !== 200) {
       if (response.status == 401)
           throw new Error("Username or Password is incorrect");
