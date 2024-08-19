@@ -1,6 +1,5 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import Context from "../../components/Context/Context";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -12,12 +11,9 @@ import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
 import { signup } from "/src/Services/users.js";
 
-
-
 export const SignUpPage = () => {
-  // const { authStatus, setAuthStatus } = useContext(Context);
   const [message, setMessage] = useState("");
-
+  const [passwordError, setPasswordError] = useState("");
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -31,10 +27,40 @@ export const SignUpPage = () => {
 
   const handleUpdateFormData = (id, value) => {
     setFormData({ ...formData, [id]: value });
+    if (id === "password") {
+      validatePassword(value);
+    }
+  };
+
+  const validatePassword = (password) => {
+    const errors = [];
+
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters long.");
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must contain at least one uppercase letter.");
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push("Password must contain at least one lowercase letter.");
+    }
+    if (!/\d/.test(password)) {
+      errors.push("Password must contain at least one digit.");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("Password must contain at least one special character.");
+    }
+
+    setPasswordError(errors.join(" "));
+    return errors.length === 0;
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (passwordError) {
+      setMessage("Please fix the password errors");
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
       setMessage("Passwords don't match");
       return;
@@ -45,7 +71,6 @@ export const SignUpPage = () => {
       if (data === "User with email provided already exists") {
         setMessage(data);
       } else {
-        // setAuthStatus(true);
         navigate("/create-advert", { state: [0, data.message] });
       }
     } catch (err) {
@@ -54,189 +79,111 @@ export const SignUpPage = () => {
     }
   };
 
-  const handlePaste = (event) => {
-    // Handle paste logic
-    console.log("Pasting image URL", event);
-  };
-
   return (
     <>
-        <>
-          {message && (
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Alert
-                data-testid="_message"
-                severity="error"
-                sx={{
-                  width: "50vw",
-                  mt: 2,
-                }}
-              >
-                {message}
-              </Alert>
-            </Box>
+      {message && (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Alert severity="error" sx={{ width: "50vw", mt: 2 }}>
+            {message}
+          </Alert>
+        </Box>
+      )}
+
+      <Card sx={{ width: "50vh", margin: "0 auto", padding: "0.1em", mb: 3, mt: 10 }}>
+        <CardHeader title="Sign Up" subheader="Please enter your details" style={{ textAlign: "left" }} />
+
+        <CardContent component="form" id="signup-form" onSubmit={handleSubmit}>
+          {passwordError && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              {passwordError}
+            </Alert>
           )}
 
-          <Card
-            sx={{
-              width: "50vh",
-              margin: "0 auto",
-              padding: "0.1em",
-              mb: 3,
-              mt: 10,
-            }}
-          >
-            <CardHeader
-              title="Sign Up"
-              subheader="Please enter your details"
-              style={{ textAlign: "left" }}
-            />
+          <TextField
+            label="First Name"
+            placeholder="e.g. Steve"
+            fullWidth
+            size="small"
+            variant="outlined"
+            id="first_name"
+            type="text"
+            value={formData.first_name}
+            onChange={(e) => handleUpdateFormData("first_name", e.target.value)}
+            sx={{ mb: 3 }}
+          />
 
-            <CardContent
-              data-testid="user-card"
-              component="form"
-              id="signup-form"
-              onSubmit={handleSubmit}
-            >
-              {formData.password !== formData.confirmPassword && (
-                <Alert severity="error" sx={{ mb: 3 }}>
-                  Passwords don't match
-                </Alert>
-              )}
+          <TextField
+            label="Last Name"
+            placeholder="e.g. Alex"
+            fullWidth
+            size="small"
+            variant="outlined"
+            id="last_name"
+            type="text"
+            value={formData.last_name}
+            onChange={(e) => handleUpdateFormData("last_name", e.target.value)}
+            sx={{ mb: 3 }}
+          />
 
-              <TextField
-                inputProps={{
-                  "data-testid": "none",
-                }}
-                InputLabelProps={{ shrink: true }}
-                label="First Name"
-                placeholder="e.g. John"
-                fullWidth
-                size="small"
-                variant="outlined"
-                id="first_name"
-                type="text"
-                name="first_name"
-                value={formData.first_name}
-                onChange={(e) =>
-                  handleUpdateFormData("first_name", e.target.value)
-                }
-                sx={{ mb: 3 }}
-              />
+          <TextField
+            label="Email"
+            placeholder="steve@example.com"
+            fullWidth
+            size="small"
+            variant="outlined"
+            id="email"
+            type="email"
+            value={formData.email}
+            onChange={(e) => handleUpdateFormData("email", e.target.value)}
+            sx={{ mb: 3 }}
+          />
 
-              <TextField
-                inputProps={{
-                  "data-testid": "none",
-                }}
-                InputLabelProps={{ shrink: true }}
-                label="Last Name"
-                placeholder="e.g. Smith"
-                fullWidth
-                size="small"
-                variant="outlined"
-                id="last_name"
-                type="text"
-                name="last_name"
-                value={formData.last_name}
-                onChange={(e) =>
-                  handleUpdateFormData("last_name", e.target.value)
-                }
-                sx={{ mb: 3 }}
-              />
+          <TextField
+            label="Password"
+            placeholder="Choose a strong one"
+            fullWidth
+            size="small"
+            variant="outlined"
+            id="password"
+            type="password"
+            value={formData.password}
+            onChange={(e) => handleUpdateFormData("password", e.target.value)}
+            sx={{ mb: 3 }}
+          />
 
-              <TextField
-                inputProps={{
-                  "data-testid": "none",
-                }}
-                InputLabelProps={{ shrink: true }}
-                label="Email"
-                placeholder="john@example.com"
-                fullWidth
-                size="small"
-                variant="outlined"
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={(e) => handleUpdateFormData("email", e.target.value)}
-                sx={{ mb: 3 }}
-              />
+          <TextField
+            label="Confirm Password"
+            placeholder="Confirm Password"
+            fullWidth
+            size="small"
+            variant="outlined"
+            id="confirmPassword"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={(e) => handleUpdateFormData("confirmPassword", e.target.value)}
+            sx={{ mb: 3 }}
+          />
 
-              <TextField
-                inputProps={{
-                  "data-testid": "none",
-                }}
-                InputLabelProps={{ shrink: true }}
-                label="Password"
-                placeholder="Choose a strong one"
-                fullWidth
-                size="small"
-                variant="outlined"
-                id="password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={(e) =>
-                  handleUpdateFormData("password", e.target.value)
-                }
-                sx={{ mb: 3 }}
-              />
+          <TextField
+            label="Shelter ID"
+            placeholder="Your Shelter id"
+            fullWidth
+            size="small"
+            variant="outlined"
+            id="shelter_id"
+            type="number"
+            value={formData.shelter_id}
+            onChange={(e) => handleUpdateFormData("shelter_id", e.target.value)}
+            sx={{ mb: 3 }}
+          />
 
-              <TextField
-                inputProps={{
-                  "data-testid": "none",
-                }}
-                InputLabelProps={{ shrink: true }}
-                label="Confirm Password"
-                placeholder="Confirm it"
-                fullWidth
-                size="small"
-                variant="outlined"
-                id="confirmPassword"
-                type="password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={(e) =>
-                  handleUpdateFormData("confirmPassword", e.target.value)
-                }
-                sx={{ mb: 3 }}
-              />
-
-              <TextField
-                InputProps={{
-                  "data-testid": "none",
-                }}
-                InputLabelProps={{ shrink: true }}
-                label="Shelter"
-                placeholder="Your Shelter id"
-                fullWidth
-                size="small"
-                variant="outlined"
-                id="shelter"
-                type="number"
-                name="Shelter"
-                value={formData.shelter_id}
-                onChange={(e) => handleUpdateFormData("shelter_id", e.target.value)}
-                sx={{ mb: 3 }}
-              />
-
-              <Typography variant="body1" color="text.secondary">
-                {/* Additional information or tips could go here */}
-              </Typography>
-            </CardContent>
-
-            <CardActions>
-              <Button
-                data-testid="_submit-button"
-                type="submit"
-                form="signup-form"
-                variant="contained"
-              >
-                Submit
-              </Button>
-            </CardActions>
-          </Card>
-        </>
+          <CardActions>
+            <Button type="submit" form="signup-form" variant="contained">
+              Submit
+            </Button>
+          </CardActions>
+        </CardContent>
+      </Card>
     </>
   );
 };
