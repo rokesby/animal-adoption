@@ -208,6 +208,7 @@ export const CreateAdvertPage = () => {
             onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
             fullWidth
             multiline
+            rows={4}
             size="small"
             variant="outlined"
             required
