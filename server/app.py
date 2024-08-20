@@ -192,7 +192,7 @@ def signup():
     with app.app_context():
         data = request.get_json()
         print('Received the data:', data)
-
+        req_email = data.get('email')
         # Password hashing happens here
         plaintext_password = data['password']
         hashed_password = bcrypt.generate_password_hash(plaintext_password).decode('utf-8') 
@@ -206,8 +206,11 @@ def signup():
         )
         db.session.add(user)
         db.session.commit()
-
-        return jsonify(user.as_dict()), 201
+        
+        token = generate_token(req_email)
+        print(token)
+        return jsonify({"token": token.decode('utf-8')}), 201
+        # return jsonify(user.as_dict()), 201
 
         
 
