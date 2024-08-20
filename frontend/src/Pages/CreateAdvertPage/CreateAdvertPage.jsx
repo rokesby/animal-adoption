@@ -13,16 +13,19 @@ import {
   CardHeader,
   Box,
   Alert,
+  IconButton,
 } from "@mui/material";
 import { createAnimal } from "../../services/animals";
+import { Add, Remove } from "@mui/icons-material";
+
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token"); // getting token from local storage
+  const token = localStorage.getItem("token"); 
   const [formData, setFormData] = useState({
     name: "",
     species: "",
-    age: "",
+    age: 0, 
     breed: "",
     location: "",
     male: true,
@@ -33,13 +36,12 @@ export const CreateAdvertPage = () => {
     shelterId: "",
   });
 
-
   const navigate = useNavigate();
 
-  // Anna I've added a useEffect to check for the token / navigate to 'login' if no token exists.
+  // Check for the token / navigate to 'login' if no token exists
   useEffect(() => {
     if (!token) {
-     navigate("/login")
+      navigate("/login");
     }
   }, [token]);
 
@@ -49,8 +51,8 @@ export const CreateAdvertPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!formData.name || !formData.species || !formData.age) {
+
+    if (!formData.name || !formData.species || formData.age === "") {
       setMessage("Please fill in all required fields");
       return;
     }
@@ -62,38 +64,40 @@ export const CreateAdvertPage = () => {
       
       // HERE: I am going to try creating an animal 
       // using the info obtained from the form
-      
-      try {
-        // I've added the 'token' as an argument on createAnimal
-        const animal = await createAnimal(token, {
-          name: formData.name,
-          species: formData.species,
-          age: formData.age,
-          breed: formData.breed,
-          location: formData.location,
-          male: formData.male,
-          bio: formData.bio,
-          neutered: formData.neutered,
-          lives_with_children: formData.livesWithChildren,
-          shelter_id: formData.shelterId
-        });
 
-        if (animal.status === 201) {
-          const newAnimalId = animal.data.id; // Get the ID of the newly created animal
-          navigate(`/animals/${newAnimalId}`); // Redirect to the animal's profile page
-        } else {
-          throw new Error("Failed to create animal");
-        }
-      } catch (err) {
-        console.error(err);
-        setMessage("Error creating advert. Please try again.");
+    try {
+      // added the 'token' as an argument on createAnimal
+      const animal = await createAnimal(token, {
+        name: formData.name,
+        species: formData.species,
+        age: formData.age,
+        breed: formData.breed,
+        location: formData.location,
+        male: formData.male,
+        bio: formData.bio,
+        neutered: formData.neutered,
+        lives_with_children: formData.livesWithChildren,
+        shelter_id: formData.shelterId,
+      });
+
+      if (animal.status === 201) {
+        const newAnimalId = animal.data.id;
+        navigate(`/animals/${newAnimalId}`);
+      } else {
+        throw new Error("Failed to create animal");
       }
-    };
-        //   } catch (err) {
-        //     console.error(err);
-        //     setMessage("Error creating advert. Please try again.");
-        //   }
-        // };
+    } catch (err) {
+      console.error(err);
+      setMessage("Error creating advert. Please try again.");
+    }
+  };
+
+  const handleAgeChange = (amount) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      age: Math.max(0, prevData.age + amount), // Age is a positive num
+    }));
+  };
 
   return (
     <>
@@ -102,10 +106,7 @@ export const CreateAdvertPage = () => {
           <Alert
             data-testid="_message"
             severity="error"
-            sx={{
-              width: "50vw",
-              mt: 2,
-            }}
+            sx={{ width: "50vw", mt: 2 }}
           >
             {message}
           </Alert>
@@ -143,27 +144,43 @@ export const CreateAdvertPage = () => {
             sx={{ mb: 3 }}
           />
 
-          <TextField
-            label="Species"
-            value={formData.species}
-            onChange={(e) => handleUpdateFormData("species", e.target.value)}
-            fullWidth
-            size="small"
-            variant="outlined"
-            required
-            sx={{ mb: 3 }}
-          />
+          <FormControl fullWidth sx={{ mb: 3 }}>
+            <InputLabel>Species</InputLabel>
+            <Select
+              value={formData.species}
+              onChange={(e) => handleUpdateFormData("species", e.target.value)}
+              fullWidth
+              size="small"
+              variant="outlined"
+              required
+            >
+              <MenuItem value="dog">Dog</MenuItem>
+              <MenuItem value="cat">Cat</MenuItem>
+              <MenuItem value="rabbit">Rabbit</MenuItem>
+              <MenuItem value="other">Other</MenuItem>
+            </Select>
+          </FormControl>
 
-          <TextField
-            label="Age"
-            value={formData.age}
-            onChange={(e) => handleUpdateFormData("age", e.target.value)}
-            fullWidth
-            size="small"
-            variant="outlined"
-            required
-            sx={{ mb: 3 }}
-          />
+          <Box display="flex" alignItems="center" sx={{ mb: 3 }}>
+            <IconButton onClick={() => handleAgeChange(-1)}>
+              <Remove />
+            </IconButton>
+            <TextField
+              label="Age"
+              value={formData.age}
+              onChange={(e) => handleUpdateFormData("age", e.target.value)}
+              type="number"
+              InputProps={{ readOnly: true }}  // Makes the text field read-only
+              size="small"
+              variant="outlined"
+              required
+              sx={{ textAlign: "center" }}
+            />
+            <IconButton onClick={() => handleAgeChange(1)}>
+              <Add />
+            </IconButton>
+          </Box>
+
           <TextField
             label="Breed"
             value={formData.breed}
@@ -201,7 +218,7 @@ export const CreateAdvertPage = () => {
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Gender</InputLabel>
             <Select
-              value={formData.male}
+              value={formData.male ? "true" : "false"}
               onChange={(e) =>
                 handleUpdateFormData("male", e.target.value === "true")
               }
@@ -209,8 +226,8 @@ export const CreateAdvertPage = () => {
               size="small"
               variant="outlined"
             >
-              <MenuItem value={true}>Male</MenuItem>
-              <MenuItem value={false}>Female</MenuItem>
+              <MenuItem value="true">Male</MenuItem>
+              <MenuItem value="false">Female</MenuItem>
             </Select>
           </FormControl>
 
@@ -230,7 +247,7 @@ export const CreateAdvertPage = () => {
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Neutered</InputLabel>
             <Select
-              value={formData.neutered}
+              value={formData.neutered ? "true" : "false"}
               onChange={(e) =>
                 handleUpdateFormData("neutered", e.target.value === "true")
               }
@@ -238,14 +255,15 @@ export const CreateAdvertPage = () => {
               size="small"
               variant="outlined"
             >
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
+              <MenuItem value="true">Yes</MenuItem>
+              <MenuItem value="false">No</MenuItem>
             </Select>
           </FormControl>
+
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Lives with Children</InputLabel>
             <Select
-              value={formData.livesWithChildren}
+              value={formData.livesWithChildren ? "true" : "false"}
               onChange={(e) =>
                 handleUpdateFormData(
                   "livesWithChildren",
@@ -256,19 +274,10 @@ export const CreateAdvertPage = () => {
               size="small"
               variant="outlined"
             >
-              <MenuItem value={true}>Yes</MenuItem>
-              <MenuItem value={false}>No</MenuItem>
+              <MenuItem value="true">Yes</MenuItem>
+              <MenuItem value="false">No</MenuItem>
             </Select>
           </FormControl>
-
-          {/* <Button variant="contained" component="label" sx={{ mb: 3 }}>
-            Upload Image
-            <input
-              type="file"
-              hidden
-              onChange={(e) => handleUpdateFormData("image", e.target.files[0])}
-            /> */}
-          {/* </Button> */}
         </CardContent>
 
         <CardActions>
@@ -284,6 +293,6 @@ export const CreateAdvertPage = () => {
       </Card>
     </>
   );
-}
+};
 
 export default CreateAdvertPage;
