@@ -40,6 +40,11 @@ const router = createBrowserRouter([
         element: <AllAnimals />,
       },
       {
+        path: "animals/:id", // Path to the individual animal profile?
+        element: <AnimalAdvertPage />,
+      },
+
+      {
         path: "create-advert", // Path to the create advert page
         element: <CreateAdvertPage />,
       }
