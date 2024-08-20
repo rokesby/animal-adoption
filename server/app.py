@@ -100,7 +100,6 @@ def token_checker(f):
         auth_header = request.headers.get('Authorization')
 
         if auth_header:
-            # Assuming the token is in the format "Bearer <token>"
             token = auth_header.split(" ")[1]
         if not token:
             return jsonify({"message": "Token is missing!"}), 401
@@ -207,8 +206,13 @@ def login():
         if not user:
             return jsonify({"error": "User not found"}), 401
         elif bcrypt.check_password_hash(user.password, req_password):
-            token = generate_token(req_email)
-            return jsonify({"token": token.decode('utf-8')}), 200
+            token_data = {
+            "id": user.id,
+            "shelter_id": user.shelter_id
+            }
+            token = generate_token(req_email, token_data) #generate token here 
+            data = decode_token(token) # decode token 
+            return jsonify({"token": token.decode('utf-8'), "user_id": data.get('id'), "shelter_id": data.get('shelter_id')}), 200
         else:
             return jsonify({"error": "Password is incorrect"}), 401
 
@@ -232,10 +236,13 @@ def signup():
         )
         db.session.add(user)
         db.session.commit()
-        
-        token = generate_token(req_email)
-        print(token)
-        return jsonify({"token": token.decode('utf-8')}), 201
+        token_data = {
+            "id": user.id,
+            "shelter_id": user.shelter_id
+            }
+        token = generate_token(req_email, token_data)
+        data = decode_token(token)
+        return jsonify({"token": token.decode('utf-8'), "user_id": data.get('id'), "shelter_id": data.get('shelter_id')}), 201
         # return jsonify(user.as_dict()), 201
 
         

@@ -72,6 +72,8 @@ export const SignUpPage = () => {
         setMessage(data);
       } else {
         localStorage.setItem("token", data.token)
+        localStorage.setItem("user_id", data.user_id)
+        localStorage.setItem("shelter_id", data.shelter_id)
         navigate("/create-advert", { state: [0, data.message] });
       }
     } catch (err) {
