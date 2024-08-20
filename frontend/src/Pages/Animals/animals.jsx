@@ -1,7 +1,8 @@
+//animals pages page  
+
 import { useState, useEffect } from "react";
 import { getAnimals } from "../../services/animals";
 import AnimalCard from "../../components/AnimalCard/animalcard";
-import LoginLogout from "../../components/LoginLogout/LoginLogout";
 
 // This component fetches all the animals from the database and displays them in a card format.
 const AllAnimals = () => {
@@ -28,23 +29,37 @@ const AllAnimals = () => {
 
   return (
     <>
-    <LoginLogout />
       <h2>Animals Who Need a Home</h2>
       {animalsState.length > 0 ? (
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: "20px", 
+          }}
+        >
           {animalsState.map((animal) => {
             const { id, image, name, breed, age, location } = animal;
             return (
-              <AnimalCard
-                key={id}
-                image={image}
-                name={name}
-                age={age}
-                breed={breed}
-                location={location}
-                button1Text={`Meet ${name}`}
-                linkUrl={`/animals/${id}`}  // Assuming animal details are on /animals/:id
-              />
+              <div
+                key={id} 
+                style={{
+                  flex: "1 1 calc(33.333% - 20px)", // Allows 3 cards per row
+                  maxWidth: "calc(33.333% - 20px)", // Ensures cards are contained within the row
+                  boxSizing: "border-box", 
+                }}
+              >
+                <AnimalCard
+                  image={image}
+                  name={name}
+                  age={age}
+                  breed={breed}
+                  location={location}
+                  button1Text={`Meet ${name}`}
+                  linkUrl={`/animals/${id}`} 
+                />
+              </div>
             );
           })}
         </div>
