@@ -11,12 +11,20 @@ from sqlalchemy.orm import sessionmaker
 
 
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+print("DB Name => ", os.getenv('DATABASE_NAME'))
+print("DB Host => ", os.getenv('DATABASE_HOST'))
+
 
 url = URL.create(
     drivername="postgresql",
     host = os.getenv("DATABASE_HOST"),
     database= os.getenv("DATABASE_NAME")
 )
+
+#engine = create_engine("postgresql+psycopg2://reza@" + os.getenv('DATABASE_HOST') + "/" + os.getenv('DATABASE_NAME'))
 
 engine = create_engine(url)
 connection = engine.connect()
@@ -113,6 +121,14 @@ shelter2 = Shelter(
 )
 session.add(shelter2)
 
+shelter3 = Shelter(
+    name = "Mayhew Animal Home",
+    location = "NW London",
+    email = "info@themayhew.org.org",
+    phone_number = "07931996802"
+)
+session.add(shelter3)
+
 # Populate the ANIMALS table
 ###############################
 
@@ -196,6 +212,23 @@ user3 = User(
     shelter = shelter2
 )
 session.add(user3)
+
+#######
+
+animal4 = Animal(
+    name = "Parsley",
+    species = "cat",
+    age = 3,
+    breed = "Ginger",
+    location = "London",
+    male = True,
+    bio = "These two sweet babies are the last of our Herby bunch and are ideally looking to be homed together. Parsley and sage are two rambunctious little boys who love to play and have fun. ",
+    neutered = False,
+    lives_with_children = False,
+    shelter = shelter3
+)
+
+session.add(animal4)
 
 #############################################################
 
