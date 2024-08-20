@@ -154,10 +154,10 @@ export const CreateAdvertPage = () => {
               variant="outlined"
               required
             >
-              <MenuItem value="dog">Dog</MenuItem>
-              <MenuItem value="cat">Cat</MenuItem>
-              <MenuItem value="rabbit">Rabbit</MenuItem>
-              <MenuItem value="other">Other</MenuItem>
+              <MenuItem value="Dog">Dog</MenuItem>
+              <MenuItem value="Cat">Cat</MenuItem>
+              <MenuItem value="Rabbit">Rabbit</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
             </Select>
           </FormControl>
 
@@ -208,7 +208,6 @@ export const CreateAdvertPage = () => {
             onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
             fullWidth
             multiline
-            rows={4}
             size="small"
             variant="outlined"
             required
