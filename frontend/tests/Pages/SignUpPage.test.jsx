@@ -1,83 +1,76 @@
-// import React from 'react'; 
-// import { render, screen } from "@testing-library/react";
-// import userEvent from "@testing-library/user-event";
-// import { useNavigate } from "react-router-dom";
-// import { vi } from 'vitest';
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
+import SignUpPage from "../../src/Pages/SignUpPage/SignUpPage";
 
-// import SignUpPage from "../../src/Pages/SignUpPage/SignUpPage";
+// Mocking React Router's useNavigate function
+vi.mock("react-router-dom", () => {
+  const navigateMock = vi.fn();
+  const useNavigateMock = () => navigateMock;
+  return { useNavigate: useNavigateMock };
+});
 
-// // Mocking React Router's useNavigate function
-// vi.mock("react-router-dom", () => {
-//   const navigateMock = vi.fn();
-//   const useNavigateMock = () => navigateMock; // Create a mock function for useNavigate
-//   return { useNavigate: useNavigateMock };
-// });
+// Mocking the signup service
+vi.mock("../../src/Services/users.js", () => {
+  const signupMock = vi.fn();
+  return { signup: signupMock };
+});
 
-// // Mocking the signup service
-// vi.mock("../../src/Services/users.js", () => {
-//   const signupMock = vi.fn();
-//   return { signup: signupMock };
-// });
+// Reusable function for filling out signup form
+const completeSignupForm = async () => {
+  const user = userEvent.setup();
 
-// // Reusable function for filling out signup form
-// const completeSignupForm = async () => {
-//   const user = userEvent.setup();
+  const firstNameInputEl = screen.getByLabelText("First Name");
+  const lastNameInputEl = screen.getByLabelText("Last Name");
+  const emailInputEl = screen.getByLabelText("Email");
+  const passwordInputEl = screen.getByLabelText("Password");
+  const confirmPasswordInputEl = screen.getByLabelText("Confirm Password");
+  const shelterIDEl = screen.getByLabelText("Shelter ID");
+  const submitEl = screen.getByTestId("submit-button");
 
-//   const firstNameInputEl = screen.getByLabelText(/first name/i);
-//   const lastNameInputEl = screen.getByLabelText(/last name/i);
-//   const emailInputEl = screen.getByLabelText(/email/i);
-//   const passwordInputEl = screen.getByLabelText(/password/i);
-//   const confirmPasswordInputEl = screen.getByLabelText(/confirm password/i);
-//   const submitButtonEl = screen.getByRole("button", { name: /submit/i });
+  await user.type(firstNameInputEl, "Alex");
+  await user.type(lastNameInputEl, "Stewart");
+  await user.type(emailInputEl, "test@mail.com");
+  await user.type(passwordInputEl, "Testing@9");
+  await user.type(confirmPasswordInputEl, "Testing@9");
+  await user.type(shelterIDEl, "1");
+  await user.click(submitEl);
+};
 
-//   await user.type(firstNameInputEl, "Alex");
-//   await user.type(lastNameInputEl, "Stewart");
-//   await user.type(emailInputEl, "test@mail.com");
-//   await user.type(passwordInputEl, "Testing@9");
-//   await user.type(confirmPasswordInputEl, "Testing@9");
-//   await user.click(submitButtonEl);
-// };
+describe("Signup Page", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
 
-// describe("SignUp Page", () => {
-//   beforeEach(() => {
-//     vi.resetAllMocks();
-//   });
+  test("allows a user to signup", async () => {
+    const { signup } = await import("../../src/Services/users.js"); // Use dynamic import
+    signup.mockResolvedValue({ token: "mockToken" }); // Mock the resolved value of signup
 
-//   test("allows a user to signup", async () => {
-//     const { signup } = require("../../src/Services/users.js");
-//     render(<SignUpPage />);
+    render(<SignUpPage />);
 
-//     await completeSignupForm();
+    await completeSignupForm();
 
-//     expect(signup).toHaveBeenCalledWith({
-//       first_name: "Alex",
-//       last_name: "Stewart",
-//       email: "test@mail.com",
-//       password: "Testing@9",
-//       confirmPassword: "Testing@9",
-//       shelter_id: ""  // Ensure all fields match your formData state
-//     });
-//   });
+    expect(signup).toHaveBeenCalledWith({
+      first_name: "Alex",
+      last_name: "Stewart",
+      email: "test@mail.com",
+      password: "Testing@9",
+      confirmPassword: "Testing@9",
+      shelter_id: "1"
+    });
+  });
 
-//   test("navigates to next page on successful signUp", async () => {
-//     render(<SignUpPage />);
+  test("navigates to the next page on successful signUp", async () => {
+    const { useNavigate } = await import("react-router-dom"); // Ensure useNavigate is correctly imported
+    const navigateMock = useNavigate();
+    
+    const { signup } = await import("../../src/Services/users.js"); // Import signup here too
+    signup.mockResolvedValue({ token: "mockToken" }); // Mock the resolved value of signup
 
-//     const navigateMock = useNavigate();
+    render(<SignUpPage />);
 
-//     await completeSignupForm();
+    await completeSignupForm();
 
-//     expect(navigateMock).toHaveBeenCalledWith("/create-advert", expect.anything());
-//   });
-
-//   // test("navigates to signup page unsuccessfull", async () => {
-//   //   render(<SignUpPage />);
-
-//   //   const { signup } = require("../../src/Services/users.js");
-//   //   signup.mockRejectedValue(new Error("Error signing up"));
-//   //   const navigateMock = useNavigate();
-
-//   //   await completeSignupForm();
-
-//   //   expect(navigateMock).toHaveBeenCalledWith("/signup");
-//   // });
-// });
+    expect(navigateMock).toHaveBeenCalledWith("/create-advert", expect.anything());
+  });
+});
