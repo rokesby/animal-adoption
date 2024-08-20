@@ -71,6 +71,7 @@ export const SignUpPage = () => {
       if (data === "User with email provided already exists") {
         setMessage(data);
       } else {
+        localStorage.setItem("token", data.token)
         navigate("/create-advert", { state: [0, data.message] });
       }
     } catch (err) {
