@@ -7,29 +7,20 @@ import {
   List,
   ListItem,
   ListItemText,
+  Button, 
 } from "@mui/material";
-// import mockData from "./mockData.json";
 import { getSingleAnimal } from "../../services/animals";
 import { useParams } from "react-router-dom";
-
-
-// useEffect(() => {
-//   const fetchAnimal = async () => {
-//     try {
-//       const data = await getSingleAnimal(id);
-//       setAnimalData(data);
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
-
-//   fetchAnimal();
-// }, [id]);
+import { useNavigate } from "react-router-dom";
 
 export const AnimalAdvertPage = () => {
   const [animalData, setAnimalData] = useState(null);
   const [error, setError] = useState(null);
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Get the JWT token from localStorage (or any other auth mechanism you're using)
+  const token = localStorage.getItem("token");
 
   console.log("AnimalAdvertPage received id:", id);
 
@@ -48,23 +39,23 @@ export const AnimalAdvertPage = () => {
     fetchAnimalData();
   }, [id]);
 
-    // Enhanced condition to check if data is not just falsy but also an empty object
-    if (error) {
-      return (
-        <Typography
-          sx={{ mt: 10, textAlign: "center" }}
-          variant="h6"
-          color="error"
-        >
-          {error}
-        </Typography>
-      );
-    }
-  
-    // Debugging line to check if data is undefined, null, or empty
-    console.log("Current animalData state:", animalData);
+   // Enhanced condition to check if data is not just falsy but also an empty object
+  if (error) {
+    return (
+      <Typography
+        sx={{ mt: 10, textAlign: "center" }}
+        variant="h6"
+        color="error"
+      >
+        {error}
+      </Typography>
+    );
+  }
 
-  if (!animalData) {
+// Debugging line to check if data is undefined, null, or empty
+console.log("Current animalData state:", animalData);
+  
+if (!animalData) {
     return (
       <Typography
         sx={{ mt: 10, textAlign: "center" }}
@@ -75,6 +66,11 @@ export const AnimalAdvertPage = () => {
       </Typography>
     );
   }
+
+  // Handle the "Edit" button click
+  const handleEditClick = () => {
+    navigate(`/edit-animal/${id}`);
+  };
 
   return (
     <Card
@@ -122,19 +118,28 @@ export const AnimalAdvertPage = () => {
               />
             </ListItem>
             <ListItem>
-            <ListItemText 
-              primary="Email" 
-              secondary={
-                <a 
-                  href={`mailto:${animalData.shelter.email}?subject=Inquiry%20about%20adopting%20${encodeURIComponent(animalData.name)}&body=Hi,%20I'm%20interested%20in%20adopting%20${encodeURIComponent(animalData.name)}.%20Could%20I%20get%20some%20more%20info?`}
-                >
-                  {animalData.shelter.email}
-                </a>
-              } 
-            />
-          </ListItem>
+              <ListItemText 
+                primary="Email" 
+                secondary={
+                  <a 
+                    href={`mailto:${animalData.shelter.email}?subject=Inquiry%20about%20adopting%20${encodeURIComponent(animalData.name)}&body=Hi,%20I'm%20interested%20in%20adopting%20${encodeURIComponent(animalData.name)}.%20Could%20I%20get%20some%20more%20info?`}
+                  >
+                    {animalData.shelter.email}
+                  </a>
+                } 
+              />
+            </ListItem>
           </List>
         </Box>
+
+        {/* Conditionally renderinf the "Edit" button if logged in */}
+        {token && (
+          <Box sx={{ mt: 4, textAlign: "center" }}>
+            <Button variant="contained" color="primary" onClick={handleEditClick}>
+              Edit Animal
+            </Button>
+          </Box>
+        )}
       </CardContent>
     </Card>
   );
