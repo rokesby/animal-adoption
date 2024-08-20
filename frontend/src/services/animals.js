@@ -89,6 +89,44 @@ export const getSingleAnimal = async (id) => {
   }
 };
 
+/**
+ * This function allows a user to edit an existing animal listing
+ * @param token (authentication),
+ * @param animalID of animal to be edited, 
+ * @param updatedAnimalData - new data to be written in database
+ * Makes a request to backend URL for PUT request 
+ * Returns success message, response status, and added data
+ */
+export const editAnimal = async (token, animalId, updatedAnimalData) => {
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updatedAnimalData),
+  };
+
+  try {
+    console.log(`Making request to: ${BACKEND_URL}/listings/${animalId}`);
+    const response = await fetch(`${BACKEND_URL}/listings/${animalId}`, requestOptions);
+
+    if (!response.ok) {
+      throw new Error("Error updating animal profile");
+    }
+
+    const data = await response.json();
+    return {
+      status: response.status,
+      message: 'Successfully updated animal profile',
+      data: data,
+    };
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+};
+
 
 
 
