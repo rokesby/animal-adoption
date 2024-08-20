@@ -178,10 +178,9 @@ def login():
         req_email = data.get('email')
         req_password = data.get('password')
         user = User.query.filter_by(email=req_email).first()
-        is_valid = bcrypt.check_password_hash(user.password, req_password)
         if not user:
             return jsonify({"error": "User not found"}), 401
-        elif is_valid:
+        elif bcrypt.check_password_hash(user.password, req_password):
             token = generate_token(req_email)
             return jsonify({"token": token.decode('utf-8')}), 200
         else:
