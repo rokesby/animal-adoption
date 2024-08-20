@@ -14,12 +14,10 @@ import imghdr # TODO  - remove and cleanup.
 from flask import send_from_directory
 from flask import abort
 import FileUploader
-
 # End photo upload.
 
 from dotenv import load_dotenv
 import os
-
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -161,6 +159,35 @@ def create_new_animal():
         db.session.commit()
 
         return jsonify(animal.as_dict()), 201
+
+# This function allows a logged in user to edit information about a specific animal
+@app.route('/listings/<int:id>', methods=['PUT'])
+@token_checker  # Ensures that the user is authenticated
+def update_animal(id):
+    with app.app_context():
+
+        data = request.get_json()
+        print('Received the data:', data)
+        animal = Animal.query.get(id)
+        if not animal:
+            return jsonify({"message": "Animal not found"}), 404
+
+        # Update the animal's attributes with the new data
+        animal.name = data.get('name', animal.name)
+        animal.species = data.get('species', animal.species)
+        animal.age = data.get('age', animal.age)
+        animal.breed = data.get('breed', animal.breed)
+        animal.location = data.get('location', animal.location)
+        animal.male = data.get('male', animal.male)
+        animal.bio = data.get('bio', animal.bio)
+        animal.neutered = data.get('neutered', animal.neutered)
+        animal.lives_with_children = data.get('lives_with_children', animal.lives_with_children)
+        animal.shelter_id = data.get('shelter_id', animal.shelter_id)
+
+        db.session.commit()
+
+        return jsonify(animal.as_dict()), 200
+
 
 
 @app.route('/users', methods=['GET'])
