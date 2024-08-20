@@ -225,7 +225,7 @@ animal4 = Animal(
     bio = "Lovely Kylie is an intelligent and caring girl who is ready to go to her new home. She is sensitive and can be shy when meeting new people, but once she gains her confidence loves affection. She enjoys walks, treats and playing with her toys, especially tennis balls. She has learnt a number of commands including sit, paw, down, roll over and leave and is doing well with her training. She is friendly and social with other dogs, but will need some guidance and ongoing socialisation as she is a young dog. She would be best suited to a quiet or semi rural location as can be sensitive to new places and traffic, however is gaining confidence in this area. With the right person making her feel safe and being patient with her she would make an amazing and loyal companion.",
     neutered = False,
     lives_with_children = False,
-    image = "",
+    image = "seed_kylie.png",
     shelter = shelter3
 )
 
