@@ -14,9 +14,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-print("DB Name => ", os.getenv('DATABASE_NAME'))
-print("DB Host => ", os.getenv('DATABASE_HOST'))
-
+print("RESEEDING DB - ", "DB Name => ", os.getenv('DATABASE_NAME'), "DB Host => ", os.getenv('DATABASE_HOST'))
 
 url = URL.create(
     drivername="postgresql",
@@ -96,11 +94,10 @@ class Shelter(Base):
 Base.metadata.create_all(engine)
 
 # Check which tables are being reflected
-print("Tables reflected => ", Base.metadata.tables.keys())  # If using MetaData
+print("Tables created => ", Base.metadata.tables.keys())  # If using MetaData
 
 Session = sessionmaker(bind=engine)
 session = Session()
-
 
 # Populate the SHELTER table
 ###############################

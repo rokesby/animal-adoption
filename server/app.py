@@ -14,12 +14,10 @@ import imghdr # TODO  - remove and cleanup.
 from flask import send_from_directory
 from flask import abort
 import FileUploader
-
 # End photo upload.
 
 from dotenv import load_dotenv
 import os
-
 
 # Create a new Flask app
 app = Flask(__name__)
