@@ -101,6 +101,9 @@ export const SignUpPage = () => {
           )}
 
           <TextField
+            inputProps={{
+              "data-testid": "none",
+            }}
             label="First Name"
             placeholder="e.g. Steve"
             fullWidth
@@ -114,6 +117,9 @@ export const SignUpPage = () => {
           />
 
           <TextField
+          inputProps={{
+            "data-testid": "none",
+          }}
             label="Last Name"
             placeholder="e.g. Alex"
             fullWidth
@@ -127,6 +133,10 @@ export const SignUpPage = () => {
           />
 
           <TextField
+            inputProps={{
+              "data-testid": "none",
+            }}
+            InputLabelProps={{ shrink: true }}
             label="Email"
             placeholder="steve@example.com"
             fullWidth
@@ -140,6 +150,9 @@ export const SignUpPage = () => {
           />
 
           <TextField
+            inputProps={{
+              "data-testid": "none",
+            }}
             label="Password"
             placeholder="Choose a strong one"
             fullWidth
@@ -153,6 +166,9 @@ export const SignUpPage = () => {
           />
 
           <TextField
+            inputProps={{
+              "data-testid": "none",
+            }}
             label="Confirm Password"
             placeholder="Confirm Password"
             fullWidth
@@ -166,6 +182,9 @@ export const SignUpPage = () => {
           />
 
           <TextField
+            inputProps={{
+              "data-testid": "none",
+            }}
             label="Shelter ID"
             placeholder="Your Shelter id"
             fullWidth
@@ -179,7 +198,7 @@ export const SignUpPage = () => {
           />
 
           <CardActions>
-            <Button type="submit" form="signup-form" variant="contained">
+            <Button data-testid="submit-button" type="submit" form="signup-form" variant="contained">
               Submit
             </Button>
           </CardActions>
