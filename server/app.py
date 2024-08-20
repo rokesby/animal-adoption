@@ -135,8 +135,6 @@ def display_one_animal(id):
 
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
-
-# Will I need to change '/listings' to something else? 
 @app.route('/listings', methods=['POST'])
 @token_checker # Added this decorator to check for token. 
 def create_new_animal():
@@ -163,6 +161,31 @@ def create_new_animal():
 
         return jsonify(animal.as_dict()), 201
 
+@app.route('/listings/<int:id>', methods=['PUT'])
+@token_checker
+def update_animal(id):
+    """
+    This function updates info about an existing animal in the database
+    Takes animal id as an argument, returns JSON object of updated info
+    """
+    animal = Animal.query.get(id)
+    # data = request.get_json()
+    name = request.json['name']
+    species = request.json['species']
+    age = request.json['age']
+    breed = request.json['breed']
+    location = request.json['location']
+    male = request.json['male']
+    bio = request.json['bio']
+    neutered = request.json['neutered']
+    lives_with_children = request.json['lives_with_children']
+    shelter_id = request.json['shelter_id']
+
+    db.session.commit()
+    return jsonify(animal.as_dict()), 201
+    
+    
+
 
 @app.route('/users', methods=['GET'])
 def get_users():
@@ -178,14 +201,22 @@ def login():
         req_email = data.get('email')
         req_password = data.get('password')
         user = User.query.filter_by(email=req_email).first()
-        is_valid = bcrypt.check_password_hash(user.password, req_password)
+        print(user)
+        print(user.id)
+        print(user.password) 
+        # if user.password is None:
+        #     return jsonify({"error": "Password not set for this user"}), 401
+
         if not user:
             return jsonify({"error": "User not found"}), 401
-        elif is_valid:
+        elif user:
+            print('I have the user')
+            bcrypt.check_password_hash(user.password, req_password)
             token = generate_token(req_email)
             return jsonify({"token": token.decode('utf-8')}), 200
         else:
             return jsonify({"error": "Password is incorrect"}), 401
+
 
 # This function adds a new user to the database
 @app.route('/sign-up', methods=['POST'])
