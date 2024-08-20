@@ -33,6 +33,7 @@ pip install -r requirements.txt
 - npm install react-router-dom
 - npm install prop-types 
 
+The /frontend/.env file contains a link to the server which will provide the underlying API services. You'll need to repoint this to your flask server.
 
 # New environment variable
 cd /server/ directory

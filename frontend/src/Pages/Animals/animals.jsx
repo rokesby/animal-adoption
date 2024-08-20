@@ -11,6 +11,7 @@ const AllAnimals = () => {
     getAnimals()
       .then((data) => {
         console.log("I have data");
+
         if (data && Array.isArray(data  )) {
           setAnimalsState(data);
         } else {
@@ -34,6 +35,7 @@ const AllAnimals = () => {
         <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
           {animalsState.map((animal) => {
             const { id, image, name, breed, age, location } = animal;
+            console.log ("Image from DB: " + image);
             return (
               <AnimalCard
                 key={id}
