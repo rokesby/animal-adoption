@@ -10,7 +10,6 @@ from flask_bcrypt import Bcrypt
 # Photo upload
 from werkzeug.utils import secure_filename
 from flask import url_for
-import imghdr # TODO  - remove and cleanup.
 from flask import send_from_directory
 from flask import abort
 import FileUploader
@@ -24,7 +23,7 @@ app = Flask(__name__)
 # Encryption with Bcrypt
 bcrypt = Bcrypt(app) 
 
-CORS(app)
+CORS(app) 
 
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
 db = SQLAlchemy(app)
@@ -33,6 +32,7 @@ db = SQLAlchemy(app)
 class Animal(db.Model):
     __tablename__ = 'animals'
 
+    # TODO - Refactor the code so that this class is not duplicated in the backend code.
     id = db.Column(db.Integer(), primary_key=True)
     name = db.Column(db.String(255))
     species = db.Column(db.String(50))
@@ -43,8 +43,9 @@ class Animal(db.Model):
     bio = db.Column(db.String(500), nullable=False)
     neutered = db.Column(db.Boolean, nullable=False)
     lives_with_children = db.Column(db.Boolean, nullable=False)
+    image = db.Column(db.String(255))
     shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
-    # shelter = db.relationship('Shelter', backref='animals', lazy=True)
+
 
     def as_dict(self):
         animal_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -83,8 +84,6 @@ class Shelter(db.Model):
     phone_number = db.Column(db.String(20), nullable=False)
 
     animals = db.relationship('Animal', backref='shelter', lazy=True)
-    # animals = relationship('Animal', backref='shelter')
-    # users = relationship('User', backref='shelter')
     users = db.relationship('User', backref='shelter', lazy=True)
 
     def as_dict(self):
@@ -191,12 +190,12 @@ def update_animal(id):
 
 
 
-@app.route('/users', methods=['GET'])
-def get_users():
-    with app.app_context():
-        users = User.query.all()
-        users_list = [user.as_dict() for user in users]
-        return jsonify(users_list)
+# @app.route('/users', methods=['GET'])
+# def get_users():
+#     with app.app_context():
+#         users = User.query.all()
+#         users_list = [user.as_dict() for user in users]
+#         return jsonify(users_list)
     
 @app.route('/token', methods=['POST'])
 def login():
@@ -247,7 +246,6 @@ app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.gif']
 app.config['UPLOAD_PATH'] = 'uploads'
 
-# TODO Specify GET?
 # Test to allow system admin to view files.
 @app.route('/upload', methods=['GET'])
 def upload_form():
@@ -272,12 +270,10 @@ def upload_files():
 def upload(filename):
     return send_from_directory(os.getenv("PHOTO_UPLOAD_LOCATION"), filename)
 
-
 # Validator for Dropzone js component.
 @app.errorhandler(413)
 def too_large(e):
     return "File is too large", 413
-
 
 ############ End Photo Upload
 

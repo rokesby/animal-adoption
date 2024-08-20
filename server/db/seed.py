@@ -39,7 +39,6 @@ meta.drop_all(bind=engine, tables=None, checkfirst=True)
 
 #############################################################
 
-# FIXME Refactor these classes out of the seed file and into a place where app.py can read them. This has not been easy.
 
 class Animal(Base):
     __tablename__ = 'animals'
@@ -51,9 +50,10 @@ class Animal(Base):
     breed = Column(String(50), nullable=False)
     location = Column(String(50), nullable=False)
     male = Column(Boolean, nullable=False)
-    bio = Column(String(500), nullable=False)
+    bio = Column(String(2048), nullable=False)
     neutered = Column(Boolean, nullable=False)
     lives_with_children = Column(Boolean, nullable=False)
+    image = Column(String(255))
     shelter_id = Column(Integer(), ForeignKey('shelters.id'))
 
 
@@ -130,7 +130,7 @@ session.add(shelter3)
 ###############################
 
 animal1 = Animal(
-    name = "Bobby",
+    name = "Andie",
     species = "cat",
     age = 3,
     breed = "British Shorthair",
@@ -139,6 +139,7 @@ animal1 = Animal(
     bio = "This is a lovely cat and he needs a good home.",
     neutered = True,
     lives_with_children = True,
+    image = "seed_andie.png",
     shelter = shelter1
 )
 
@@ -147,15 +148,16 @@ session.add(animal1)
 #################### 
 
 animal2 = Animal(
-    name = "Roger",
-    species = "dog",
+    name = "Cinnamon",
+    species = "cat",
     age = 3,
-    breed = "German Shepherd",
+    breed = "Maine Coon",
     location = "London",
     male = True,
-    bio = "This is a lovely dog and he needs a good home.",
+    bio = "This is a lovely kitten and he needs a good home.",
     neutered = False,
     lives_with_children = False,
+    image = "seed_cinnamon.png",
     shelter = shelter2
 )
 
@@ -164,15 +166,16 @@ session.add(animal2)
 #################### 
 
 animal3 = Animal(
-    name = "Duke",
-    species = "rabbit",
+    name = "River",
+    species = "dog",
     age = 3,
-    breed = "American Rabbit",
+    breed = "Husky",
     location = "London",
     male = True,
-    bio = "This is a lovely rabbit and he needs a good home and lots of carrots.",
+    bio = "This is a lovely dog and he needs a good home and lots of carrots.",
     neutered = False,
     lives_with_children = False,
+    image = "seed_river.png",
     shelter = shelter2
 )
 
@@ -213,15 +216,16 @@ session.add(user3)
 #######
 
 animal4 = Animal(
-    name = "Parsley",
-    species = "cat",
-    age = 3,
-    breed = "Ginger",
+    name = "Kylie",
+    species = "dog",
+    age = 2,
+    breed = "German Shepherd Cross",
     location = "London",
-    male = True,
-    bio = "These two sweet babies are the last of our Herby bunch and are ideally looking to be homed together. Parsley and sage are two rambunctious little boys who love to play and have fun. ",
+    male = False,
+    bio = "Lovely Kylie is an intelligent and caring girl who is ready to go to her new home. She is sensitive and can be shy when meeting new people, but once she gains her confidence loves affection. She enjoys walks, treats and playing with her toys, especially tennis balls. She has learnt a number of commands including sit, paw, down, roll over and leave and is doing well with her training. She is friendly and social with other dogs, but will need some guidance and ongoing socialisation as she is a young dog. She would be best suited to a quiet or semi rural location as can be sensitive to new places and traffic, however is gaining confidence in this area. With the right person making her feel safe and being patient with her she would make an amazing and loyal companion.",
     neutered = False,
     lives_with_children = False,
+    image = "",
     shelter = shelter3
 )
 
