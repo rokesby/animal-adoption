@@ -211,11 +211,9 @@ def login():
             "id": user.id,
             "shelter_id": user.shelter_id
             }
-            token = generate_token(req_email, token_data)
-            data = decode_token(token)
-            # print(f"User ID: {data.get('id')}")
-            # print(f"shelter_id: {data.get('shelter_id')}")
-            return jsonify({"token": token.decode('utf-8')}), 200
+            token = generate_token(req_email, token_data) #generate token here 
+            data = decode_token(token) # decode token 
+            return jsonify({"token": token.decode('utf-8'), "user_id": data.get('id'), "shelter_id": data.get('shelter_id')}), 200
         else:
             return jsonify({"error": "Password is incorrect"}), 401
 
@@ -245,9 +243,7 @@ def signup():
             }
         token = generate_token(req_email, token_data)
         data = decode_token(token)
-        # print(f"User ID: {data.get('id')}")
-        # print(f"shelter_id: {data.get('shelter_id')}")
-        return jsonify({"token": token.decode('utf-8')}), 201
+        return jsonify({"token": token.decode('utf-8'), "user_id": data.get('id'), "shelter_id": data.get('shelter_id')}), 201
         # return jsonify(user.as_dict()), 201
 
         

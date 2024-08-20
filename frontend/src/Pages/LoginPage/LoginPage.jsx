@@ -37,6 +37,8 @@ export const LoginPage = () => {
       try {
         const data = await login(email, password)
         localStorage.setItem("token", data.token)
+        localStorage.setItem("user_id", data.user_id)
+        localStorage.setItem("shelter_id", data.shelter_id)
         navigate("/create-advert");
         setEmail("");
         setPassword("");

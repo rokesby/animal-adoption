@@ -26,15 +26,8 @@ def generate_token(user_id, additional_data=None):
     return token
 
 def decode_token(token):
-  return jwt.decode(token, secret)
-
-def decode_token(token):
     try:
         payload = jwt.decode(token, secret)
-        
-        # Optionally, verify the claims, like expiration ('exp') etc.
-        # jwt.validate_claims(payload, claims_options={"exp": {"essential": True}})
-        
         return payload  # This is a dictionary containing the token's data
     except JoseError as e:
         # Handle errors such as invalid signature, expired token, etc.
