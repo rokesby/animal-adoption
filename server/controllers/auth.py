@@ -1,52 +1,43 @@
-from authlib.jose import jwt
+from authlib.jose import jwt, JoseError
 from dotenv import load_dotenv
 import os
+from datetime import datetime, timedelta, timezone
 
 load_dotenv()
 
 # Encoding a JWT
-header = {'alg': 'HS256'}
+
 secret = os.getenv('SECRET_KEY')
 
-
-def generate_token(user_id):
-    token = jwt.encode(
-        {
-            'alg': 'HS256'}, 
-        {
-            "user_id": user_id
-        }, 
-        secret
-        )
+def generate_token(user_id, additional_data=None):
+    
+    header = {'alg': 'HS256'}
+    
+    payload = {
+        "user_id": user_id,
+        "exp": datetime.now(timezone.utc) + timedelta(hours=1),  # Token expiration time (timezone-aware)
+        "iat": datetime.now(timezone.utc), 
+    }
+    
+    if additional_data:
+        payload.update(additional_data)
+    
+    token = jwt.encode(header, payload, secret)
     return token
-
 
 def decode_token(token):
   return jwt.decode(token, secret)
 
+def decode_token(token):
+    try:
+        payload = jwt.decode(token, secret)
+        
+        # Optionally, verify the claims, like expiration ('exp') etc.
+        # jwt.validate_claims(payload, claims_options={"exp": {"essential": True}})
+        
+        return payload  # This is a dictionary containing the token's data
+    except JoseError as e:
+        # Handle errors such as invalid signature, expired token, etc.
+        print(f"Token decoding failed: {e}")
+        return None
 
-
-# const JWT = require("jsonwebtoken");
-
-# // Middleware function to check for valid tokens
-# const tokenChecker = (req, res, next) => {
-#   let token;
-#   const authHeader = req.get("Authorization");
-
-#   if (authHeader) {
-#     token = authHeader.slice(7);
-#   }
-
-#   JWT.verify(token, process.env.JWT_SECRET, (err, payload) => {
-#     if (err) {
-#       console.log(err);
-#       res.status(401).json({ message: "auth error" });
-#     } else {
-#       // Add the user_id from the payload to the req object.
-#       req.user_id = payload.user_id;
-#       next();
-#     }
-#   });
-# };
-
-# module.exports = tokenChecker;
