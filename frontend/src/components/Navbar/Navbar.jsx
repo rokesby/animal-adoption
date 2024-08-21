@@ -13,16 +13,15 @@ import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import Context from "../Context/Context";
+import { AuthContext } from "../Context/AuthContext";
 
 
-function Navbar() {
+export const Navbar = () => {
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState();
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  const [loggedIn, setLoggedIn] = useState(false);
+  const { token, setToken } = useContext(AuthContext);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
-  // const { authStatus, setAuthStatus } = useContext(Context);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -47,11 +46,11 @@ function Navbar() {
 
   const handleLogoutClick = () => {
     if (token) {
-      localStorage.clear("token");
+      localStorage.removeItem("token");
       setToken(null);
-    } else {
-      navigate("/login");
-    }
+    } 
+    setLoggedIn(false)
+    navigate("/login");
   };
 
   return (
