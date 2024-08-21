@@ -19,29 +19,7 @@ export const getAnimals = async () => {
       return [];
     }
 };
-// export const getsingleAnimal = async () => {
-//   const requestOptions = {
-//     method: "GET",
-//     headers: {
-//       // Authorization: `Bearer ${token}`,
-//     },
-//   };
-//   try {
-//     const response = await fetch(`${BACKEND_URL}/listings/<int:id>`, requestOptions);
-//     if (response.status !== 200) {
-//       throw new Error("Unable to fetch animals");
-//     }
-//     const data = await response.json();
-//     return data || [];
-//   } catch (error) {
-//     console.error('Error:', error);
-//     return [];
-//   }
-// };
-// The animal object is what is created on CreateAdvertPage
-// We pass it in through the services function here
 
-// I've updated createAnimal to accept a token
 export const createAnimal = async (token, animal) => {
   const requestOptions = {
     method: "POST",
@@ -126,6 +104,39 @@ export const editAnimal = async (token, animalId, updatedAnimalData) => {
     throw error;
   }
 };
+
+// This function changes the isActive state to be set to False 
+// Makes a PUT request to change isActive field in db to 'false' 
+
+export const updateAnimalActiveStatus = async (token, animalId, isActive) => {
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ isActive }),
+  };
+
+  try {
+    const response = await fetch(`${BACKEND_URL}/listings/${animalId}/change_isactive`, requestOptions);
+
+    if (!response.ok) {
+      throw new Error("Error updating animal status");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Fetch error:", error);
+    throw error;
+  }
+}
+
+
+
+
+
 
 
 
