@@ -13,6 +13,7 @@ export const LoginPage = () => {
   const [error, setError] = useState("")
   const [userData, setUserData] = useState("");
   const token = localStorage.getItem("token");
+  // const [token, setToken] = useState(localStorage.getItem("token"))
   const navigate = useNavigate();
   
   // get token from local storage

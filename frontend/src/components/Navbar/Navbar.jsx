@@ -10,13 +10,19 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import Context from "../Context/Context";
 
-function ResponsiveAppBar() {
+
+function Navbar() {
+  const navigate = useNavigate();
+  const [loggedIn, setLoggedIn] = useState();
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  // const { authStatus, setAuthStatus } = useContext(Context);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -33,17 +39,11 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"));
-  const [buttonText, setButtonText] = useState();
 
   useEffect(() => {
-    if (token) {
-      setButtonText("Logout");
-    } else {
-      setButtonText("Login");
-    }
+    setLoggedIn(!!token);
   }, [token]);
+
 
   const handleLogoutClick = () => {
     if (token) {
@@ -124,8 +124,8 @@ function ResponsiveAppBar() {
           >
             🐾 For a Cause
           </Typography>
-        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-        <Button
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            <Button
               component={Link}
               to="/animals"
               data-testid="_animals"
@@ -142,96 +142,87 @@ function ResponsiveAppBar() {
               Animals
             </Button>
           </Box>
-          
-          
-          <Box sx={{ marginLeft: "auto" }}>
-            <Button
-              component={Link}
-              to="/sign-up"
-              data-testid="_signup"
-              color="inherit"
-            >
-              Signup
-            </Button>
-          </Box>
-          <Box sx={{ marginLeft: "auto" }}>
-            <Button
-              component={Link}
-              to="/login"
-              data-testid="_login"
-              color="inherit"
-            >
-              Login
-            </Button>
-          </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="My Account">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {" "}
-              <MenuItem
-                onClick={handleCloseUserMenu}
+          {!loggedIn && (
+            <Box sx={{ marginLeft: "auto" }}>
+              <Button
                 component={Link}
-                to="/my-profile"
-                data-testid="_my-profile"
+                to="/sign-up"
+                data-testid="_signup"
                 color="inherit"
               >
-                <Typography textAlign="center">My Profile</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={handleCloseUserMenu}
-                component={Link}
-                to="/create-advert"
-                data-testid="_create-advert"
-                color="inherit"
-              >
-                <Typography textAlign="center">Create Advert</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={handleCloseUserMenu}
-                component={Link}
-                to="/my-animals"
-                data-testid="_my-animals"
-                color="inherit"
-              >
-                <Typography textAlign="center">My Animals</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={handleLogoutClick}
+                Signup
+              </Button>
+              <Button
                 component={Link}
                 to="/login"
-                data-testid="_logout"
+                data-testid="_login"
                 color="inherit"
               >
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+                Login
+              </Button>
+            </Box>
+          )}
+
+          {loggedIn && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="My Account">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  component={Link}
+                  to="/create-advert"
+                  data-testid="_create-advert"
+                  color="inherit"
+                >
+                  <Typography textAlign="center">Create Advert</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleCloseUserMenu}
+                  component={Link}
+                  to="/my-animals"
+                  data-testid="_my-animals"
+                  color="inherit"
+                >
+                  <Typography textAlign="center">My Animals</Typography>
+                </MenuItem>
+                <MenuItem
+                  onClick={handleLogoutClick}
+                  component={Link}
+                  to="/login"
+                  data-testid="_logout"
+                  color="inherit"
+                >
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default Navbar;
 
 // import AppBar from "@mui/material/AppBar";
 // import Box from "@mui/material/Box";
