@@ -8,14 +8,18 @@ import {
   ListItem,
   ListItemText,
   Button, 
+  TextField
 } from "@mui/material";
-import { getSingleAnimal } from "../../services/animals";
+import { editAnimal, getSingleAnimal, updateAnimalActiveStatus } from "../../services/animals";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 export const AnimalAdvertPage = () => {
   const [animalData, setAnimalData] = useState(null);
+  const [formData, setFormData] = useState({});
   const [error, setError] = useState(null);
+  const [isActive, setisActive] = useState(true);
+  const [isEditMode, setisEditMode] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -30,8 +34,9 @@ export const AnimalAdvertPage = () => {
     const fetchAnimalData = async () => {
       try {
         const data = await getSingleAnimal(id);
-        console.log("Fetched animal data:", data); // Debugging line
+        console.log("Fetched animal data:", data); 
         setAnimalData(data);
+        setFormData(data)
       } catch (error) {
         console.error("Failed to fetch animal data:", error);
         setError("Failed to fetch animal data");
@@ -41,7 +46,6 @@ export const AnimalAdvertPage = () => {
     fetchAnimalData();
   }, [id]);
 
-   // Enhanced condition to check if data is not just falsy but also an empty object
   if (error) {
     return (
       <Typography
@@ -69,18 +73,36 @@ if (!animalData) {
     );
   }
 
-  // Handle the "Edit" button click
+  // THIS SECTION IS WHERE ALL THE EVENT HANDLERS ARE - MS
+
   const handleEditClick = () => {
-    navigate(`/edit-animal/${id}`);
+    setisEditMode(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSaveChanges = async () => {
+    try {
+      const updatedAnimalData = { ...formData };
+      const response = await editAnimal(token, id, updatedAnimalData);
+      setAnimalData(response.data);
+      setisEditMode(false);
+    } catch (error) {
+      console.error('Failed to update animal profile at this time', error);
+      setError('Failed to update animal profile');
+    }
   };
 
   const handleRemoveClick = async () => {
+    console.log('We are attempting to change the isActive state to false')
     await updateAnimalActiveStatus(token, animalData.id, false)
     setisActive(false)
     alert('This animal profile has now been hidden from all animal listings')
     navigate('/animals')
   };
-
   console.log("Current isActive state:", isActive);
 
   return (
@@ -93,6 +115,8 @@ if (!animalData) {
       }}
     >
       <CardContent>
+        {!isEditMode ? (
+          <>
         <Typography variant="h4" component="div">
           {animalData.name}
         </Typography>
@@ -153,6 +177,68 @@ if (!animalData) {
               Remove {animalData.name}'s profile
             </Button>
           </Box>
+        )}
+        </>
+        ) : (
+          <>
+          <TextField
+              label="Name"
+              name="name"
+              value={formData.name || ''}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Breed"
+              name="breed"
+              value={formData.breed || ''}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Age"
+              name="age"
+              value={formData.age || ''}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Bio"
+              name="bio"
+              value={formData.bio || ''}
+              onChange={handleInputChange}
+              fullWidth
+              multiline
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Species"
+              name="species"
+              value={formData.species || ''}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Location"
+              name="location"
+              value={formData.location || ''}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ mt: 2, textAlign: "center" }}>
+              <Button variant="contained" color="primary" onClick={handleSaveChanges} sx={{ mr: 2 }}>
+                Save
+              </Button>
+              <Button variant="outlined" color="secondary" onClick={() => setisEditMode(false)}>
+                Cancel
+              </Button>
+            </Box>
+          </>
         )}
       </CardContent>
     </Card>

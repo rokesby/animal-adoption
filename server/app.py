@@ -232,8 +232,12 @@ def update_is_active(id):
         animal = Animal.query.get(id)
         if not animal:
             return jsonify({"message": "Animal not found"}), 404
+        
         data = request.get_json()
         animal.isActive = data.get('isActive', animal.isActive)
+        
+        db.session.commit()
+        return jsonify(animal.as_dict()), 200
     
 @app.route('/token', methods=['POST'])
 def login():
