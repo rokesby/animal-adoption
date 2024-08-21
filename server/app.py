@@ -28,6 +28,7 @@ CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
 db = SQLAlchemy(app)
 
+# ------------------------------------
 
 class Animal(db.Model):
     __tablename__ = 'animals'
@@ -44,8 +45,10 @@ class Animal(db.Model):
     neutered = db.Column(db.Boolean, nullable=False)
     lives_with_children = db.Column(db.Boolean, nullable=False)
     image = db.Column(db.String(255))
+    isActive = db.Column(db.Boolean, nullable=False, default=True)
     shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
 
+# ------------------------------------
 
     def as_dict(self):
         animal_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -58,6 +61,8 @@ class Animal(db.Model):
             'phone_number': shelter_info.phone_number
         }
         return animal_dict
+
+# ------------------------------------
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -72,6 +77,8 @@ class User(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+# ------------------------------------
 
 class Shelter(db.Model):
     __tablename__ = 'shelters'
@@ -88,7 +95,10 @@ class Shelter(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    
+
+
+# ------------------------------------
+
 # == Routes Here ==
 
 
@@ -151,7 +161,7 @@ def create_new_animal():
             bio=data['bio'],
             neutered=data['neutered'],
             lives_with_children=data['lives_with_children'],
-            shelter_id=data['shelter_id']
+            shelter_id=data['shelter_id'],
         )
 
         db.session.add(animal)
