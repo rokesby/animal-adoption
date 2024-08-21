@@ -37,6 +37,8 @@ export const LoginPage = () => {
       try {
         const data = await login(email, password)
         localStorage.setItem("token", data.token)
+        localStorage.setItem("user_id", data.user_id)
+        localStorage.setItem("shelter_id", data.shelter_id)
         navigate("/create-advert");
         setEmail("");
         setPassword("");
@@ -86,8 +88,8 @@ export const LoginPage = () => {
           size="small"
           variant="outlined"
           id="username"
-          type="text"
-          name="message"
+          type="email"
+          name="email"
           value={email}
           onChange={handleEmailChange}
 
@@ -101,8 +103,8 @@ export const LoginPage = () => {
           size="small"
           variant="outlined"
           id="password"
-          type="text"
-          name="message"
+          type="password"
+          name="password"
           value={password}
           onChange={handlePasswordChange}
           helperText={error}

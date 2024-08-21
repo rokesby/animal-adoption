@@ -54,6 +54,7 @@ class Animal(Base):
     neutered = Column(Boolean, nullable=False)
     lives_with_children = Column(Boolean, nullable=False)
     image = Column(String(255))
+    isActive = Column(Boolean, nullable=False)
     shelter_id = Column(Integer(), ForeignKey('shelters.id'))
 
 
@@ -140,6 +141,7 @@ animal1 = Animal(
     neutered = True,
     lives_with_children = True,
     image = "seed_andie.png",
+    isActive = True,
     shelter = shelter1
 )
 
@@ -158,6 +160,7 @@ animal2 = Animal(
     neutered = False,
     lives_with_children = False,
     image = "seed_cinnamon.png",
+    isActive = True,
     shelter = shelter2
 )
 
@@ -176,6 +179,7 @@ animal3 = Animal(
     neutered = False,
     lives_with_children = False,
     image = "seed_river.png",
+    isActive = True,
     shelter = shelter2
 )
 
@@ -226,6 +230,7 @@ animal4 = Animal(
     neutered = False,
     lives_with_children = False,
     image = "seed_kylie.png",
+    isActive = True,
     shelter = shelter3
 )
 

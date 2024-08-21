@@ -23,6 +23,12 @@ npm run dev
 This will live in a folder called 'server' just under the root.
 
 cd server
+.env file - Add SECRET_KEY="SecretKeyHere"
+
+Generate a secret key
+>>> import secrets
+>>> secret_key = secrets.token_hex(32)
+>>> print(secret_key)
 
 ### Create virtual environment
 
@@ -48,7 +54,7 @@ DATABASE_HOST = "localhost"
 PHOTO_UPLOAD_LOCATION = "static/photo_uploads/"
 
 
-# How to seed as a one-off task
+# Seeding - How to seed as a one-off task
 
 ONE OFF INSTRUCTIONS to create the Postgres database.
 cd /server/db
