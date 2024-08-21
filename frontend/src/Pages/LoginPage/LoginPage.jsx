@@ -88,8 +88,8 @@ export const LoginPage = () => {
           size="small"
           variant="outlined"
           id="username"
-          type="text"
-          name="message"
+          type="email"
+          name="email"
           value={email}
           onChange={handleEmailChange}
 
@@ -103,8 +103,8 @@ export const LoginPage = () => {
           size="small"
           variant="outlined"
           id="password"
-          type="text"
-          name="message"
+          type="password"
+          name="password"
           value={password}
           onChange={handlePasswordChange}
           helperText={error}
