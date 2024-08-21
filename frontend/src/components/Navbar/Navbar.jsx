@@ -124,23 +124,27 @@ function ResponsiveAppBar() {
           >
             🐾 For a Cause
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            <Button
+        <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+        <Button
               component={Link}
-              onClick={handleCloseNavMenu}
-              sx={{ my: 2, color: "white", display: "block" }}
-            ></Button>
-          </Box>
-          <Box sx={{ marginLeft: "auto" }}>
+              to="/animals"
+              data-testid="_animals"
+              color="inherit"
+            >
+              Home
+            </Button>
             <Button
               component={Link}
               to="/animals"
               data-testid="_animals"
               color="inherit"
             >
-              {" "}
-              Home
+              Animals
             </Button>
+          </Box>
+          
+          
+          <Box sx={{ marginLeft: "auto" }}>
             <Button
               component={Link}
               to="/sign-up"
@@ -148,6 +152,16 @@ function ResponsiveAppBar() {
               color="inherit"
             >
               Signup
+            </Button>
+          </Box>
+          <Box sx={{ marginLeft: "auto" }}>
+            <Button
+              component={Link}
+              to="/login"
+              data-testid="_login"
+              color="inherit"
+            >
+              Login
             </Button>
           </Box>
 
