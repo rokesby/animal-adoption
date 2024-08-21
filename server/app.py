@@ -45,7 +45,7 @@ class Animal(db.Model):
     neutered = db.Column(db.Boolean, nullable=False)
     lives_with_children = db.Column(db.Boolean, nullable=False)
     image = db.Column(db.String(255))
-    isActive = db.Column(db.Boolean, nullable=False)
+    isActive = db.Column(db.Boolean, nullable=False, default=True)
     shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
 
 # ------------------------------------
@@ -161,7 +161,7 @@ def create_new_animal():
             bio=data['bio'],
             neutered=data['neutered'],
             lives_with_children=data['lives_with_children'],
-            shelter_id=data['shelter_id']
+            shelter_id=data['shelter_id'],
         )
 
         db.session.add(animal)

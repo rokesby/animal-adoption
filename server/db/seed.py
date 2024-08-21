@@ -54,7 +54,7 @@ class Animal(Base):
     neutered = Column(Boolean, nullable=False)
     lives_with_children = Column(Boolean, nullable=False)
     image = Column(String(255))
-    isActive = Column(Boolean, nullable=False)
+    isActive = Column(Boolean, nullable=False, default=True)
     shelter_id = Column(Integer(), ForeignKey('shelters.id'))
 
 
