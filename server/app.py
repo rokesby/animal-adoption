@@ -101,7 +101,6 @@ class Shelter(db.Model):
 
 # == Routes Here ==
 
-
 # decorator function used for sake of DRY
 def token_checker(f):
     @wraps(f)
@@ -141,8 +140,7 @@ def display_one_animal(id):
 
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
-
-# Will I need to change '/listings' to something else? 
+# TODO : Will I need to change '/listings' to something else? 
 @app.route('/listings', methods=['POST'])
 @token_checker # Added this decorator to check for token. 
 def create_new_animal():
@@ -150,7 +148,7 @@ def create_new_animal():
 
         data = request.get_json()
         print('Received the data:', data)
-        # data= request.json
+
         animal = Animal(
             name=data['name'],
             species=data['species'],
@@ -161,11 +159,38 @@ def create_new_animal():
             bio=data['bio'],
             neutered=data['neutered'],
             lives_with_children=data['lives_with_children'],
+            image = "unique_id_tbd",
             shelter_id=data['shelter_id'],
         )
 
         db.session.add(animal)
         db.session.commit()
+
+        # Give the filename a unique ID e.g animal ID which doesn’t yet exist
+        # The primary key is instantly available once the record has been commited.        
+        # Retrieve the auto-incremented ID
+        new_animal_id = animal.id
+        # Query the database for the newly created object using the ID
+        retrieved_animal = db.session.query(Animal).get(new_animal_id)
+
+        # Update the image field of the retrieved object
+        retrieved_animal.image = f"unique_id_{new_animal_id}"
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Step b - Save the image into the static folder
+
+        # uploader = FileUploader.FileUploader(
+        #     upload_location=os.getenv("PHOTO_UPLOAD_LOCATION"),
+        #     allowed_extensions=app.config['UPLOAD_EXTENSIONS']
+        # )
+
+        # uploaded_file = request.files['file']
+        # success, message = uploader.validate_and_save(uploaded_file)
+
+        # if not success:
+        #     return message, 400
+        # return jsonify(animal.as_dict()), 201
 
         return jsonify(animal.as_dict()), 201
 
@@ -209,13 +234,6 @@ def update_is_active(id):
             return jsonify({"message": "Animal not found"}), 404
         data = request.get_json()
         animal.isActive = data.get('isActive', animal.isActive)
-
-# @app.route('/users', methods=['GET'])
-# def get_users():
-#     with app.app_context():
-#         users = User.query.all()
-#         users_list = [user.as_dict() for user in users]
-#         return jsonify(users_list)
     
 @app.route('/token', methods=['POST'])
 def login():

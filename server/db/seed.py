@@ -2,10 +2,13 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy import URL
-from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Boolean, MetaData
-from sqlalchemy.orm import declarative_base
+
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.orm import sessionmaker
+
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, Boolean, MetaData
+from sqlalchemy.orm import declarative_base
+
 
 import os
 from dotenv import load_dotenv
@@ -296,7 +299,7 @@ session.add(animal9)
 
 user1 = User(
     email = "reza@jugon.com",
-    password = "password1",
+    password = "$2b$12$j1Jfgt6YnqBRF.4Npxlp9eVBPBgh/2HCdHHfMCcmsfmVIh98mM86O",
     first_name = "reza",
     last_name = "jugon",
     shelter = shelter1
