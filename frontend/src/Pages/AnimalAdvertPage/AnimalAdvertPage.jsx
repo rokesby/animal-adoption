@@ -138,7 +138,10 @@ if (!animalData) {
         {token && (shelter_id == animalData.shelter_id) && (
           <Box sx={{ mt: 4, textAlign: "center" }}>
             <Button variant="contained" color="primary" onClick={handleEditClick}>
-              Edit Animal
+              Edit {animalData.name}'s listing
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleRemoveClick}>
+              Remove {animalData.name}'s listing
             </Button>
           </Box>
         )}
