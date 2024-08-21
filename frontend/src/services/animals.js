@@ -43,6 +43,8 @@ export const getAnimals = async () => {
 
 // I've updated createAnimal to accept a token
 export const createAnimal = async (token, animal) => {
+  // const formData = newFormData();
+  // formData.append("image", setUploadImage);
   const requestOptions = {
     method: "POST",
     headers: {
@@ -127,6 +129,35 @@ export const editAnimal = async (token, animalId, updatedAnimalData) => {
   }
 };
 
+// export const handleUpload = async () => {
+//   const formData = newFormData();
+//   formData.append("image", setUploadImage);
+
+//   const requestOptions = {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Bearer ${token}`, // I've uncommented this to pass the token in the header.
+//     },
+//     body: JSON.stringify(animal),
+//   };
+//   try {
+//     console.log(`Making request to: ${BACKEND_URL}/listings`);
+//     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
+//     if (!response.ok) {
+//       throw new Error("Error creating animal post");
+//     }
+//     const data = await response.json();
+//     return {
+//       status: response.status,
+//       message: 'Successfully created animal profile',
+//       data:data,
+//     };
+//   } catch (error) {
+//     console.error("Fetch error:", error);
+//     throw error;
+//   }
+// };
 
 
 

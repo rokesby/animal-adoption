@@ -50,8 +50,13 @@ export const CreateAdvertPage = () => {
     setFormData({ ...formData, [id]: value });
   };
 
-  const handleFileChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+  const handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setUploadImage(file);
+    }
+
+    // setFormData({ ...formData, image: e.target.files[0] });
   };
 
   const handleSubmit = async (e) => {
@@ -151,6 +156,7 @@ export const CreateAdvertPage = () => {
           />
 
         <Button
+            onClick={handleUploadImage}
             variant="contained"
             component="label"
             sx={{ mb: 3 }}
@@ -160,6 +166,7 @@ export const CreateAdvertPage = () => {
               type="file"
               hidden
               onChange={(e) => handleUpdateFormData("image", e.target.files[0])}
+              
             />
             
           </Button>
