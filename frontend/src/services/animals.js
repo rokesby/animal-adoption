@@ -55,7 +55,7 @@ export const createAnimal = async (token, animal) => {
     console.log(`Making request to: ${BACKEND_URL}/listings`);
     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
     if (!response.ok) {
-      throw new Error("Error creating post");
+      throw new Error("Error creating animal post");
     }
     const data = await response.json();
     return {

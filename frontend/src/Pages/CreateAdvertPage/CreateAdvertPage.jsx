@@ -21,6 +21,7 @@ import { Add, Remove } from "@mui/icons-material";
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
+  const [uploadImage, setUploadImage] = useState("");
   const token = localStorage.getItem("token"); 
   const [formData, setFormData] = useState({
     name: "",
@@ -32,7 +33,7 @@ export const CreateAdvertPage = () => {
     bio: "",
     neutered: false,
     livesWithChildren: false,
-    // image: null,
+    image: "null",
     shelterId: "",
   });
 
@@ -47,6 +48,10 @@ export const CreateAdvertPage = () => {
 
   const handleUpdateFormData = (id, value) => {
     setFormData({ ...formData, [id]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
   };
 
   const handleSubmit = async (e) => {
@@ -78,6 +83,7 @@ export const CreateAdvertPage = () => {
         neutered: formData.neutered,
         lives_with_children: formData.livesWithChildren,
         shelter_id: formData.shelterId,
+        image: formData.image
       });
 
       if (animal.status === 201) {
@@ -143,6 +149,20 @@ export const CreateAdvertPage = () => {
             required
             sx={{ mb: 3 }}
           />
+
+        <Button
+            variant="contained"
+            component="label"
+            sx={{ mb: 3 }}
+          >
+            Upload Image
+            <input
+              type="file"
+              hidden
+              onChange={(e) => handleUpdateFormData("image", e.target.files[0])}
+            />
+            
+          </Button>
 
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Species</InputLabel>

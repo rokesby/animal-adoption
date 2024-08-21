@@ -144,15 +144,19 @@ def create_new_animal():
         animal = Animal(
             name=data['name'],
             species=data['species'],
-            age=data['age'],
+            age= data['age'],
             breed=data['breed'],
             location=data['location'],
             male=data['male'],
             bio=data['bio'],
             neutered=data['neutered'],
             lives_with_children=data['lives_with_children'],
-            shelter_id=data['shelter_id']
+            shelter_id=data['shelter_id'],
+            # image=data['image']
+            image = data[‘name’] + “-needs-to-be-unique.jpg”
         )
+// Step a - give the filename a unique ID e.g animal ID which doesn’t yet exist
+// Step b - Save the image into the static folder
 
         db.session.add(animal)
         db.session.commit()
