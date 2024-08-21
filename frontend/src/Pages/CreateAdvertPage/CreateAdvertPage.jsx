@@ -22,6 +22,7 @@ import { Add, Remove } from "@mui/icons-material";
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
   const token = localStorage.getItem("token"); 
+  const user_shelter_id = localStorage.getItem("shelter_id")
   const [formData, setFormData] = useState({
     name: "",
     species: "",
@@ -33,7 +34,7 @@ export const CreateAdvertPage = () => {
     neutered: false,
     livesWithChildren: false,
     // image: null,
-    shelterId: "",
+    shelterId: user_shelter_id,
   });
 
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ export const CreateAdvertPage = () => {
         bio: formData.bio,
         neutered: formData.neutered,
         lives_with_children: formData.livesWithChildren,
-        shelter_id: formData.shelterId,
+        shelter_id: user_shelter_id,
       });
 
       if (animal.status === 201) {
@@ -202,7 +203,7 @@ export const CreateAdvertPage = () => {
             sx={{ mb: 3 }}
           />
 
-          <TextField
+          {/* <TextField
             label="Shelter_ID"
             value={formData.shelterId}
             onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
@@ -212,7 +213,7 @@ export const CreateAdvertPage = () => {
             variant="outlined"
             required
             sx={{ mb: 3 }}
-          />
+          /> */}
 
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Gender</InputLabel>
