@@ -169,6 +169,7 @@ def create_new_animal():
 
         return jsonify(animal.as_dict()), 201
 
+# PUT REQUEST FUNCTION
 # This function allows a logged in user to edit information about a specific animal
 @app.route('/listings/<int:id>', methods=['PUT'])
 @token_checker  # Ensures that the user is authenticated
