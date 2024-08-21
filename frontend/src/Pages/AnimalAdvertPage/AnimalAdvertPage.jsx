@@ -23,7 +23,9 @@ export const AnimalAdvertPage = () => {
 
   // Get the JWT token from localStorage (or any other auth mechanism you're using)
   const token = localStorage.getItem("token");
-  const shelter_id = localStorage.getItem("shelter_id");
+  const shelter_id = Number(localStorage.getItem("shelter_id"));
+  console.log(token)
+  console.log(shelter_id)
 
 
   console.log("AnimalAdvertPage received id:", id);
@@ -167,11 +169,11 @@ export const AnimalAdvertPage = () => {
             </Box>
   
             {/* Conditionally rendering the "Edit" button if logged in AND if token.shelter_id == animal's shelter id */}
-            {token && shelter_id === animalData.shelter_id && (
+            {token && (shelter_id === animalData.shelter_id) && (
               <Box sx={{ mt: 4, textAlign: "center" }}>
-                <Button variant="contained" color="primary" onClick={handleEditClick}>
+                {/* <Button variant="contained" color="primary" onClick={handleEditClick}>
                   Edit {animalData.name}'s profile
-                </Button>
+                </Button> */}
                 <Button variant="contained" color="primary" onClick={handleRemoveClick} sx={{ mt: 2 }}>
                   Remove {animalData.name}'s profile
                 </Button>
