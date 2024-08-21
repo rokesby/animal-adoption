@@ -74,6 +74,15 @@ if (!animalData) {
     navigate(`/edit-animal/${id}`);
   };
 
+  const handleRemoveClick = async () => {
+    await updateAnimalActiveStatus(token, animalData.id, false)
+    setisActive(false)
+    alert('This animal profile has now been hidden from all animal listings')
+    navigate('/animals')
+  };
+
+  console.log("Current isActive state:", isActive);
+
   return (
     <Card
       sx={{
@@ -138,7 +147,10 @@ if (!animalData) {
         {token && (shelter_id == animalData.shelter_id) && (
           <Box sx={{ mt: 4, textAlign: "center" }}>
             <Button variant="contained" color="primary" onClick={handleEditClick}>
-              Edit Animal
+              Edit {animalData.name}'s profile
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleRemoveClick}>
+              Remove {animalData.name}'s profile
             </Button>
           </Box>
         )}

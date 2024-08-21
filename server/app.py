@@ -128,7 +128,7 @@ def token_checker(f):
 def display_animals():
 
     with app.app_context():
-        animals = Animal.query.all()
+        animals = Animal.query.filter(Animal.isActive == True)
         animals_to_json = [animal.as_dict() for animal in animals]
         return jsonify(animals_to_json)
 
@@ -197,7 +197,18 @@ def update_animal(id):
 
         return jsonify(animal.as_dict()), 200
 
+# This backend function allows a user to update the isActive field in the database 
+# This is mainly used when the user wants to 'hide' an animal profile by setting isActive to false
 
+@app.route('/listings/<int:id>/change_isactive', methods=['PUT'])
+@token_checker 
+def update_is_active(id):
+    with app.app_context():
+        animal = Animal.query.get(id)
+        if not animal:
+            return jsonify({"message": "Animal not found"}), 404
+        data = request.get_json()
+        animal.isActive = data.get('isActive', animal.isActive)
 
 # @app.route('/users', methods=['GET'])
 # def get_users():
