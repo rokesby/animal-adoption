@@ -30,7 +30,7 @@ export const AnimalAdvertPage = () => {
 
   // HERE I AM EXPERIMENTING WITH GETTING AN IMAGE TO LOAD
   const realImage = animalData?.image // The '?' is added in bc animalData is set to null on line 19. Code was failing w/out it
-  ? `${import.meta.env.VITE_BACKEND_URL}/upload/${animalData.image}`
+  ? `${import.meta.env.VITE_BACKEND_URL}`+ "/upload/" + `${animalData.image}`
   : "https://via.placeholder.com/265";
 
   console.log("AnimalAdvertPage received id:", id);
