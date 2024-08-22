@@ -24,11 +24,12 @@ export const createAnimal = async (token, animal) => {
   const requestOptions = {
     method: "POST",
     headers: {
-      // "Content-Type": "application/json",
-      'content-type': 'multipart/form-data',
+      "Content-Type": "application/json",
+      // 'content-type': 'multipart/form-data',
       Authorization: `Bearer ${token}`, // I've uncommented this to pass the token in the header.
     },
-    body: formData,
+    // body: formData,
+    body: JSON.stringify(animal),
   };
   console.log(requestOptions)
   try {
