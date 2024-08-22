@@ -30,6 +30,10 @@ const router = createBrowserRouter([
     element: <NavbarWrapper />, // Navbar on all pages
     children: [
       {
+        path: "/",
+        element: <AllAnimals />,
+      },
+      {
         path: "login",
         element: <LoginPage />,
       },
