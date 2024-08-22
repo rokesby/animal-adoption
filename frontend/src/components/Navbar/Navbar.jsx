@@ -54,25 +54,24 @@ export const Navbar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#003554' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "#FFFACA", 
               textDecoration: "none",
             }}
           >
-            🐾 For a Cause
+            🐾  Paws For a Cause
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -82,7 +81,7 @@ export const Navbar = () => {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              sx={{ color: "#FFFACA" }}
             >
               <MenuIcon />
             </IconButton>
@@ -105,30 +104,39 @@ export const Navbar = () => {
               }}
             ></Menu>
           </Box>
+
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
+              fontFamily: "Arial, sans-serif",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "#FFFACA",
               textDecoration: "none",
             }}
           >
-            🐾 For a Cause
+            🐾 Paws For a Cause
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
               component={Link}
               to="/animals"
               data-testid="_animals"
-              color="inherit"
+              sx={{
+                fontFamily: 'Arial, sans-serif',
+                color: '#FFFACA',             
+                '&:hover': {
+                  backgroundColor: '#557B71',
+                  marginRight: "1em",
+                  marginLeft: "1em", 
+                },
+              }}
             >
               Home
             </Button>
@@ -136,7 +144,16 @@ export const Navbar = () => {
               component={Link}
               to="/animals"
               data-testid="_animals"
-              color="inherit"
+              sx={{
+                fontFamily: 'Arial, sans-serif',
+                backgroundColor: '#003554', 
+                color: '#FFFACA',             
+                '&:hover': {
+                  backgroundColor: '#557B71', 
+                  marginRight: "1em",
+                  marginLeft: "1em",
+                },
+              }}
             >
               Animals
             </Button>
@@ -148,7 +165,16 @@ export const Navbar = () => {
                 component={Link}
                 to="/sign-up"
                 data-testid="_signup"
-                color="inherit"
+                sx={{
+                  fontFamily: 'Arial, sans-serif',  
+                  color: '#FFFACA',             
+                  '&:hover': {
+                    backgroundColor: '#557B71',
+                    marginRight: "1em",
+                    marginLeft: "1em",
+                    gap: "1em", 
+                  },
+                }}
               >
                 Signup
               </Button>
@@ -156,7 +182,17 @@ export const Navbar = () => {
                 component={Link}
                 to="/login"
                 data-testid="_login"
-                color="inherit"
+                sx={{
+                  fontFamily: 'Arial, sans-serif',  
+                  color: '#FFFACA',             
+                  '&:hover': {
+                    backgroundColor: '#557B71',
+                    marginRight: "1em",
+                    marginLeft: "1em",
+                    gap: "1em",  
+
+                  },
+                }}
               >
                 Login
               </Button>
@@ -191,7 +227,7 @@ export const Navbar = () => {
                   component={Link}
                   to="/create-advert"
                   data-testid="_create-advert"
-                  color="inherit"
+                  sx={{ color: "#03554A" }}  // Set the text color in the menu items
                 >
                   <Typography textAlign="center">Create Advert</Typography>
                 </MenuItem>
@@ -200,7 +236,7 @@ export const Navbar = () => {
                   component={Link}
                   to="/my-animals"
                   data-testid="_my-animals"
-                  color="inherit"
+                  sx={{ color: "#03554A" }}  // Set the text color in the menu items
                 >
                   <Typography textAlign="center">My Animals</Typography>
                 </MenuItem>
@@ -209,7 +245,7 @@ export const Navbar = () => {
                   component={Link}
                   to="/login"
                   data-testid="_logout"
-                  color="inherit"
+                  sx={{ color: "#03554A" }}  // Set the text color in the menu items
                 >
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
@@ -220,8 +256,10 @@ export const Navbar = () => {
       </Container>
     </AppBar>
   );
-}
+};
+
 export default Navbar;
+
 
 // import AppBar from "@mui/material/AppBar";
 // import Box from "@mui/material/Box";
