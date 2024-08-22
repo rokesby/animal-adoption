@@ -38,6 +38,7 @@ source adoption-venv/bin/activate
 ### Install dependencies 
 
 pip install -r requirements.txt
+pip install pytest
 
 The /frontend/.env file contains a link to the server which will provide the underlying API services. You'll need to repoint this to your flask server.
 
