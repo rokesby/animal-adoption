@@ -131,9 +131,6 @@ if (!animalData) {
         <Typography variant="h4" component="div">
           {animalData.name}
         </Typography>
-
-        {/* Add image section here */}
-        
         <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
           {animalData.breed} - {animalData.age} years old
         </Typography>
