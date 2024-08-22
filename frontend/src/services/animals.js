@@ -1,53 +1,36 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getAnimals = async () => {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      // Authorization: `Bearer ${token}`,
-      // Commented out to get this working - Marya recommended this workaround.
-    },
-  };
-  try {
-    const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
-    if (response.status !== 200) {
-      throw new Error("Unable to fetch animals");
+      return [];
     }
-    const data = await response.json();
-    return data || [];
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
+};
 
 export const createAnimal = async (token, animal) => {
-  // formData.append("image", file);
-  console.log(animal);
-  const formData = new FormData();
-  formData.append("image", animal.image);
-  formData.append("name", animal.name);
-  formData.append("species", animal.species);
-  formData.append("age", animal.age);
-  formData.append("breed", animal.breed);
-  formData.append("location", animal.location);
-  formData.append("male", animal.male);
-  formData.append("bio", animal.bio);
-  formData.append("neutered", animal.neutered);
-  formData.append("livesWithChildren", animal.livesWithChildren);
-  // formData.append("shelterId", animal.shelterId);
-  console.log(formData.entries());
-  for (var pair of formData.entries()) {
-    console.log(pair[0]+ ', ' + pair[1]); }
+  // const formData = newFormData();
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        // Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
+      if (response.status !== 200) {
+        throw new Error("Unable to fetch animals");
+      }
+      const data = await response.json();
+      return data || [];
+    } catch (error) {
+      console.error('Error:', error);
+  // formData.append("image", setUploadImage);
   const requestOptions = {
     method: "POST",
     headers: {
-      // "Content-Type": "application/json",
-      'content-type': 'multipart/form-data',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`, // I've uncommented this to pass the token in the header.
     },
-    body: formData,
+    body: JSON.stringify(animal),
   };
-  console.log(requestOptions)
   try {
     console.log(`Making request to: ${BACKEND_URL}/listings`);
     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
@@ -152,3 +135,10 @@ export const updateAnimalActiveStatus = async (token, animalId, isActive) => {
     throw error;
   }
 }
+
+
+
+
+
+
+
