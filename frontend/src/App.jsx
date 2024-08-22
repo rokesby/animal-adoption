@@ -5,7 +5,8 @@ import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import AllAnimals from "./Pages/Animals/animals";
+// import AllAnimals from "./Pages/Animals/animals";
+import AllAnimals from "./Pages/ExperimentAnimalAdvertpAGE/ExperimentAnimalAdvertPage.jsx"
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
 import { AuthProvider } from "./components/Context/AuthContext";
 
