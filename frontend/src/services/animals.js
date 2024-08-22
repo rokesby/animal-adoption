@@ -1,6 +1,12 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getAnimals = async () => {
+      return [];
+    }
+};
+
+export const createAnimal = async (token, animal) => {
+  // const formData = newFormData();
     const requestOptions = {
       method: "GET",
       headers: {
@@ -16,11 +22,7 @@ export const getAnimals = async () => {
       return data || [];
     } catch (error) {
       console.error('Error:', error);
-      return [];
-    }
-};
-
-export const createAnimal = async (token, animal) => {
+  // formData.append("image", setUploadImage);
   const requestOptions = {
     method: "POST",
     headers: {
@@ -33,7 +35,7 @@ export const createAnimal = async (token, animal) => {
     console.log(`Making request to: ${BACKEND_URL}/listings`);
     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
     if (!response.ok) {
-      throw new Error("Error creating post");
+      throw new Error("Error creating animal post");
     }
     const data = await response.json();
     return {
@@ -105,6 +107,7 @@ export const editAnimal = async (token, animalId, updatedAnimalData) => {
   }
 };
 
+
 // This function changes the isActive state to be set to False 
 // Makes a PUT request to change isActive field in db to 'false' 
 
@@ -132,11 +135,6 @@ export const updateAnimalActiveStatus = async (token, animalId, isActive) => {
     throw error;
   }
 }
-
-
-
-
-
 
 
 
