@@ -8,7 +8,8 @@ import {
   ListItem,
   ListItemText,
   Button, 
-  TextField
+  TextField,
+  CardMedia
 } from "@mui/material";
 import { editAnimal, getSingleAnimal, updateAnimalActiveStatus } from "../../services/animals";
 import { useParams } from "react-router-dom";
@@ -27,6 +28,10 @@ export const AnimalAdvertPage = () => {
   const token = localStorage.getItem("token");
   const shelter_id = localStorage.getItem("shelter_id");
 
+  // HERE I AM EXPERIMENTING WITH GETTING AN IMAGE TO LOAD
+  const realImage = animalData?.image // The '?' is added in bc animalData is set to null on line 19. Code was failing w/out it
+  ? `${import.meta.env.VITE_BACKEND_URL}/upload/${animalData.image}`
+  : "https://via.placeholder.com/265";
 
   console.log("AnimalAdvertPage received id:", id);
 
@@ -114,6 +119,12 @@ if (!animalData) {
         mt: 10,
       }}
     >
+      <CardMedia
+        component="img"
+        height="265"
+        image={realImage}
+        alt={`${animalData.name}'s image`}
+      />
       <CardContent>
         {!isEditMode ? (
           <>
