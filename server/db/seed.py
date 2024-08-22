@@ -114,7 +114,7 @@ session.add(shelter2)
 shelter3 = Shelter(
     name = "Mayhew Animal Home",
     location = "NW London",
-    email = "info@themayhew.org.org",
+    email = "info@themayhew.org",
     phone_number = "07931996802"
 )
 session.add(shelter3)
