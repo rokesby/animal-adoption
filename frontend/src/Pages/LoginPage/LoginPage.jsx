@@ -73,7 +73,7 @@ export const LoginPage = () => {
         id="post-form"
         onSubmit={handleSubmit}
       >
-        <Typography variant="h2"  sx={{mb: 2}}>Login</Typography>
+        <Typography variant="h2" sx={{ mb: 2, color: '#003554' }}>Login</Typography>
         {/* <PetsIcon sx={{mb: 2}}/> */}
         <TextField
           inputProps={{
@@ -109,15 +109,23 @@ export const LoginPage = () => {
         />
       </CardContent>
       <CardActions sx={{ display:"flex" , justifyContent:"right", mr: 1.3}}>
-        <Button
-          data-testid="_submit-button"
-          type="submit"
-          form="post-form"
-          variant="contained"
-          endIcon={<PetsIcon />}
-        >
-          Login
-        </Button>
+      <Button
+            data-testid="_submit-button"
+            type="submit"
+            form="post-form"
+            variant="contained"
+            sx={{
+              fontFamily: 'Arial, sans-serif',
+              backgroundColor: '#003554',
+              color: '#FFFACA',
+              '&:hover': {
+                backgroundColor: '#557B71',
+              },
+            }}
+            endIcon={<PetsIcon />}
+          >
+            Login
+          </Button>
       </CardActions>
     </Card>
     </Box>

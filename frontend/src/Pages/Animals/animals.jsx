@@ -30,7 +30,7 @@ const AllAnimals = () => {
 
   return (
     <>
-      <h2>Animals Who Need a Home</h2>
+      <h2>Can you give one of us a good home?</h2>
       {animalsState.length > 0 ? (
         <div
           style={{
@@ -47,9 +47,8 @@ const AllAnimals = () => {
               <div
                 key={id} 
                 style={{
-                  flex: "1 1 calc(33.333% - 20px)", // Allows 3 cards per row
-                  maxWidth: "calc(33.333% - 20px)", // Ensures cards are contained within the row
-                  boxSizing: "border-box", 
+                  flex: "1 1 calc(33.333% - 20px)", 
+                  maxWidth: "calc(33.333% - 20px)",
                 }}
               >
                 <AnimalCard
@@ -60,7 +59,7 @@ const AllAnimals = () => {
                   location={location}
                   button1Text={`Meet ${name}`}
                   linkUrl={`/animals/${id}`} 
-                />
+                              />
               </div>
             );
           })}

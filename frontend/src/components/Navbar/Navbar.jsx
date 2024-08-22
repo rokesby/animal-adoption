@@ -11,10 +11,8 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
-
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -26,6 +24,7 @@ export const Navbar = () => {
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -38,51 +37,48 @@ export const Navbar = () => {
     setAnchorElUser(null);
   };
 
-
   useEffect(() => {
     setLoggedIn(!!token);
   }, [token]);
-
 
   const handleLogoutClick = () => {
     if (token) {
       localStorage.removeItem("token");
       setToken(null);
     } 
-    setLoggedIn(false)
+    setLoggedIn(false);
     navigate("/login");
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#003554' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
+              fontFamily: "Roboto, Helvetica, Arial, sans-serif",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "#FFFACA", 
               textDecoration: "none",
             }}
           >
-            🐾 For a Cause
+            🐾 Paws For Cause
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              sx={{ color: "#FFFACA" }}
             >
               <MenuIcon />
             </IconButton>
@@ -100,35 +96,72 @@ export const Navbar = () => {
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            ></Menu>
+              sx={{ display: { xs: "block", md: "none" } }}
+            >
+              <MenuItem component={Link} to="/animals" onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Home</Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/animals" onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Animals</Typography>
+              </MenuItem>
+              {!loggedIn && (
+                <>
+                  <MenuItem component={Link} to="/sign-up" onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">Signup</Typography>
+                  </MenuItem>
+                  <MenuItem component={Link} to="/login" onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>
+                </>
+              )}
+              {loggedIn && (
+                <>
+                  <MenuItem component={Link} to="/create-advert" onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">Create Advert</Typography>
+                  </MenuItem>
+                  <MenuItem component={Link} to="/my-animals" onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">My Animals</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogoutClick}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </>
+              )}
+            </Menu>
           </Box>
+
           <Typography
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
+              fontFamily: "Roboto, Helvetica, Arial, sans-serif",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "#FFFACA",
               textDecoration: "none",
             }}
           >
-            🐾 For a Cause
+            🐾 Paws For Cause
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             <Button
               component={Link}
               to="/animals"
               data-testid="_animals"
-              color="inherit"
+              sx={{
+                fontFamily: 'Arial, sans-serif',
+                color: '#FFFACA',             
+                '&:hover': {
+                  backgroundColor: '#557B71',
+                  marginRight: "1em",
+                  marginLeft: "1em", 
+                },
+              }}
             >
               Home
             </Button>
@@ -136,7 +169,16 @@ export const Navbar = () => {
               component={Link}
               to="/animals"
               data-testid="_animals"
-              color="inherit"
+              sx={{
+                fontFamily: 'Arial, sans-serif',
+                backgroundColor: '#003554', 
+                color: '#FFFACA',             
+                '&:hover': {
+                  backgroundColor: '#557B71', 
+                  marginRight: "1em",
+                  marginLeft: "1em",
+                },
+              }}
             >
               Animals
             </Button>
@@ -148,7 +190,16 @@ export const Navbar = () => {
                 component={Link}
                 to="/sign-up"
                 data-testid="_signup"
-                color="inherit"
+                sx={{
+                  fontFamily: 'Arial, sans-serif',  
+                  color: '#FFFACA',             
+                  '&:hover': {
+                    backgroundColor: '#557B71',
+                    marginRight: "1em",
+                    marginLeft: "1em",
+                    gap: "1em", 
+                  },
+                }}
               >
                 Signup
               </Button>
@@ -156,7 +207,16 @@ export const Navbar = () => {
                 component={Link}
                 to="/login"
                 data-testid="_login"
-                color="inherit"
+                sx={{
+                  fontFamily: 'Arial, sans-serif',  
+                  color: '#FFFACA',             
+                  '&:hover': {
+                    backgroundColor: '#557B71',
+                    marginRight: "1em",
+                    marginLeft: "1em",
+                    gap: "1em",  
+                  },
+                }}
               >
                 Login
               </Button>
@@ -191,7 +251,7 @@ export const Navbar = () => {
                   component={Link}
                   to="/create-advert"
                   data-testid="_create-advert"
-                  color="inherit"
+                  sx={{ color: "#003554" }} 
                 >
                   <Typography textAlign="center">Create Advert</Typography>
                 </MenuItem>
@@ -200,7 +260,7 @@ export const Navbar = () => {
                   component={Link}
                   to="/my-animals"
                   data-testid="_my-animals"
-                  color="inherit"
+                  sx={{ color: "#003554" }}  
                 >
                   <Typography textAlign="center">My Animals</Typography>
                 </MenuItem>
@@ -209,7 +269,7 @@ export const Navbar = () => {
                   component={Link}
                   to="/login"
                   data-testid="_logout"
-                  color="inherit"
+                  sx={{ color: "#003554" }}  
                 >
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
@@ -220,71 +280,6 @@ export const Navbar = () => {
       </Container>
     </AppBar>
   );
-}
+};
+
 export default Navbar;
-
-// import AppBar from "@mui/material/AppBar";
-// import Box from "@mui/material/Box";
-// import Toolbar from "@mui/material/Toolbar";
-// import Typography from "@mui/material/Typography";
-// import Button from "@mui/material/Button";
-// import { Link } from "react-router-dom";
-
-// //import { useContext } from "react";
-// //import Context from "../Context/Context";
-
-// const Navbar = () => {
-//   //const { authStatus, setAuthStatus } = useContext(Context);
-
-//   return (
-//     <Box sx={{ flexGrow: 1 }}>
-//       <AppBar
-//         data-testid="_nav"
-//         position="static"
-//         color="transparent"
-//         sx={{
-//           width: "100vw",
-//         }}
-//       >
-//         <Toolbar>
-//         <Typography component={Link} to="/" color="inherit" variant="h6">
-//   🐾 For a Cause
-// </Typography>
-
-//           <Box sx={{ marginLeft: "auto" }}>
-//             <Button
-//               component={Link}
-//               to="/animals"
-//               data-testid="_animals"
-//               color="inherit"
-//             >
-//               Home
-//             </Button>
-//
-//             <Button
-//               component={Link}
-//               to="/sign-up"
-//               data-testid="_signup"
-//               color="inherit"
-//             >
-//               Signup
-//             </Button>
-//           </Box>
-
-//           {/* <Box sx={{ marginLeft: "auto" }}>
-//             <Button
-//               component={Link}
-//               to="/create-advert"
-//               data-testid="_create-advert"
-//               color="inherit"
-//             >
-//               Create Advert
-//             </Button>
-//           </Box> */}
-//         </Toolbar>
-//       </AppBar>
-//     </Box>
-//   );
-// };
-
-// export default Navbar;

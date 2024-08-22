@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
@@ -95,7 +94,7 @@ export const SignUpPage = () => {
         </Box>
       )}
 
-      <Card sx={{ width: "50vh", margin: "0 auto", padding: "0.1em", mb: 3, mt: 10 }}>
+      <Card sx={{ width: "50vh", margin: "0 auto", padding: "0.1em", mb: 3, mt: 10, color: '#003554' }}>
         <CardHeader title="Sign Up" subheader="Please enter your details" style={{ textAlign: "left" }} />
 
         <CardContent component="form" id="signup-form" onSubmit={handleSubmit}>
@@ -203,7 +202,15 @@ export const SignUpPage = () => {
           />
 
           <CardActions>
-            <Button data-testid="submit-button" type="submit" form="signup-form" variant="contained">
+            <Button data-testid="submit-button" type="submit" form="signup-form" variant="contained"
+            sx={{
+              fontFamily: 'Arial, sans-serif',
+              backgroundColor: '#003554',
+              color: '#FFFACA',
+              '&:hover': {
+                backgroundColor: '#557B71',
+              },
+            }}>
               Submit
             </Button>
           </CardActions>

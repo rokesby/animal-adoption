@@ -24,11 +24,13 @@ export const createAnimal = async (token, animal) => {
   const requestOptions = {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      // "Content-Type": "application/json",
+      'content-type': 'multipart/form-data',
       Authorization: `Bearer ${token}`, // I've uncommented this to pass the token in the header.
     },
-    body: JSON.stringify(animal),
+    body: formData,
   };
+  console.log(requestOptions)
   try {
     console.log(`Making request to: ${BACKEND_URL}/listings`);
     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
