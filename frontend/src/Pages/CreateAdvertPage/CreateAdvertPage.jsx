@@ -19,12 +19,14 @@ import { createAnimal } from "../../services/animals";
 import { Add, Remove } from "@mui/icons-material";
 
 
-import { createAnimal } from "../../services/animals";
-import { Add, Remove } from "@mui/icons-material";
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
+
   const [selectedImage, setSelectedImage] = useState(null);
   const token = localStorage.getItem("token");
+
+  const user_shelter_id = localStorage.getItem("shelter_id")
+
   const [formData, setFormData] = useState({
     name: "",
     species: "",
@@ -35,7 +37,8 @@ export const CreateAdvertPage = () => {
     bio: "",
     neutered: false,
     livesWithChildren: false,
-    shelterId: "",
+    image: null,
+    shelterId: user_shelter_id, 
   });
   const navigate = useNavigate();
   // Check for the token / navigate to 'login' if no token exists
@@ -61,14 +64,21 @@ export const CreateAdvertPage = () => {
       return;
     }
     try {
-      const data = new FormData();
-      for (const key in formData) {
-        data.append(key, formData[key]);
-      }
-      if (selectedImage) {
-        data.append("image", selectedImage);
-      }
-      const animal = await createAnimal(token, data);
+
+      // added the 'token' as an argument on createAnimal
+      const animal = await createAnimal(token, {
+        name: formData.name,
+        species: formData.species,
+        age: formData.age,
+        breed: formData.breed,
+        location: formData.location,
+        male: formData.male,
+        bio: formData.bio,
+        neutered: formData.neutered,
+        lives_with_children: formData.livesWithChildren,
+        shelter_id: user_shelter_id,
+      });
+
       if (animal.status === 201) {
         const newAnimalId = animal.data.id;
         navigate(`/animals/${newAnimalId}`);
@@ -181,17 +191,6 @@ export const CreateAdvertPage = () => {
             value={formData.location}
             onChange={(e) => handleUpdateFormData("location", e.target.value)}
             fullWidth
-            size="small"
-            variant="outlined"
-            required
-            sx={{ mb: 3 }}
-          />
-          <TextField
-            label="Shelter_ID"
-            value={formData.shelterId}
-            onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
-            fullWidth
-            multiline
             size="small"
             variant="outlined"
             required

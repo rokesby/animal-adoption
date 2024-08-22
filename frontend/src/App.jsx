@@ -7,11 +7,13 @@ import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
 import AllAnimals from "./Pages/Animals/animals";
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
+import { AuthProvider } from "./components/Context/AuthContext";
+
 
 // alternative to state for passing down to child components
 // https://react.dev/reference/react/useContext#usecontext
 // Create a context to pass down authStatus
-const Context = createContext();
+// const Context = createContext();
 
 // Wrapper component that includes the Navbar and renders the nested routes
 const NavbarWrapper = () => (
@@ -28,15 +30,19 @@ const router = createBrowserRouter([
     element: <NavbarWrapper />, // Navbar on all pages
     children: [
       {
-        path: "login", 
+        path: "/",
+        element: <AllAnimals />,
+      },
+      {
+        path: "login",
         element: <LoginPage />,
       },
       {
-        path: "sign-up", 
+        path: "sign-up",
         element: <SignUpPage />,
       },
       {
-        path: "animals", 
+        path: "animals",
         element: <AllAnimals />,
       },
       {
@@ -47,24 +53,17 @@ const router = createBrowserRouter([
       {
         path: "create-advert", // Path to the create advert page
         element: <CreateAdvertPage />,
-      }
+      },
     ],
   },
-
 ]);
 
 const App = () => {
-  const [authStatus, setAuthStatus] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setAuthStatus(!!token);
-  }, []);
 
   return (
-    <Context.Provider value={{ authStatus, setAuthStatus }}>
+    <AuthProvider>
       <RouterProvider router={router} />
-    </Context.Provider>
+    </AuthProvider>
   );
 };
 

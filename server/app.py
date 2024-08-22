@@ -28,6 +28,7 @@ CORS(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_CONNECT")
 db = SQLAlchemy(app)
 
+# ------------------------------------
 
 class Animal(db.Model):
     __tablename__ = 'animals'
@@ -44,8 +45,10 @@ class Animal(db.Model):
     neutered = db.Column(db.Boolean, nullable=False)
     lives_with_children = db.Column(db.Boolean, nullable=False)
     image = db.Column(db.String(255))
+    isActive = db.Column(db.Boolean, nullable=False, default=True)
     shelter_id = db.Column(db.Integer(), db.ForeignKey('shelters.id'))
 
+# ------------------------------------
 
     def as_dict(self):
         animal_dict = {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -58,6 +61,8 @@ class Animal(db.Model):
             'phone_number': shelter_info.phone_number
         }
         return animal_dict
+
+# ------------------------------------
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -72,6 +77,8 @@ class User(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+# ------------------------------------
 
 class Shelter(db.Model):
     __tablename__ = 'shelters'
@@ -88,9 +95,19 @@ class Shelter(db.Model):
 
     def as_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-    
-# == Routes Here ==
 
+
+# ------------------------------------
+# Email domain name to shelter_id mapping dictionary is here
+
+# email_to_shelter_mapping = {
+#     '@batterseadogshome.org': 1,
+#     '@cardiffdogshome.org': 2,
+#     '@themayhew.org': 3,
+#     '@rspca.org.uk': 4
+# }
+
+# == Routes Here ==
 
 # decorator function used for sake of DRY
 def token_checker(f):
@@ -118,7 +135,7 @@ def token_checker(f):
 def display_animals():
 
     with app.app_context():
-        animals = Animal.query.all()
+        animals = Animal.query.filter(Animal.isActive == True)
         animals_to_json = [animal.as_dict() for animal in animals]
         return jsonify(animals_to_json)
 
@@ -131,8 +148,7 @@ def display_one_animal(id):
 
 
 # THIS FUNCTION WILL POST A NEW ANIMAL TO THE DATABASE
-
-# Will I need to change '/listings' to something else? 
+# TODO : Will I need to change '/listings' to something else? 
 @app.route('/listings', methods=['POST'])
 @token_checker # Added this decorator to check for token. 
 def create_new_animal():
@@ -140,7 +156,7 @@ def create_new_animal():
 
         data = request.get_json()
         print('Received the data:', data)
-        # data= request.json
+
         animal = Animal(
             name=data['name'],
             species=data['species'],
@@ -152,14 +168,39 @@ def create_new_animal():
             neutered=data['neutered'],
             lives_with_children=data['lives_with_children'],
             shelter_id=data['shelter_id'],
-            image=data['image']
-            # image = data['name'] + "-needs-to-be-unique.jpg"
+            image = ""
         )
 # // Step a - give the filename a unique ID e.g animal ID which doesn’t yet exist
 # // Step b - Save the image into the static folder
 
         db.session.add(animal)
         db.session.commit()
+
+        # Give the filename a unique ID e.g animal ID which doesn’t yet exist
+        # The primary key is instantly available once the record has been commited.        
+        # Retrieve the auto-incremented ID
+        new_animal_id = animal.id
+        # Query the database for the newly created object using the ID
+        retrieved_animal = db.session.query(Animal).get(new_animal_id)
+
+        # Update the image field of the retrieved object
+        retrieved_animal.image = f"unique_id_{new_animal_id}"
+        # Commit the changes to the database
+        db.session.commit()
+
+        # Step b - Save the image into the static folder
+
+        # uploader = FileUploader.FileUploader(
+        #     upload_location=os.getenv("PHOTO_UPLOAD_LOCATION"),
+        #     allowed_extensions=app.config['UPLOAD_EXTENSIONS']
+        # )
+
+        # uploaded_file = request.files['file']
+        # success, message = uploader.validate_and_save(uploaded_file)
+
+        # if not success:
+        #     return message, 400
+        # return jsonify(animal.as_dict()), 201
 
         return jsonify(animal.as_dict()), 201
 
@@ -191,14 +232,22 @@ def update_animal(id):
 
         return jsonify(animal.as_dict()), 200
 
+# This backend function allows a user to update the isActive field in the database 
+# This is mainly used when the user wants to 'hide' an animal profile by setting isActive to false
 
-
-# @app.route('/users', methods=['GET'])
-# def get_users():
-#     with app.app_context():
-#         users = User.query.all()
-#         users_list = [user.as_dict() for user in users]
-#         return jsonify(users_list)
+@app.route('/listings/<int:id>/change_isactive', methods=['PUT'])
+@token_checker 
+def update_is_active(id):
+    with app.app_context():
+        animal = Animal.query.get(id)
+        if not animal:
+            return jsonify({"message": "Animal not found"}), 404
+        
+        data = request.get_json()
+        animal.isActive = data.get('isActive', animal.isActive)
+        
+        db.session.commit()
+        return jsonify(animal.as_dict()), 200
     
 @app.route('/token', methods=['POST'])
 def login():
@@ -231,12 +280,23 @@ def signup():
         plaintext_password = data['password']
         hashed_password = bcrypt.generate_password_hash(plaintext_password).decode('utf-8') 
 
+        # Shelter_id assignment via email domain name happens here
+        # shelter_id = None
+        # for domain, id in email_to_shelter_mapping.items():
+        #     if domain in req_email:
+        #         shelter_id = id
+        #         break
+
+        #     if shelter_id is None:
+        #         return jsonify({'error': 'You do not have a registered animal shelter email'}), 400
+
         user = User(
             email=data['email'],
             password=hashed_password,
             first_name=data['first_name'],
             last_name=data['last_name'],
-            shelter_id=data['shelter_id']
+            # shelter_id=shelter_id
+            shelter_id = data['shelter_id']
         )
         db.session.add(user)
         db.session.commit()

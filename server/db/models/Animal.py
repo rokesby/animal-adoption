@@ -1,5 +1,6 @@
 # The functions for READING and POSTING are defined here
 
+
 class Animal:
     def __init__(self, id, name, species, age, breed, location, gender, description, neutered, lives_with_children, shelter_id, image):
         self.id = id
@@ -15,8 +16,8 @@ class Animal:
         self.shelter_id = shelter_id
         self.image = image
 
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+#     def __eq__(self, other):
+#         return self.__dict__ == other.__dict__
     
     def __repr__(self):
         return f"Listing:({self.id}, {self.name}, {self.species}, {self.age}, {self.breed}, {self.location}, {self.gender}, {self.description}, {self.neutered}, {self.lives_with_children}, {self.shelter_id}, {self.image},"

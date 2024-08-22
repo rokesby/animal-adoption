@@ -24,6 +24,7 @@ export const signup = async (formData) => {
     return data;
   } else if (response.status === 409) {
     const data = await response.json();
+    // alert(data.error || 'An error occurred during sign up. Use a registered shelter email');
     return data.message;
   } else {
     throw new Error(

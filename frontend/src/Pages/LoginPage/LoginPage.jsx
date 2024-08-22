@@ -1,21 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/authentication"
-// import { useContext } from "react";
-// import Context from "../../components/Context/Context";
 import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions, Typography } from "@mui/material";
 import PetsIcon from '@mui/icons-material/Pets';
-
+import { AuthContext } from "../../components/Context/AuthContext"
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
   const [userData, setUserData] = useState("");
-  const token = localStorage.getItem("token");
+  const {token, setToken} = useContext(AuthContext)
   const navigate = useNavigate();
-  
-  // get token from local storage
   
   useEffect(() => {
     if (token) {
@@ -39,6 +35,7 @@ export const LoginPage = () => {
         localStorage.setItem("token", data.token)
         localStorage.setItem("user_id", data.user_id)
         localStorage.setItem("shelter_id", data.shelter_id)
+        setToken(localStorage.getItem("token"))
         navigate("/create-advert");
         setEmail("");
         setPassword("");
