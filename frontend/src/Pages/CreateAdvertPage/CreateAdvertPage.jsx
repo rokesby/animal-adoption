@@ -21,50 +21,52 @@ import { Add, Remove } from "@mui/icons-material";
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
-
-  const [selectedImage, setSelectedImage] = useState(null);
-  const token = localStorage.getItem("token");
-
+  const token = localStorage.getItem("token"); 
   const user_shelter_id = localStorage.getItem("shelter_id")
-
   const [formData, setFormData] = useState({
     name: "",
     species: "",
-    age: 0,
+    age: 0, 
     breed: "",
     location: "",
     male: true,
     bio: "",
     neutered: false,
     livesWithChildren: false,
-    image: null,
-    shelterId: user_shelter_id, 
+    // image: null,
+    shelterId: user_shelter_id,
   });
+
   const navigate = useNavigate();
+
   // Check for the token / navigate to 'login' if no token exists
   useEffect(() => {
     if (!token) {
       navigate("/login");
     }
   }, [token]);
-  // Handle image selection
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-    }
-  };
+
   const handleUpdateFormData = (id, value) => {
     setFormData({ ...formData, [id]: value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.name || !formData.species || formData.age === "") {
       setMessage("Please fill in all required fields");
       return;
     }
-    try {
 
+    // try {
+    //   const data = new FormData();
+    //   for (const key in formData) {
+      //     data.append(key, formData[key]);
+      
+      // HERE: I am going to try creating an animal 
+      // using the info obtained from the form
+
+    try {
       // added the 'token' as an argument on createAnimal
       const animal = await createAnimal(token, {
         name: formData.name,
@@ -90,12 +92,14 @@ export const CreateAdvertPage = () => {
       setMessage("Error creating advert. Please try again.");
     }
   };
+
   const handleAgeChange = (amount) => {
     setFormData((prevData) => ({
       ...prevData,
       age: Math.max(0, prevData.age + amount), // Age is a positive num
     }));
   };
+
   return (
     <>
       {message && (
@@ -109,6 +113,7 @@ export const CreateAdvertPage = () => {
           </Alert>
         </Box>
       )}
+
       <Card
         sx={{
           width: "50vh",
@@ -123,6 +128,7 @@ export const CreateAdvertPage = () => {
           subheader="Please enter the animal's details"
           style={{ textAlign: "left" }}
         />
+
         <CardContent
           component="form"
           id="create-advert-form"
@@ -138,10 +144,7 @@ export const CreateAdvertPage = () => {
             required
             sx={{ mb: 3 }}
           />
-          <Button variant="contained" component="label" sx={{ mb: 3 }}>
-            Upload Image
-            <input type="file" hidden onChange={handleImageChange} />
-          </Button>
+
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Species</InputLabel>
             <Select
@@ -158,6 +161,7 @@ export const CreateAdvertPage = () => {
               <MenuItem value="Other">Other</MenuItem>
             </Select>
           </FormControl>
+
           <Box display="flex" alignItems="center" sx={{ mb: 3 }}>
             <IconButton onClick={() => handleAgeChange(-1)}>
               <Remove />
@@ -167,7 +171,7 @@ export const CreateAdvertPage = () => {
               value={formData.age}
               onChange={(e) => handleUpdateFormData("age", e.target.value)}
               type="number"
-              InputProps={{ readOnly: true }} // Makes the text field read-only
+              InputProps={{ readOnly: true }}  // Makes the text field read-only
               size="small"
               variant="outlined"
               required
@@ -177,6 +181,7 @@ export const CreateAdvertPage = () => {
               <Add />
             </IconButton>
           </Box>
+
           <TextField
             label="Breed"
             value={formData.breed}
@@ -186,6 +191,7 @@ export const CreateAdvertPage = () => {
             variant="outlined"
             sx={{ mb: 3 }}
           />
+
           <TextField
             label="Location"
             value={formData.location}
@@ -196,6 +202,19 @@ export const CreateAdvertPage = () => {
             required
             sx={{ mb: 3 }}
           />
+
+          {/* <TextField
+            label="Shelter_ID"
+            value={formData.shelterId}
+            onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
+            fullWidth
+            multiline
+            size="small"
+            variant="outlined"
+            required
+            sx={{ mb: 3 }}
+          /> */}
+
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Gender</InputLabel>
             <Select
@@ -211,6 +230,7 @@ export const CreateAdvertPage = () => {
               <MenuItem value="false">Female</MenuItem>
             </Select>
           </FormControl>
+
           <TextField
             label="Bio"
             value={formData.bio}
@@ -223,6 +243,7 @@ export const CreateAdvertPage = () => {
             required
             sx={{ mb: 3 }}
           />
+
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Neutered</InputLabel>
             <Select
@@ -238,6 +259,7 @@ export const CreateAdvertPage = () => {
               <MenuItem value="false">No</MenuItem>
             </Select>
           </FormControl>
+
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Lives with Children</InputLabel>
             <Select
@@ -257,6 +279,7 @@ export const CreateAdvertPage = () => {
             </Select>
           </FormControl>
         </CardContent>
+
         <CardActions>
           <Button
             type="submit"
@@ -271,4 +294,5 @@ export const CreateAdvertPage = () => {
     </>
   );
 };
+
 export default CreateAdvertPage;

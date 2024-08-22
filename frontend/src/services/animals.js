@@ -1,42 +1,26 @@
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getAnimals = async () => {
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      //Authorization: `Bearer ${token}`,
-    },
-  };
-  try {
-    const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
-    if (response.status !== 200) {
-      throw new Error("Unable to fetch animals");
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        // Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
+      if (response.status !== 200) {
+        throw new Error("Unable to fetch animals");
+      }
+      const data = await response.json();
+      return data || [];
+    } catch (error) {
+      console.error('Error:', error);
+      return [];
     }
-    const data = await response.json();
-    return data || [];
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
+};
 
 export const createAnimal = async (token, animal) => {
-  // formData.append("image", file);
-  console.log(animal);
-  const formData = new FormData();
-  formData.append("image", animal.image);
-  formData.append("name", animal.name);
-  formData.append("species", animal.species);
-  formData.append("age", animal.age);
-  formData.append("breed", animal.breed);
-  formData.append("location", animal.location);
-  formData.append("male", animal.male);
-  formData.append("bio", animal.bio);
-  formData.append("neutered", animal.neutered);
-  formData.append("livesWithChildren", animal.livesWithChildren);
-  // formData.append("shelterId", animal.shelterId);
-  console.log(formData.entries());
-  for (var pair of formData.entries()) {
-    console.log(pair[0]+ ', ' + pair[1]); }
   const requestOptions = {
     method: "POST",
     headers: {
@@ -51,7 +35,7 @@ export const createAnimal = async (token, animal) => {
     console.log(`Making request to: ${BACKEND_URL}/listings`);
     const response = await fetch(`${BACKEND_URL}/listings`, requestOptions);
     if (!response.ok) {
-      throw new Error("Error creating animal post");
+      throw new Error("Error creating post");
     }
     const data = await response.json();
     return {
@@ -123,7 +107,6 @@ export const editAnimal = async (token, animalId, updatedAnimalData) => {
   }
 };
 
-
 // This function changes the isActive state to be set to False 
 // Makes a PUT request to change isActive field in db to 'false' 
 
@@ -151,3 +134,15 @@ export const updateAnimalActiveStatus = async (token, animalId, isActive) => {
     throw error;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
