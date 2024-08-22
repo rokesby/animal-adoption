@@ -98,6 +98,14 @@ class Shelter(db.Model):
 
 
 # ------------------------------------
+# Email domain name to shelter_id mapping dictionary is here
+
+# email_to_shelter_mapping = {
+#     '@batterseadogshome.org': 1,
+#     '@cardiffdogshome.org': 2,
+#     '@themayhew.org': 3,
+#     '@rspca.org.uk': 4
+# }
 
 # == Routes Here ==
 
@@ -270,12 +278,23 @@ def signup():
         plaintext_password = data['password']
         hashed_password = bcrypt.generate_password_hash(plaintext_password).decode('utf-8') 
 
+        # Shelter_id assignment via email domain name happens here
+        # shelter_id = None
+        # for domain, id in email_to_shelter_mapping.items():
+        #     if domain in req_email:
+        #         shelter_id = id
+        #         break
+
+        #     if shelter_id is None:
+        #         return jsonify({'error': 'You do not have a registered animal shelter email'}), 400
+
         user = User(
             email=data['email'],
             password=hashed_password,
             first_name=data['first_name'],
             last_name=data['last_name'],
-            shelter_id=data['shelter_id']
+            # shelter_id=shelter_id
+            shelter_id = data['shelter_id']
         )
         db.session.add(user)
         db.session.commit()
