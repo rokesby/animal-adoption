@@ -124,7 +124,7 @@ session.add(shelter3)
 
 animal1 = Animal(
     name = "Andie",
-    species = "cat",
+    species = "Cat",
     age = 3,
     breed = "British Shorthair",
     location = "Cardiff",
@@ -143,7 +143,7 @@ session.add(animal1)
 
 animal2 = Animal(
     name = "Cinnamon",
-    species = "cat",
+    species = "Cat",
     age = 3,
     breed = "Maine Coon",
     location = "London",
@@ -162,7 +162,7 @@ session.add(animal2)
 
 animal3 = Animal(
     name = "River",
-    species = "dog",
+    species = "Dog",
     age = 3,
     breed = "Husky",
     location = "London",
@@ -181,7 +181,7 @@ session.add(animal3)
 
 animal4 = Animal(
     name = "Kylie",
-    species = "dog",
+    species = "Dog",
     age = 2,
     breed = "German Shepherd Cross",
     location = "London",
@@ -200,7 +200,7 @@ session.add(animal4)
 
 animal5 = Animal(
     name = "Biscuit",
-    species = "rabbit",
+    species = "Rabbit",
     age = 1,
     breed = "Crossbreed",
     location = "London",
@@ -219,7 +219,7 @@ session.add(animal5)
 
 animal6 = Animal(
     name = "Mango",
-    species = "cat",
+    species = "Cat",
     age = 1,
     breed = "Domestic Short Hair",
     location = "Southampton",
@@ -238,7 +238,7 @@ session.add(animal6)
 
 animal7 = Animal(
     name = "Binx",
-    species = "cat",
+    species = "Cat",
     age = 1,
     breed = "Domestic Short Hair, Tabby White",
     location = "Birmingham",
@@ -257,7 +257,7 @@ session.add(animal7)
 
 animal8 = Animal(
     name = "Zara",
-    species = "dog",
+    species = "Dog",
     age = 3,
     breed = "Doberman Brown",
     location = "Birmingham",
@@ -277,7 +277,7 @@ session.add(animal8)
 
 animal9 = Animal(
     name = "Bella",
-    species = "dog",
+    species = "Dog",
     age = 5,
     breed = "Dachshund (Smooth-Haired)",
     location = "Sheffield",

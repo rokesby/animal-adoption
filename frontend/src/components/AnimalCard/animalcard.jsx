@@ -16,8 +16,14 @@ const AnimalCard = ({
   button1Text,
   linkUrl,
 }) => {
-  const dummyImage = "https://via.placeholder.com/265"; // Dummy image URL
-  const realImage = import.meta.env.VITE_BACKEND_URL + "/upload/" + image;
+
+
+  const placeholderImage = "https://placecats.com/265/265";
+  const specificSubstring = "unique_id";
+  const realImage = image && !image.includes(specificSubstring)
+    ? `${import.meta.env.VITE_BACKEND_URL}/upload/${image}`
+    : placeholderImage;
+  // const realImage = import.meta.env.VITE_BACKEND_URL + "/upload/" + image;
 
   return (
     <Card
@@ -32,7 +38,7 @@ const AnimalCard = ({
       <Link to={linkUrl} style={{ textDecoration: "none", color: "inherit" }}>
         <CardMedia
           sx={{ height: 265, width: "100%", objectFit: "cover" }}
-          image={realImage || dummyImage}
+          image={realImage || placeholderImage}
         />
       </Link>
       <CardContent style={{ padding: "16px", color: "#003554" }}>

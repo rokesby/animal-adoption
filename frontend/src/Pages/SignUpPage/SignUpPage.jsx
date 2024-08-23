@@ -185,7 +185,7 @@ export const SignUpPage = () => {
             sx={{ mb: 3 }}
           />
 
-          <TextField
+          {/* <TextField
             inputProps={{
               "data-testid": "none",
             }}
@@ -199,7 +199,7 @@ export const SignUpPage = () => {
             value={formData.shelter_id}
             onChange={(e) => handleUpdateFormData("shelter_id", e.target.value)}
             sx={{ mb: 3 }}
-          />
+          /> */}
 
           <CardActions>
             <Button data-testid="submit-button" type="submit" form="signup-form" variant="contained"

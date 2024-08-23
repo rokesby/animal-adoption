@@ -28,10 +28,12 @@ export const AnimalAdvertPage = () => {
   const token = localStorage.getItem("token");
   const shelter_id = localStorage.getItem("shelter_id");
 
+  const specificSubstring = "unique_id";
+
   // HERE I AM EXPERIMENTING WITH GETTING AN IMAGE TO LOAD
-  const realImage = animalData?.image // The '?' is added in bc animalData is set to null on line 19. Code was failing w/out it
+  const realImage = animalData?.image && !animalData.image.includes(specificSubstring) // The '?' is added in bc animalData is set to null on line 19. Code was failing w/out it
   ? `${import.meta.env.VITE_BACKEND_URL}`+ "/upload/" + `${animalData.image}`
-  : "https://via.placeholder.com/265";
+  : "https://placecats.com/265/265";
 
   console.log("AnimalAdvertPage received id:", id);
 
@@ -169,6 +171,7 @@ if (!animalData) {
                 secondary={
                   <a 
                     href={`mailto:${animalData.shelter.email}?subject=Inquiry%20about%20adopting%20${encodeURIComponent(animalData.name)}&body=Hi,%20I'm%20interested%20in%20adopting%20${encodeURIComponent(animalData.name)}.%20Could%20I%20get%20some%20more%20info?`}
+                    style={{ color: 'navy', fontWeight: 'bold' }} 
                   >
                     {animalData.shelter.email}
                   </a>

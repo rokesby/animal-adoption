@@ -5,8 +5,10 @@ import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
 import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import AllAnimals from "./Pages/Animals/animals";
+// import AllAnimals from "./Pages/Animals/animals";
+import ExperimentalAllAnimals from "./Pages/ExperimentAnimalAdvert/ExperimentAnimalAdvert";
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
+import MyAnimals from "./Pages/MyAnimals/MyAnimals";
 import { AuthProvider } from "./components/Context/AuthContext";
 
 
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <AllAnimals />,
+        element: <ExperimentalAllAnimals />,
       },
       {
         path: "login",
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
       },
       {
         path: "animals",
-        element: <AllAnimals />,
+        element: <ExperimentalAllAnimals />,
       },
       {
         path: "animals/:id", // Path to the individual animal profile?
@@ -53,6 +55,10 @@ const router = createBrowserRouter([
       {
         path: "create-advert", // Path to the create advert page
         element: <CreateAdvertPage />,
+      },
+      {
+        path: "my-animals", // Path to the create advert page
+        element: <MyAnimals />,
       },
     ],
   },
