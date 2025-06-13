@@ -7,41 +7,42 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button, 
+  Button,
   TextField,
-  CardMedia
+  CardMedia,
 } from "@mui/material";
-import { editAnimal, getSingleAnimal, updateAnimalActiveStatus } from "../../services/animals";
+import {
+  editAnimal,
+  getSingleAnimal,
+  updateAnimalActiveStatus,
+} from "../../services/animals";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useAuth, AuthProvider } from "../../components/Context/AuthProvider";
+import { buildImageUrl } from "../../utils/gcpUtils";
 
 export const AnimalAdvertPage = () => {
   const [animalData, setAnimalData] = useState(null);
   const [formData, setFormData] = useState({});
+  const [profileImage, setProfileImage] = useState("/profile_placeholder.png");
   const [error, setError] = useState(null);
   const [isActive, setisActive] = useState(true);
   const [isEditMode, setisEditMode] = useState(false);
   const { id } = useParams();
+  const { authFetch, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  // Get the JWT token from localStorage (or any other auth mechanism you're using)
-  const token = localStorage.getItem("token");
-  const shelter_id = localStorage.getItem("shelter_id");
-
-  // HERE I AM EXPERIMENTING WITH GETTING AN IMAGE TO LOAD
-  const realImage = animalData?.image // The '?' is added in bc animalData is set to null on line 19. Code was failing w/out it
-  ? `${import.meta.env.VITE_BACKEND_URL}`+ "/upload/" + `${animalData.image}`
-  : "https://via.placeholder.com/265";
-
-  console.log("AnimalAdvertPage received id:", id);
 
   useEffect(() => {
     const fetchAnimalData = async () => {
       try {
         const data = await getSingleAnimal(id);
-        console.log("Fetched animal data:", data); 
         setAnimalData(data);
-        setFormData(data)
+        setFormData(data);
+        if (data.images != 0) {
+          const profileImageUrl = buildImageUrl(data.id, data.profileImageId);
+          setProfileImage(profileImageUrl);
+          // console.log(profileImageUrl)
+        }
       } catch (error) {
         console.error("Failed to fetch animal data:", error);
         setError("Failed to fetch animal data");
@@ -63,10 +64,7 @@ export const AnimalAdvertPage = () => {
     );
   }
 
-// Debugging line to check if data is undefined, null, or empty
-console.log("Current animalData state:", animalData);
-  
-if (!animalData) {
+  if (!animalData) {
     return (
       <Typography
         sx={{ mt: 10, textAlign: "center" }}
@@ -77,8 +75,6 @@ if (!animalData) {
       </Typography>
     );
   }
-
-  // THIS SECTION IS WHERE ALL THE EVENT HANDLERS ARE - MS
 
   const handleEditClick = () => {
     setisEditMode(true);
@@ -92,110 +88,165 @@ if (!animalData) {
   const handleSaveChanges = async () => {
     try {
       const updatedAnimalData = { ...formData };
-      const response = await editAnimal(token, id, updatedAnimalData);
+      const response = await editAnimal(authFetch, id, updatedAnimalData);
       setAnimalData(response.data);
       setisEditMode(false);
     } catch (error) {
-      console.error('Failed to update animal profile at this time', error);
-      setError('Failed to update animal profile');
+      console.error("Failed to update animal profile at this time", error);
+      setError("Failed to update animal profile");
     }
   };
 
   const handleRemoveClick = async () => {
-    console.log('We are attempting to change the isActive state to false')
-    await updateAnimalActiveStatus(token, animalData.id, false)
-    setisActive(false)
-    alert('This animal profile has now been hidden from all animal listings')
-    navigate('/animals')
+    console.log("We are attempting to change the isActive state to false");
+    await updateAnimalActiveStatus(authFetch, animalData.id, false);
+    setisActive(false);
+    alert("This animal profile has now been hidden from all animal listings");
+    navigate("/animals");
   };
-  console.log("Current isActive state:", isActive);
 
   return (
     <Card
+      square={true}
       sx={{
-        width: "50vh",
-        margin: "0 auto",
-        padding: "2em",
-        mt: 10,
+        display: "flex",
+        flexDirection: "column",
+        width: {
+          xs: "100%",
+          md: "80%",
+        },
+        margin: "auto",
+        height: "90vh",
+        minHeight: 'min-content',
+        // border: '2px solid blue',
       }}
     >
       <CardMedia
         component="img"
-        height="265"
-        image={realImage}
+        sx={{
+          maxHeight: '5rem',
+          maxHeight: {
+            xs: "30rem",
+            // sm: "30rem",
+          },
+          objectFit: {
+            xs: "cover",
+          },
+        }}
+        image={profileImage}
         alt={`${animalData.name}'s image`}
       />
-      <CardContent>
+      <CardContent
+        sx={{
+          minHeight: 'min-content',
+          // border: "2px solid green",
+        }}
+      >
         {!isEditMode ? (
           <>
-        <Typography variant="h4" component="div">
-          {animalData.name}
-        </Typography>
-        <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
-          {animalData.breed} - {animalData.age} years old
-        </Typography>
-        <Typography variant="body1" sx={{ mb: 2 }}>
-          {animalData.bio}
-        </Typography>
-        <Box sx={{ mt: 4 }}>
-          <List>
-            <ListItem>
-              <ListItemText primary="Species" secondary={animalData.species} />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="Location" secondary={animalData.location} />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Gender"
-                secondary={animalData.male ? "Male" : "Female"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Neutered"
-                secondary={animalData.neutered ? "Yes" : "No"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Lives with Children"
-                secondary={animalData.livesWithChildren ? "Yes" : "No"}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText 
-                primary="Email" 
-                secondary={
-                  <a 
-                    href={`mailto:${animalData.shelter.email}?subject=Inquiry%20about%20adopting%20${encodeURIComponent(animalData.name)}&body=Hi,%20I'm%20interested%20in%20adopting%20${encodeURIComponent(animalData.name)}.%20Could%20I%20get%20some%20more%20info?`}
-                  >
-                    {animalData.shelter.email}
-                  </a>
-                } 
-              />
-            </ListItem>
-          </List>
-        </Box>
+            <Box sx={{
+              flexDirection: "column",
+              
+            }}>
+              <Typography variant="h4">{animalData.name}</Typography>
+              <Typography variant="h6" color="textSecondary" sx={{ mb: "1em" }}>
+                {animalData.breed} - {animalData.age} years old
+              </Typography>
+              <Typography variant="body1" sx={{ mb: "1em" }}>
+                {animalData.bio}
+              </Typography>
+            </Box>
+            <List
+              sx={{
+                display: "flex",
+                // border: "2px solid pink",
+                flexDirection: 'row',
+                minHeight:'min-content',
+                flexWrap: 'wrap',
+                "& > *": {
+                  display: 'flex',
+                  flex: {
+                    xs: "1 1 100%",
+                    md: "1 1 50%",
+                    // lg: "1 1 25%",
+                  },
 
-        {/* Conditionally renderinf the "Edit" button if logged in AND if token.shelter_id == animals shelter id*/}
-        {token && (shelter_id == animalData.shelter_id) && (
-          <Box sx={{ mt: 4, textAlign: "center" }}>
-            <Button variant="contained" color="primary" onClick={handleEditClick}>
-              Edit {animalData.name}'s profile
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleRemoveClick}>
-              Remove {animalData.name}'s profile
-            </Button>
-          </Box>
-        )}
-        </>
+                  // border: '2px solid purple',
+                },
+              }}
+            >
+              <ListItem>
+                <ListItemText
+                  primary="Species"
+                  secondary={animalData.species}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="Location"
+                  secondary={animalData.location}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="Gender"
+                  secondary={animalData.male ? "Male" : "Female"}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="Neutered"
+                  secondary={animalData.neutered ? "Yes" : "No"}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="Lives with Children"
+                  secondary={animalData.livesWithChildren ? "Yes" : "No"}
+                />
+              </ListItem>
+              {/* This should be a button */}
+              {/* <ListItem>
+                <ListItemText primary="Email" 
+                  secondary="Log in to email"
+                />
+              </ListItem> */}
+            </List>
+
+            {/* Conditionally renderinf the "Edit" button if logged in AND if token.shelter_id == animals shelter id*/}
+            {isAuthenticated && animalData.shelter_id == 1 && (
+              <Box
+                sx={{
+                  mt: 4,
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 2,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleEditClick}
+                >
+                  Edit {animalData.name}'s profile
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleRemoveClick}
+                >
+                  Remove {animalData.name}'s profile
+                </Button>
+              </Box>
+            )}
+          </>
         ) : (
           <>
-          <TextField
+            <TextField
               label="Name"
               name="name"
-              value={formData.name || ''}
+              value={formData.name || ""}
               onChange={handleInputChange}
               fullWidth
               sx={{ mb: 2 }}
@@ -203,7 +254,7 @@ if (!animalData) {
             <TextField
               label="Breed"
               name="breed"
-              value={formData.breed || ''}
+              value={formData.breed || ""}
               onChange={handleInputChange}
               fullWidth
               sx={{ mb: 2 }}
@@ -211,7 +262,7 @@ if (!animalData) {
             <TextField
               label="Age"
               name="age"
-              value={formData.age || ''}
+              value={formData.age || ""}
               onChange={handleInputChange}
               fullWidth
               sx={{ mb: 2 }}
@@ -219,7 +270,7 @@ if (!animalData) {
             <TextField
               label="Bio"
               name="bio"
-              value={formData.bio || ''}
+              value={formData.bio || ""}
               onChange={handleInputChange}
               fullWidth
               multiline
@@ -228,7 +279,7 @@ if (!animalData) {
             <TextField
               label="Species"
               name="species"
-              value={formData.species || ''}
+              value={formData.species || ""}
               onChange={handleInputChange}
               fullWidth
               sx={{ mb: 2 }}
@@ -236,16 +287,25 @@ if (!animalData) {
             <TextField
               label="Location"
               name="location"
-              value={formData.location || ''}
+              value={formData.location || ""}
               onChange={handleInputChange}
               fullWidth
               sx={{ mb: 2 }}
             />
             <Box sx={{ mt: 2, textAlign: "center" }}>
-              <Button variant="contained" color="primary" onClick={handleSaveChanges} sx={{ mr: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveChanges}
+                sx={{ mr: 2 }}
+              >
                 Save
               </Button>
-              <Button variant="outlined" color="secondary" onClick={() => setisEditMode(false)}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setisEditMode(false)}
+              >
                 Cancel
               </Button>
             </Box>

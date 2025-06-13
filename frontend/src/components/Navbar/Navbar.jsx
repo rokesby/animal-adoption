@@ -12,14 +12,23 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthProvider, useAuth } from "../Context/AuthProvider";
 
-export const Navbar = () => {
+const Navbar = () => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
-  const { token, setToken } = useContext(AuthContext);
+  const { logout, isAuthenticated } = useAuth()
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  useEffect(() => {
+    setLoggedIn(isAuthenticated);
+    console.log('isAuthenticated = ', isAuthenticated)
+  }, [isAuthenticated]);
+
+  const handleLogoutClick = async () => {
+    await logout()
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,18 +46,6 @@ export const Navbar = () => {
     setAnchorElUser(null);
   };
 
-  useEffect(() => {
-    setLoggedIn(!!token);
-  }, [token]);
-
-  const handleLogoutClick = () => {
-    if (token) {
-      localStorage.removeItem("token");
-      setToken(null);
-    } 
-    setLoggedIn(false);
-    navigate("/login");
-  };
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#003554' }}>
@@ -80,7 +77,7 @@ export const Navbar = () => {
               onClick={handleOpenNavMenu}
               sx={{ color: "#FFFACA" }}
             >
-              <MenuIcon />
+            <MenuIcon />
             </IconButton>
             <Menu
               id="menu-appbar"
@@ -105,27 +102,28 @@ export const Navbar = () => {
                 <Typography textAlign="center">Animals</Typography>
               </MenuItem>
               {!loggedIn && (
-                <>
+                <Menu>
                   <MenuItem component={Link} to="/sign-up" onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">Signup</Typography>
                   </MenuItem>
                   <MenuItem component={Link} to="/login" onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">Login</Typography>
                   </MenuItem>
-                </>
+                </Menu>
               )}
               {loggedIn && (
-                <>
+                <Menu>
                   <MenuItem component={Link} to="/create-advert" onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">Create Advert</Typography>
-                  </MenuItem>
-                  <MenuItem component={Link} to="/my-animals" onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">My Animals</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogoutClick}>
-                    <Typography textAlign="center">Logout</Typography>
-                  </MenuItem>
-                </>
+                      <Typography textAlign="center">Create Advert</Typography>
+                    </MenuItem>
+                    {/* <MenuItem component={Link} to="/my-animals" onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">My Animals</Typography>
+                    </MenuItem> */}
+                    <MenuItem onClick={handleLogoutClick}>
+                      <Typography textAlign="center">Logout</Typography>
+                    </MenuItem>
+                </Menu>
+
               )}
             </Menu>
           </Box>
@@ -255,7 +253,7 @@ export const Navbar = () => {
                 >
                   <Typography textAlign="center">Create Advert</Typography>
                 </MenuItem>
-                <MenuItem
+                {/* <MenuItem
                   onClick={handleCloseUserMenu}
                   component={Link}
                   to="/my-animals"
@@ -263,7 +261,7 @@ export const Navbar = () => {
                   sx={{ color: "#003554" }}  
                 >
                   <Typography textAlign="center">My Animals</Typography>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem
                   onClick={handleLogoutClick}
                   component={Link}

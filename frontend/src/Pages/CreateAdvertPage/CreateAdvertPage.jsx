@@ -17,12 +17,12 @@ import {
 } from "@mui/material";
 import { createAnimal } from "../../services/animals";
 import { Add, Remove } from "@mui/icons-material";
+import { AuthProvider, useAuth } from "../../components/Context/AuthProvider";
+import {InputFileUpload} from "../../components/MaterialComponents/InputFileUpload"
 
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token"); 
-  const user_shelter_id = localStorage.getItem("shelter_id")
   const [formData, setFormData] = useState({
     name: "",
     species: "",
@@ -33,18 +33,18 @@ export const CreateAdvertPage = () => {
     bio: "",
     neutered: false,
     livesWithChildren: false,
-    // image: null,
-    shelterId: user_shelter_id,
+    images: 0,
   });
-
+  const [files, setFiles] = useState(null);
+  const {authFetch, isAuthenticated} = useAuth()
   const navigate = useNavigate();
 
   // Check for the token / navigate to 'login' if no token exists
   useEffect(() => {
-    if (!token) {
+    if (!isAuthenticated) {
       navigate("/login");
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
   const handleUpdateFormData = (id, value) => {
     setFormData({ ...formData, [id]: value });
@@ -62,13 +62,9 @@ export const CreateAdvertPage = () => {
     //   const data = new FormData();
     //   for (const key in formData) {
       //     data.append(key, formData[key]);
-      
-      // HERE: I am going to try creating an animal 
-      // using the info obtained from the form
 
     try {
-      // added the 'token' as an argument on createAnimal
-      const animal = await createAnimal(token, {
+      const animal = await createAnimal(authFetch,{
         name: formData.name,
         species: formData.species,
         age: formData.age,
@@ -78,11 +74,13 @@ export const CreateAdvertPage = () => {
         bio: formData.bio,
         neutered: formData.neutered,
         lives_with_children: formData.livesWithChildren,
-        shelter_id: user_shelter_id,
+        images: formData.images
       });
 
       if (animal.status === 201) {
         const newAnimalId = animal.data.id;
+        // Upload images to Bucket here
+        console.log(files)
         navigate(`/animals/${newAnimalId}`);
       } else {
         throw new Error("Failed to create animal");
@@ -99,6 +97,13 @@ export const CreateAdvertPage = () => {
       age: Math.max(0, prevData.age + amount), // Age is a positive num
     }));
   };
+
+  const handleFileUploadData = (e) => {
+    console.log(e.target.files)
+    if(e.target.files) {
+        setFiles(e.target.files)
+    }
+}
 
   return (
     <>
@@ -277,6 +282,7 @@ export const CreateAdvertPage = () => {
               <MenuItem value="true">Yes</MenuItem>
               <MenuItem value="false">No</MenuItem>
             </Select>
+            <InputFileUpload handleFileUploadData={handleFileUploadData}/>
           </FormControl>
         </CardContent>
 

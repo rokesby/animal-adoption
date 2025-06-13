@@ -1,23 +1,22 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../services/authentication"
 import {Button, Card, CardContent, CardHeader, Box, TextField, CardActions, Typography } from "@mui/material";
 import PetsIcon from '@mui/icons-material/Pets';
-import { AuthContext } from "../../components/Context/AuthContext"
+import { AuthProvider, useAuth } from "../../components/Context/AuthProvider"
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("")
   const [userData, setUserData] = useState("");
-  const {token, setToken} = useContext(AuthContext)
+  const {token, setToken, isAuthenticated, setIsAuthenticated, login} = useAuth()
   const navigate = useNavigate();
-  
+
   useEffect(() => {
-    if (token) {
-     navigate("/animals")
-    }
-  }, [token]);
+    if (isAuthenticated) {
+      navigate("/animals")
+    } 
+  }, [isAuthenticated]);
 
 
   const handleEmailChange = (event) => {
@@ -31,12 +30,10 @@ export const LoginPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
       try {
-        const data = await login(email, password)
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("user_id", data.user_id)
-        localStorage.setItem("shelter_id", data.shelter_id)
-        setToken(localStorage.getItem("token"))
-        navigate("/create-advert");
+        const success = await login(email, password)
+        if (success) {
+          navigate('/login')
+        }
         setEmail("");
         setPassword("");
         setError("")

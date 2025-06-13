@@ -1,15 +1,17 @@
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Box from '@mui/material/Box';
 import { Button, Card, CardContent, CardHeader } from "@mui/material";
+import { AuthContext, useAuth } from "../Context/AuthContext";
 
 
 
 export const LoginLogout = () => {
 
   const navigate = useNavigate();
-  const [token, setToken] = useState(localStorage.getItem("token"))
+  const {token, setToken} = useAuth()
   const [buttonText, setButtonText] = useState()
+  
   
   useEffect(() => {
     if (token) {
@@ -21,7 +23,6 @@ export const LoginLogout = () => {
 
   const handleClick = () => {
     if (token) {
-      localStorage.clear("token")
       setToken(null)
     } else {
       navigate("/login")

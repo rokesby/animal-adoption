@@ -1,83 +1,102 @@
 # Installation
 
 ## Repo creation
-Clone this repo
-- cd into animal-adoption
+Clone this repo - Note: I have named the directory animal-adoption-app for consistency but you can name it whatever you like!
+```zsh
+git clone https://github.com/Matt-Wilkes/python-react-animal-adoption-app.git animal-adoption-app
+cd animal-adoption-app
+```
 
 ## Frontend setup
-Notes taken from the video - https://www.youtube.com/watch?v=ctQMqqEo4G8&t=629s
-
-### Follow the on-screen instructions
-
+```zsh
 cd frontend
 npm install
-npm run dev
-
-### Frontend Dependencies
-- npm install @mui/material @emotion/react @emotion/styled
-- npm install react-router-dom
-- npm install prop-types 
-
+```
 
 ## Backend setup
 This will live in a folder called 'server' just under the root.
-
+```zsh
 cd server
-.env file - Add SECRET_KEY="SecretKeyHere"
+```
 
-Generate a secret key
->>> import secrets
->>> secret_key = secrets.token_hex(32)
->>> print(secret_key)
+### 1. Create virtual environment
 
-### Create virtual environment
-
-python -m venv adoption-venv
-source adoption-venv/bin/activate
-
-### Install dependencies 
-
+```zsh
+python -m venv animal-adoption-app-venv 
+source animal-adoption-app-venv/bin/activate 
+```
+### 2. Install dependencies 
+```zsh
 pip install -r requirements.txt
+```
 
-The /frontend/.env file contains a link to the server which will provide the underlying API services. You'll need to repoint this to your flask server.
+### 3. Create a local database
 
-### New environment variable
-cd /server/ directory
-- ensure your python venv is activated
-touch .env
-- ensure that the .env file is in your gitignore file
-- Paste the following line into your .env file (change the relevant fields!!)
+In the terminal: 
+```zsh
+cd db
+createdb animal_adoption_app
+```
 
-DATABASE_CONNECT = "postgresql://reza@localhost:5432/adoption"
-DATABASE_NAME = "adoption"
+### Add environment variables
+In a new terminal:
+Generate a secret key in Python repl:
+```zsh
+python
+import secrets
+print(secrets.token_hex(32)) # copy the secret key generated here
+exit()
+```
+
+```zsh
+# create a .env file with your secret key in the same directory (server)
+echo SECRET_KEY=\"ReplaceThisWithYourSecretKey\" >> .env
+# check the .env file has been created and updated with your secret key
+open .env
+```
+<!-- add the below to your .env file: -->
+NODE_ENV="development"
+DATABASE_CONNECT = "postgresql://your-user-name@localhost:5432/animal_adoption_app"
+DATABASE_NAME = "animal_adoption_app"
 DATABASE_HOST = "localhost"
 PHOTO_UPLOAD_LOCATION = "static/photo_uploads/"
 
+### New environment variable
 
-# Seeding - How to seed as a one-off task
+The /frontend/.env file contains a link to the server which will provide the underlying API services. You'll need to repoint this to your flask server.
 
-ONE OFF INSTRUCTIONS to create the Postgres database.
-cd /server/db
-- activate your venv environment!
-- type in:
- createdb adoption # to create a new postgres database
+in the /frontend directory
+```zsh
+# create the .env file
+echo VITE_BACKEND_URL="http://127.0.0.1:5000" >> .env
+# check the .env file has been created and updated with your secret key
+open .env
+```
 
-- run this file : 
-python seed.py
+# Initialising the database
+in the server/ directory run the below commands
+```zsh
+flask init-db
+flask seed-db
+```
 
 - run this file : 
 python print_seed.py
 
 # Run the application
+You'll need to run the server in one terminal and the frontend in another terminal window
 
 ## Run the server application
+```zsh
 cd server
-python -m flask run --port 8000
+python -m flask run
+```
 
 ## Run the client application
+```zsh
 cd frontend
 npm run dev
-
+```
 
 # Demonstration video
 

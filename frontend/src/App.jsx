@@ -4,10 +4,11 @@ import "./App.css";
 import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
-import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import AllAnimals from "./Pages/Animals/animals";
+import CreateAdvertPage from "./Pages/CreateAdvertPage/CreateAdvertPage";
+import AllAnimals from "./Pages/Animals/AllAnimals";
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
-import { AuthProvider } from "./components/Context/AuthContext";
+import { AuthProvider } from "./components/Context/AuthProvider";
+import '@mui/material/styles/styled'; // patching an issue with vite chunking https://github.com/vitejs/vite/issues/12423
 
 
 // alternative to state for passing down to child components
