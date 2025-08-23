@@ -4,10 +4,14 @@ import "./App.css";
 import { LoginPage } from "./Pages/LoginPage/LoginPage";
 import Navbar from "./components/Navbar/Navbar";
 import SignUpPage from "./Pages/SignUpPage/SignUpPage";
-import CreateAdvertPage from "./pages/CreateAdvertPage/CreateAdvertPage";
-import AllAnimals from "./Pages/Animals/animals";
+import CreateAdvertPage from "./Pages/CreateAdvertPage/CreateAdvertPage";
+import AllAnimals from "./Pages/Animals/AllAnimals";
 import AnimalAdvertPage from "./Pages/AnimalAdvertPage/AnimalAdvertPage";
-import { AuthProvider } from "./components/Context/AuthContext";
+import MessagesPage from "./Pages/Messages/MessagesPage"
+import VerifyPage from "./Pages/Verify/VerifyPage"
+import { AuthProvider } from "./components/Context/AuthProvider";
+import '@mui/material/styles/styled'; // patching an issue with vite chunking https://github.com/vitejs/vite/issues/12423
+
 
 
 // alternative to state for passing down to child components
@@ -42,17 +46,25 @@ const router = createBrowserRouter([
         element: <SignUpPage />,
       },
       {
+        path: "verify",
+        element: <VerifyPage />,
+      },
+      {
         path: "animals",
         element: <AllAnimals />,
       },
       {
-        path: "animals/:id", // Path to the individual animal profile?
+        path: "animals/:id",
         element: <AnimalAdvertPage />,
       },
 
       {
-        path: "create-advert", // Path to the create advert page
+        path: "create-advert",
         element: <CreateAdvertPage />,
+      },
+      {
+        path: "messages",
+        element: <MessagesPage />,
       },
     ],
   },

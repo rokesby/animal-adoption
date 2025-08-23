@@ -15,39 +15,73 @@ import {
   Alert,
   IconButton,
 } from "@mui/material";
-import { createAnimal } from "../../services/animals";
+import { createAnimal, editAnimal, uploadAnimalImages } from "../../services/animals";
 import { Add, Remove } from "@mui/icons-material";
-
+import { AuthProvider, useAuth } from "../../components/Context/AuthProvider";
+import { InputFileUpload } from "../../components/MaterialComponents/InputFileUpload";
+import StandardImageList from "../../components/MaterialComponents/StandardImageList";
 
 export const CreateAdvertPage = () => {
   const [message, setMessage] = useState("");
-  const token = localStorage.getItem("token"); 
-  const user_shelter_id = localStorage.getItem("shelter_id")
   const [formData, setFormData] = useState({
     name: "",
     species: "",
-    age: 0, 
+    age: 0,
     breed: "",
     location: "",
     male: true,
     bio: "",
     neutered: false,
     livesWithChildren: false,
-    // image: null,
-    shelterId: user_shelter_id,
+    images: 0,
   });
-
+  const [files, setFiles] = useState([]);
+  const { authFetch, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   // Check for the token / navigate to 'login' if no token exists
   useEffect(() => {
-    if (!token) {
+    if (!isAuthenticated) {
       navigate("/login");
     }
-  }, [token]);
+  }, [isAuthenticated]);
 
   const handleUpdateFormData = (id, value) => {
     setFormData({ ...formData, [id]: value });
+  };
+
+    const handleAgeChange = (amount) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      age: Math.max(0, prevData.age + amount), // Age is a positive num
+    }));
+  };
+
+  const handleFileUploadData = (e) => {
+    const fileList = e.target.files
+    console.log(fileList);
+    // I want to allow user to use untl max is reached
+    if (fileList) {
+      setFiles(fileList);
+    }
+  };
+
+  const uploadImages = async (animalId, files) => {
+    try {
+      // make a post request to /upload
+      // if response is 201
+      const formData = new FormData();
+      [...files].forEach((file) => {
+        formData.append('file', file)
+      })
+      console.log('files: ', files)
+      if (files) {
+        const uploaded_images = await uploadAnimalImages(authFetch, animalId, formData)
+        return uploaded_images
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -58,17 +92,9 @@ export const CreateAdvertPage = () => {
       return;
     }
 
-    // try {
-    //   const data = new FormData();
-    //   for (const key in formData) {
-      //     data.append(key, formData[key]);
-      
-      // HERE: I am going to try creating an animal 
-      // using the info obtained from the form
 
     try {
-      // added the 'token' as an argument on createAnimal
-      const animal = await createAnimal(token, {
+      const animal = await createAnimal(authFetch, {
         name: formData.name,
         species: formData.species,
         age: formData.age,
@@ -78,11 +104,22 @@ export const CreateAdvertPage = () => {
         bio: formData.bio,
         neutered: formData.neutered,
         lives_with_children: formData.livesWithChildren,
-        shelter_id: user_shelter_id,
+        images: formData.images,
       });
 
       if (animal.status === 201) {
         const newAnimalId = animal.data.id;
+        console.log("temp log: Animal created ", newAnimalId)
+        if (files.length > 0) {
+          const uploaded_images = await uploadImages(newAnimalId, files)
+          const successful_images_count = uploaded_images.data['uploaded'].length
+          const profile_image_id = uploaded_images.data['uploaded'][0]
+          try {
+            await editAnimal(authFetch, newAnimalId, {'images': successful_images_count, 'profileImageId': profile_image_id})
+          } catch (error) {
+            console.log(error)
+          }
+        }
         navigate(`/animals/${newAnimalId}`);
       } else {
         throw new Error("Failed to create animal");
@@ -91,13 +128,6 @@ export const CreateAdvertPage = () => {
       console.error(err);
       setMessage("Error creating advert. Please try again.");
     }
-  };
-
-  const handleAgeChange = (amount) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      age: Math.max(0, prevData.age + amount), // Age is a positive num
-    }));
   };
 
   return (
@@ -171,7 +201,7 @@ export const CreateAdvertPage = () => {
               value={formData.age}
               onChange={(e) => handleUpdateFormData("age", e.target.value)}
               type="number"
-              InputProps={{ readOnly: true }}  // Makes the text field read-only
+              InputProps={{ readOnly: true }} // Makes the text field read-only
               size="small"
               variant="outlined"
               required
@@ -202,18 +232,6 @@ export const CreateAdvertPage = () => {
             required
             sx={{ mb: 3 }}
           />
-
-          {/* <TextField
-            label="Shelter_ID"
-            value={formData.shelterId}
-            onChange={(e) => handleUpdateFormData("shelterId", e.target.value)}
-            fullWidth
-            multiline
-            size="small"
-            variant="outlined"
-            required
-            sx={{ mb: 3 }}
-          /> */}
 
           <FormControl fullWidth sx={{ mb: 3 }}>
             <InputLabel>Gender</InputLabel>
@@ -277,7 +295,11 @@ export const CreateAdvertPage = () => {
               <MenuItem value="true">Yes</MenuItem>
               <MenuItem value="false">No</MenuItem>
             </Select>
+            <InputFileUpload handleFileUploadData={handleFileUploadData} files={files} />
           </FormControl>
+          {files && (
+            <StandardImageList files={files}/>
+          )}
         </CardContent>
 
         <CardActions>

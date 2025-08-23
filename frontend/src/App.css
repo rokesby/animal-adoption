@@ -1,43 +1,123 @@
 #root {
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   text-align: center;
   background-color: #E0F7FA;
+  min-height: 100vh;
+  color-scheme: light dark;
+  /* height: 100vh; */
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #ffffffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #ffffffaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
 
 .card {
   padding: 2em;
 }
 
-.read-the-docs {
-  color: #888;
+
+a {
+  font-weight: 500;
+  color: #ffffff;
+  text-decoration: inherit;
+
 }
+a:hover {
+  color: #ffffff;
+}
+
+body {
+  margin: 0;
+  /* display: flex; */
+  min-width: 320px;
+  /* min-height: 100vh; */
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  color: #003554;
+}
+
+h2 {
+  font-size: 2.4em;
+  line-height: 1.2;
+  color: #003554;  
+}
+
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #ffffff;
+  }
+  button {
+    background-color: #ffffff;
+  }
+}
+
+/* @media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #ffffff;
+  }
+  button {
+    background-color: #ffffff;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #ffffff;
+  }
+  button {
+    background-color: #ffffff;
+  }
+} */
+
+/* xs - mobile */
+@media (width < 600px) {
+
+}
+/* sm - tablet  */
+@media (600px <= width < 900px) {
+
+}
+
+/* md expanded */
+@media (900px <= width < 1200px) {
+
+}
+
+/* lg standard browser */
+@media (1200px <= width < 1536px) {
+
+}
+
+/* xl Large browser */
+@media (width > 1536px) {
+
+}
+
+

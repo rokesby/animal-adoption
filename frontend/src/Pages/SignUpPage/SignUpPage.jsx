@@ -8,11 +8,11 @@ import TextField from "@mui/material/TextField";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
-import { signup } from "/src/Services/users.js";
-import { AuthContext } from "../../components/Context/AuthContext"
+import { AuthProvider, useAuth } from "../../components/Context/AuthProvider"
 
 export const SignUpPage = () => {
-  const {token, setToken} = useContext(AuthContext)
+  const {token, signup} = useAuth()
+  const [errorMessage, setErrorMessage] = useState("");
   const [message, setMessage] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [formData, setFormData] = useState({
@@ -21,8 +21,8 @@ export const SignUpPage = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    shelter_id: ""
   });
+  const [success, setSuccess] = useState(false)
 
   const navigate = useNavigate();
 
@@ -58,6 +58,7 @@ export const SignUpPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setErrorMessage("")
     if (passwordError) {
       setMessage("Please fix the password errors");
       return;
@@ -68,19 +69,23 @@ export const SignUpPage = () => {
     }
 
     try {
-      const data = await signup(formData);
-      if (data === "User with email provided already exists") {
-        setMessage(data);
-      } else {
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("user_id", data.user_id)
-        localStorage.setItem("shelter_id", data.shelter_id)
-        setToken(localStorage.getItem("token"))
-        navigate("/create-advert", { state: [0, data.message] });
+      const success = await signup(formData);
+      if (success) {
+        console.log('successful signup')
+        // navigate("/create-advert")
+        setSuccess(true)
+        setFormData({
+          first_name: "",
+          last_name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        })
       }
+     
     } catch (err) {
       console.error(err);
-      setMessage("Error signing up. Please try again.");
+      setErrorMessage("Error signing up. Please try again.");
     }
   };
 
@@ -185,22 +190,6 @@ export const SignUpPage = () => {
             sx={{ mb: 3 }}
           />
 
-          <TextField
-            inputProps={{
-              "data-testid": "none",
-            }}
-            label="Shelter ID"
-            placeholder="Your Shelter id"
-            fullWidth
-            size="small"
-            variant="outlined"
-            id="shelter_id"
-            type="number"
-            value={formData.shelter_id}
-            onChange={(e) => handleUpdateFormData("shelter_id", e.target.value)}
-            sx={{ mb: 3 }}
-          />
-
           <CardActions>
             <Button data-testid="submit-button" type="submit" form="signup-form" variant="contained"
             sx={{
@@ -215,7 +204,15 @@ export const SignUpPage = () => {
             </Button>
           </CardActions>
         </CardContent>
+        {success && (
+          <Alert severity="success">Sign up successful. Please check your email to verify your account</Alert>
+        )}
+        {errorMessage && (
+          <Alert severity="error">{errorMessage}</Alert>
+        )}
+        
       </Card>
+      
     </>
   );
 };

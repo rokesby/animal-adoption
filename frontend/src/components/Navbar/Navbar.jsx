@@ -12,14 +12,23 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { AuthContext } from "../Context/AuthContext";
+import { AuthProvider, useAuth } from "../Context/AuthProvider";
 
-export const Navbar = () => {
+const Navbar = () => {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
-  const { token, setToken } = useContext(AuthContext);
+  const { logout, isAuthenticated } = useAuth()
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+
+  useEffect(() => {
+    setLoggedIn(isAuthenticated);
+    console.log('isAuthenticated = ', isAuthenticated)
+  }, [isAuthenticated]);
+
+  const handleLogoutClick = async () => {
+    await logout()
+  };
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,22 +46,11 @@ export const Navbar = () => {
     setAnchorElUser(null);
   };
 
-  useEffect(() => {
-    setLoggedIn(!!token);
-  }, [token]);
-
-  const handleLogoutClick = () => {
-    if (token) {
-      localStorage.removeItem("token");
-      setToken(null);
-    } 
-    setLoggedIn(false);
-    navigate("/login");
-  };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#003554' }}>
-      <Container maxWidth="xl">
+    <AppBar position="static" 
+        sx={{ backgroundColor: '#003554' }}>
+      <Container maxWidth="xl" >
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -80,8 +78,9 @@ export const Navbar = () => {
               onClick={handleOpenNavMenu}
               sx={{ color: "#FFFACA" }}
             >
-              <MenuIcon />
+            <MenuIcon />
             </IconButton>
+            {/* LEFT HAND MENU */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -104,30 +103,38 @@ export const Navbar = () => {
               <MenuItem component={Link} to="/animals" onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">Animals</Typography>
               </MenuItem>
-              {!loggedIn && (
-                <>
+              <MenuItem component={Link} to="/messages" onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">Messages</Typography>
+              </MenuItem>
+              </Menu>
+
+
+              {/* USER MENU? */}
+              {/* {!loggedIn && (
+                <Menu>
                   <MenuItem component={Link} to="/sign-up" onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">Signup</Typography>
                   </MenuItem>
                   <MenuItem component={Link} to="/login" onClick={handleCloseNavMenu}>
                     <Typography textAlign="center">Login</Typography>
                   </MenuItem>
-                </>
+                </Menu>
               )}
               {loggedIn && (
-                <>
+                <Menu>
                   <MenuItem component={Link} to="/create-advert" onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">Create Advert</Typography>
-                  </MenuItem>
-                  <MenuItem component={Link} to="/my-animals" onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">My Animals</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogoutClick}>
-                    <Typography textAlign="center">Logout</Typography>
-                  </MenuItem>
-                </>
-              )}
-            </Menu>
+                      <Typography textAlign="center">Create Advert</Typography>
+                    </MenuItem> */}
+                    {/* <MenuItem component={Link} to="/my-animals" onClick={handleCloseNavMenu}>
+                      <Typography textAlign="center">My Animals</Typography>
+                    </MenuItem> */}
+                    {/* <MenuItem onClick={handleLogoutClick}>
+                      <Typography textAlign="center">Logout</Typography>
+                    </MenuItem>
+                </Menu>
+
+              )} */}
+            
           </Box>
 
           <Typography
@@ -158,8 +165,6 @@ export const Navbar = () => {
                 color: '#FFFACA',             
                 '&:hover': {
                   backgroundColor: '#557B71',
-                  marginRight: "1em",
-                  marginLeft: "1em", 
                 },
               }}
             >
@@ -175,12 +180,25 @@ export const Navbar = () => {
                 color: '#FFFACA',             
                 '&:hover': {
                   backgroundColor: '#557B71', 
-                  marginRight: "1em",
-                  marginLeft: "1em",
                 },
               }}
             >
               Animals
+            </Button>
+            <Button
+              component={Link}
+              to="/messages"
+              data-testid="_messages"
+              sx={{
+                fontFamily: 'Arial, sans-serif',
+                backgroundColor: '#003554', 
+                color: '#FFFACA',             
+                '&:hover': {
+                  backgroundColor: '#557B71', 
+                },
+              }}
+            >
+              Messages
             </Button>
           </Box>
 
@@ -195,8 +213,6 @@ export const Navbar = () => {
                   color: '#FFFACA',             
                   '&:hover': {
                     backgroundColor: '#557B71',
-                    marginRight: "1em",
-                    marginLeft: "1em",
                     gap: "1em", 
                   },
                 }}
@@ -212,8 +228,6 @@ export const Navbar = () => {
                   color: '#FFFACA',             
                   '&:hover': {
                     backgroundColor: '#557B71',
-                    marginRight: "1em",
-                    marginLeft: "1em",
                     gap: "1em",  
                   },
                 }}
@@ -227,12 +241,12 @@ export const Navbar = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="My Account">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="" src="/public/avatar_cat.png" />
                 </IconButton>
               </Tooltip>
               <Menu
                 sx={{ mt: "45px" }}
-                id="menu-appbar"
+                id="account-menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
                   vertical: "top",
@@ -255,7 +269,7 @@ export const Navbar = () => {
                 >
                   <Typography textAlign="center">Create Advert</Typography>
                 </MenuItem>
-                <MenuItem
+                {/* <MenuItem
                   onClick={handleCloseUserMenu}
                   component={Link}
                   to="/my-animals"
@@ -263,7 +277,7 @@ export const Navbar = () => {
                   sx={{ color: "#003554" }}  
                 >
                   <Typography textAlign="center">My Animals</Typography>
-                </MenuItem>
+                </MenuItem> */}
                 <MenuItem
                   onClick={handleLogoutClick}
                   component={Link}
